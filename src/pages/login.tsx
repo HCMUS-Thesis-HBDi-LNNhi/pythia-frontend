@@ -47,7 +47,9 @@ export default function Login(): JSX.Element {
       <h1 className="text-4xl">
         Welcome to <strong className="text-6xl font-MsMadi">Pythia</strong>
       </h1>
-      <h3>“It's not what you sell that matters as much as how you sell it!”</h3>
+      <h3>
+        It{"'"}s not what you sell that matters as much as how you sell it!
+      </h3>
       <h3>— Brian Halligan, CEO & Co-Founder, HubSpot</h3>
       <div className="h-4"></div>
       {loginMethods.map((method) => (

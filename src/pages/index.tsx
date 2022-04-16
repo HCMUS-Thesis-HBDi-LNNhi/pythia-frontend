@@ -10,5 +10,5 @@ export default function Router(): void {
   useLayoutEffect(() => {
     if (!viewMode) router.push(`/${PageTitles.LOGIN}`);
     else router.push(`/${PageTitles.DASHBOARD}`);
-  }, []);
+  }, [router, viewMode]);
 }
