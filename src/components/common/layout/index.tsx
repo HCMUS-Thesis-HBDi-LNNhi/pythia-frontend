@@ -6,9 +6,9 @@ interface Props {
 
 export default function Layout(props: Props): JSX.Element {
   return (
-    <div className="min-h-screen w-screen">
+    <div className="min-h-screen w-screen flex">
       <MenuBar />
-      <main>{props.children}</main>
+      <main className="m-12 min-h-full w-full">{props.children}</main>
     </div>
   );
 }

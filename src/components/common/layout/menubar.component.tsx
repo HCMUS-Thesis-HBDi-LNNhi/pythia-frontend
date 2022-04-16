@@ -1,14 +1,7 @@
-import icons from "const/icons.const";
-import { IMenuItem } from "interfaces/common.interface";
+import { menuItems } from "const/pages.const";
+import { PageTitles } from "interfaces/common.interface";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-
-const menuItems: IMenuItem[] = [
-  { title: "Profile", icon: icons.solid.account },
-  { title: "Dashboard", icon: icons.solid.home },
-  { title: "Analytics", icon: icons.outline.analytic },
-  { title: "Prediction", icon: icons.solid.prediction },
-  { title: "Logout", icon: icons.outline.logout },
-];
 
 export default function MenuBar(): JSX.Element {
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -37,24 +30,26 @@ export default function MenuBar(): JSX.Element {
       ref={menuRef}
     >
       {menuItems.map((item) => (
-        <button
-          key={item.title}
-          className={[
-            "w-full flex items-center space-x-2 text-primary-700 px-6 py-4",
-            "hover:bg-primary-400 hover:text-white-100",
-            "last:text-white-100 last:absolute last:bottom-20 hover:last:text-primary-700",
-          ].join(" ")}
-        >
-          <span className="text-4xl">{item.icon}</span>
-          <span
+        <Link href={item.title != "log_out" ? `/${item.title}` : `/`} passHref>
+          <a
+            key={item.title}
             className={[
-              isHover ? "inline" : "hidden",
-              "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
+              "w-full flex items-center space-x-2 text-primary-700 px-6 py-4 capitalize",
+              "hover:bg-primary-400 hover:text-white-100",
+              "last:text-white-100 last:absolute last:bottom-20 hover:last:text-primary-700",
             ].join(" ")}
           >
-            {item.title}
-          </span>
-        </button>
+            <span className="text-4xl">{item.icon}</span>
+            <span
+              className={[
+                isHover ? "inline" : "hidden",
+                "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
+              ].join(" ")}
+            >
+              {item.title}
+            </span>
+          </a>
+        </Link>
       ))}
     </div>
   );
