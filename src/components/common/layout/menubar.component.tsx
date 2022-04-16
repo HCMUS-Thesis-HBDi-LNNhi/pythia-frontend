@@ -30,7 +30,11 @@ export default function MenuBar(): JSX.Element {
       ref={menuRef}
     >
       {menuItems.map((item) => (
-        <Link href={item.title != "log_out" ? `/${item.title}` : `/`} passHref>
+        <Link
+          href={item.title != "log_out" ? `/${item.title}` : `/`}
+          passHref
+          key={item.title}
+        >
           <a
             key={item.title}
             className={[
