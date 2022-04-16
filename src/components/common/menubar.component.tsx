@@ -1,5 +1,4 @@
 import { menuItems } from "const/pages.const";
-import { PageTitles } from "interfaces/common.interface";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -24,7 +23,7 @@ export default function MenuBar(): JSX.Element {
     <div
       className={[
         "bg-gradient-to-t from-primary-600 via-primary-300 to-white-100",
-        "h-screen w-20 hover:w-44 duration-500",
+        "h-screen w-20 hover:w-48 duration-500",
         "flex flex-col py-20 space-y-10 relative",
       ].join(" ")}
       ref={menuRef}

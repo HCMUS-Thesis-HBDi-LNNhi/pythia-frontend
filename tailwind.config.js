@@ -1,4 +1,5 @@
 module.exports = {
+  mode: "jit",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
@@ -18,6 +19,10 @@ module.exports = {
         600: "#2C5D87",
         700: "#003A6B",
       },
+    },
+    fontFamily: {
+      Montserrat: ["Montserrat", "sans-serif"],
+      MsMadi: ["Ms Madi", "cursive"],
     },
     extend: {},
   },
