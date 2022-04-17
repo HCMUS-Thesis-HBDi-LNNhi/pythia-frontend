@@ -1,5 +1,5 @@
 import Button from "components/common/button.component";
-import API from "const/api.const";
+// import API from "const/api.const";
 import icons from "const/icons.const";
 import {
   ILoginMethod,
@@ -8,7 +8,7 @@ import {
 } from "interfaces/common.interface";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
-import { fetcher } from "utils/fetcher";
+// import { fetcher } from "utils/fetcher";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function Login(): JSX.Element {
     {
       title: "Login with Google",
       icon: icons.outline.google,
-      action: async () => {
+      action: () => {
         setViewMode("user");
         // const response = await fetcher.post(API.POST.loginWithGoogle);
         router.push(`/${PageTitles.DASHBOARD}`);
