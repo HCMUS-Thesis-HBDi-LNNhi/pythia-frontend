@@ -7,9 +7,13 @@ interface Props {
 
 export default function Layout(props: Props): JSX.Element {
   return (
-    <div className="min-h-screen w-screen flex">
+    <div className="h-screen w-screen flex">
       <MenuBar />
-      <main className={["m-12 min-h-full w-full", props.className].join(" ")}>
+      <main
+        className={["p-8 h-full w-full overflow-scroll", props.className].join(
+          " "
+        )}
+      >
         {props.children}
       </main>
     </div>

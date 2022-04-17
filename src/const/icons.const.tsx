@@ -7,6 +7,7 @@ const outline = {
   logout: <Icon icon="ic:outline-logout" />,
   google: <Icon icon="ant-design:google-outlined" />,
   guest: <Icon icon="fluent:guest-16-regular" />,
+  plus: <Icon icon="akar-icons:circle-plus" />,
 };
 
 const solid = {
@@ -17,6 +18,7 @@ const solid = {
   logout: <Icon icon="ic:baseline-logout" />,
   google: <Icon icon="ant-design:google-circle-filled" />,
   guest: <Icon icon="fluent:guest-16-filled" />,
+  plus: <Icon icon="akar-icons:circle-plus-fill" />,
 };
 
 const colored = {

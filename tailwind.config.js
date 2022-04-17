@@ -24,7 +24,11 @@ module.exports = {
       Montserrat: ["Montserrat", "sans-serif"],
       MsMadi: ["Ms Madi", "cursive"],
     },
-    extend: {},
+    extend: {
+      aspectRatio: {
+        "4/3": "4 / 3",
+      },
+    },
   },
   plugins: [],
 };
