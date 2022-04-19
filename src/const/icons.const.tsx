@@ -8,6 +8,10 @@ const outline = {
   google: <Icon icon="ant-design:google-outlined" />,
   guest: <Icon icon="fluent:guest-16-regular" />,
   plus: <Icon icon="akar-icons:circle-plus" />,
+  delete: <Icon icon="typcn:delete-outline" />,
+  trash: <Icon icon="fa:trash-o" />,
+  edit: <Icon icon="akar-icons:edit" />,
+  hamburger: <Icon icon="radix-icons:hamburger-menu" />
 };
 
 const solid = {
@@ -19,6 +23,10 @@ const solid = {
   google: <Icon icon="ant-design:google-circle-filled" />,
   guest: <Icon icon="fluent:guest-16-filled" />,
   plus: <Icon icon="akar-icons:circle-plus-fill" />,
+  delete: <Icon icon="typcn:delete" />,
+  trash: <Icon icon="fa:trash" />,
+  options_vertical: <Icon icon="mi:options-vertical" />,
+  options_horizontal: <Icon icon="mi:options-horizontal" />
 };
 
 const colored = {

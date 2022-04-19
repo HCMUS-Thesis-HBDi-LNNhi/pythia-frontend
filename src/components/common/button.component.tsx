@@ -13,8 +13,8 @@ export default function Button(props: Props): JSX.Element {
       className={[
         "rounded-xl text-center",
         "py-3 px-5 opacity-80 flex items-center",
-        "hover:opacity-100 hover:shadow-lg hover:font-medium",
-        style === "solid" && "bg-primary-600 text-white-100",
+        "hover:opacity-100 hover:font-medium",
+        style === "solid" && "bg-primary-600 text-white-100 hover:shadow-lg",
         props.className,
       ].join(" ")}
       onClick={() => props.onClick && props.onClick()}
