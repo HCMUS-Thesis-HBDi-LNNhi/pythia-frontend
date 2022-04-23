@@ -1,4 +1,4 @@
-import Button from "components/common/button.component";
+import { Button } from "components/common";
 // import API from "const/api.const";
 import icons from "const/icons.const";
 import {
@@ -57,6 +57,7 @@ export default function Login(): JSX.Element {
           icon={method.icon}
           onClick={() => method.action()}
           key={method.label}
+          style="solid"
         >
           {method.label}
         </Button>
