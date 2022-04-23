@@ -2,7 +2,7 @@ import React from "react";
 
 export type ViewMode = "guest" | "user";
 
-export enum PageTitles {
+export enum PageLabels {
   LOGIN = "login",
   DASHBOARD = "dashboard",
   PROFILE = "profile",
@@ -10,12 +10,12 @@ export enum PageTitles {
   PREDICTION = "prediction",
 }
 export interface IMenuItem {
-  title: PageTitles | "log_out";
+  label: PageLabels | "log_out";
   icon: React.ReactNode;
 }
 
 export interface ILoginMethod {
-  title: string;
+  label: string;
   icon: React.ReactNode;
   action: () => void;
 }

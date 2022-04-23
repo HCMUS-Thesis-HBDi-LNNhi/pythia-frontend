@@ -1,9 +1,9 @@
-import Button from "components/common/button.component";
+import { Button } from "components/common";
 // import API from "const/api.const";
 import icons from "const/icons.const";
 import {
   ILoginMethod,
-  PageTitles,
+  PageLabels,
   ViewMode,
 } from "interfaces/common.interface";
 import { useRouter } from "next/router";
@@ -19,20 +19,20 @@ export default function Login(): JSX.Element {
 
   const loginMethods: ILoginMethod[] = [
     {
-      title: "Login with Google",
+      label: "Login with Google",
       icon: icons.outline.google,
       action: () => {
         setViewMode("user");
         // const response = await fetcher.post(API.POST.loginWithGoogle);
-        router.push(`/${PageTitles.DASHBOARD}`);
+        router.push(`/${PageLabels.DASHBOARD}`);
       },
     },
     {
-      title: "Continue as guest",
+      label: "Continue as guest",
       icon: icons.solid.guest,
       action: () => {
         setViewMode("guest");
-        router.push(`/${PageTitles.DASHBOARD}`);
+        router.push(`/${PageLabels.DASHBOARD}`);
       },
     },
   ];
@@ -56,9 +56,10 @@ export default function Login(): JSX.Element {
         <Button
           icon={method.icon}
           onClick={() => method.action()}
-          key={method.title}
+          key={method.label}
+          style="solid"
         >
-          {method.title}
+          {method.label}
         </Button>
       ))}
     </main>

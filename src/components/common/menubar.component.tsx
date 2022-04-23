@@ -30,12 +30,12 @@ export default function MenuBar(): JSX.Element {
     >
       {menuItems.map((item) => (
         <Link
-          href={item.title != "log_out" ? `/${item.title}` : `/`}
+          href={item.label != "log_out" ? `/${item.label}` : `/`}
           passHref
-          key={item.title}
+          key={item.label}
         >
           <a
-            key={item.title}
+            key={item.label}
             className={[
               "w-full flex items-center space-x-2 text-primary-700 px-6 py-4 capitalize",
               "hover:bg-primary-400 hover:text-white-100",
@@ -49,7 +49,7 @@ export default function MenuBar(): JSX.Element {
                 "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
               ].join(" ")}
             >
-              {item.title}
+              {item.label}
             </span>
           </a>
         </Link>

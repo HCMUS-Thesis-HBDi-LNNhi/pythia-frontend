@@ -1,10 +1,10 @@
-import { IMenuItem, PageTitles } from "interfaces/common.interface";
+import { IMenuItem, PageLabels } from "interfaces/common.interface";
 import icons from "./icons.const";
 
 export const menuItems: IMenuItem[] = [
-  { title: PageTitles.PROFILE, icon: icons.solid.account },
-  { title: PageTitles.DASHBOARD, icon: icons.solid.home },
-  { title: PageTitles.ANALYTICS, icon: icons.outline.analytic },
-  { title: PageTitles.PREDICTION, icon: icons.solid.prediction },
-  { title: "log_out", icon: icons.outline.logout },
+  { label: PageLabels.PROFILE, icon: icons.solid.account },
+  { label: PageLabels.DASHBOARD, icon: icons.solid.home },
+  { label: PageLabels.ANALYTICS, icon: icons.outline.analytic },
+  { label: PageLabels.PREDICTION, icon: icons.solid.prediction },
+  { label: "log_out", icon: icons.outline.logout },
 ];
