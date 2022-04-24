@@ -5,7 +5,7 @@ export type ViewMode = "guest" | "user";
 export enum PageLabels {
   LOGIN = "login",
   DASHBOARD = "dashboard",
-  PROFILE = "profile",
+  HISTORY = "history",
   ANALYTICS = "analytics",
   PREDICTION = "prediction",
 }
