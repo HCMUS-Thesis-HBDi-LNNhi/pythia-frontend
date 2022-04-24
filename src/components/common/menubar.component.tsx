@@ -30,7 +30,7 @@ export default function MenuBar(): JSX.Element {
     >
       {menuItems.map((item) => (
         <Link
-          href={item.label != "log_out" ? `/${item.label}` : `/`}
+          href={item.label != "log out" ? `/${item.label}` : `/`}
           passHref
           key={item.label}
         >

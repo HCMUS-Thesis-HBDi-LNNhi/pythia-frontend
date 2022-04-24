@@ -11,7 +11,9 @@ const outline = {
   delete: <Icon icon="typcn:delete-outline" />,
   trash: <Icon icon="fa:trash-o" />,
   edit: <Icon icon="akar-icons:edit" />,
-  hamburger: <Icon icon="radix-icons:hamburger-menu" />
+  hamburger: <Icon icon="radix-icons:hamburger-menu" />,
+  chevron_down: <Icon icon="akar-icons:circle-chevron-down" />,
+  chevron_up: <Icon icon="akar-icons:circle-chevron-up" />,
 };
 
 const solid = {
@@ -26,7 +28,9 @@ const solid = {
   delete: <Icon icon="typcn:delete" />,
   trash: <Icon icon="fa:trash" />,
   options_vertical: <Icon icon="mi:options-vertical" />,
-  options_horizontal: <Icon icon="mi:options-horizontal" />
+  options_horizontal: <Icon icon="mi:options-horizontal" />,
+  chevron_down: <Icon icon="akar-icons:circle-chevron-down-fill" />,
+  chevron_up: <Icon icon="akar-icons:circle-chevron-up-fill" />,
 };
 
 const colored = {
