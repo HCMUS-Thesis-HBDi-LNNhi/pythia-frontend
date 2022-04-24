@@ -10,7 +10,7 @@ export enum PageLabels {
   PREDICTION = "prediction",
 }
 export interface IMenuItem {
-  label: PageLabels | "log_out";
+  label: PageLabels | "log out";
   icon: React.ReactNode;
 }
 
@@ -18,4 +18,11 @@ export interface ILoginMethod {
   label: string;
   icon: React.ReactNode;
   action: () => void;
+}
+
+export enum TagColor {
+  gray,
+  red,
+  green,
+  blue,
 }

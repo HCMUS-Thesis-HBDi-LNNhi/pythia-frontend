@@ -6,5 +6,5 @@ export const menuItems: IMenuItem[] = [
   { label: PageLabels.DASHBOARD, icon: icons.solid.home },
   { label: PageLabels.ANALYTICS, icon: icons.outline.analytic },
   { label: PageLabels.PREDICTION, icon: icons.solid.prediction },
-  { label: "log_out", icon: icons.outline.logout },
+  { label: "log out", icon: icons.outline.logout },
 ];

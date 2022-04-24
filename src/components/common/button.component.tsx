@@ -24,9 +24,10 @@ export default function Button(props: Props): JSX.Element {
   return (
     <button
       className={[
-        "rounded-xl text-center",
-        "py-3 px-5 opacity-80 flex items-center",
+        "rounded-xl text-center px-5",
+        "opacity-80 flex items-center",
         "hover:opacity-100 hover:font-medium",
+        (!props.icon || props.children) && "py-3",
         getStyle(),
         props.className,
       ].join(" ")}
