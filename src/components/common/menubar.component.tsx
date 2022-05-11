@@ -1,10 +1,27 @@
+import icons from "const/icons.const";
 import { menuItems } from "const/pages.const";
+import { IMenuItem, PageLabels, ViewMode } from "interfaces/common.interface";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useReadLocalStorage } from "usehooks-ts";
 
 export default function MenuBar(): JSX.Element {
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const viewMode: ViewMode | null = useReadLocalStorage("view-mode");
   const [isHover, setIsHover] = useState(false);
+
+  const [items, setItems] = useState<IMenuItem[]>(menuItems);
+
+  useLayoutEffect(() => {
+    if (!viewMode) return;
+    const newItems = items.slice();
+    if (viewMode === "guest") {
+      newItems.push({ label: PageLabels.LOGIN, icon: icons.outline.login });
+    } else {
+      newItems.push({ label: "log out", icon: icons.outline.logout });
+    }
+    setItems(newItems);
+  }, [viewMode]);
 
   useEffect(() => {
     const menuElement = menuRef.current;
@@ -28,9 +45,11 @@ export default function MenuBar(): JSX.Element {
       ].join(" ")}
       ref={menuRef}
     >
-      {menuItems.map((item) => (
+      {items.map((item) => (
         <Link
-          href={item.label != "log out" ? `/${item.label}` : `/`}
+          href={
+            item.label != "log out" ? `/${item.label}` : `/${PageLabels.LOGIN}`
+          }
           passHref
           key={item.label}
         >
@@ -39,7 +58,7 @@ export default function MenuBar(): JSX.Element {
             className={[
               "w-full flex items-center space-x-2 text-primary-700 px-6 py-4 capitalize",
               "hover:bg-primary-400 hover:text-white-100",
-              "last:text-white-100 last:absolute last:bottom-20 hover:last:text-primary-700",
+              "last:text-white-100 hover:last:text-primary-700 last:absolute last:bottom-[5%]",
             ].join(" ")}
           >
             <span className="text-4xl">{item.icon}</span>

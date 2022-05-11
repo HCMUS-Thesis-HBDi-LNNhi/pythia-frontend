@@ -5,6 +5,7 @@ const outline = {
   home: <Icon icon="bx:home" />,
   analytic: <Icon icon="carbon:analytics" />,
   logout: <Icon icon="ic:outline-logout" />,
+  login: <Icon icon="ic:outline-login" />,
   google: <Icon icon="ant-design:google-outlined" />,
   guest: <Icon icon="fluent:guest-16-regular" />,
   plus: <Icon icon="akar-icons:circle-plus" />,
@@ -14,6 +15,10 @@ const outline = {
   hamburger: <Icon icon="radix-icons:hamburger-menu" />,
   chevron_down: <Icon icon="akar-icons:circle-chevron-down" />,
   chevron_up: <Icon icon="akar-icons:circle-chevron-up" />,
+  chevron_left: <Icon icon="akar-icons:circle-chevron-left" />,
+  chevron_right: <Icon icon="akar-icons:circle-chevron-right" />,
+  history: <Icon icon="icon-park-outline:history" />,
+  dots: <Icon icon="bi:three-dots" />,
 };
 
 const solid = {
@@ -31,6 +36,8 @@ const solid = {
   options_horizontal: <Icon icon="mi:options-horizontal" />,
   chevron_down: <Icon icon="akar-icons:circle-chevron-down-fill" />,
   chevron_up: <Icon icon="akar-icons:circle-chevron-up-fill" />,
+  chevron_left: <Icon icon="akar-icons:circle-chevron-left-fill" />,
+  chevron_right: <Icon icon="akar-icons:circle-chevron-right-fill" />,
 };
 
 const colored = {
