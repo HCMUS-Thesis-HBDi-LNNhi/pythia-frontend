@@ -1,4 +1,12 @@
 import * as axios from "axios";
+import { useReadLocalStorage } from "usehooks-ts";
+
+axios.default.interceptors.request.use(function (config) {
+  if (!config.headers) return;
+  const token = useReadLocalStorage<string>("token");
+  config.headers.Authorization = token ?? "";
+  return config;
+});
 
 function get(
   url: string,

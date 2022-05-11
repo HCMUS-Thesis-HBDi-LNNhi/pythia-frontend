@@ -45,17 +45,6 @@ export default function MenuBar(): JSX.Element {
       ].join(" ")}
       ref={menuRef}
     >
-      <div className="w-full flex items-center space-x-2 text-primary-700 px-6 py-4 capitalize">
-        <span className="text-4xl">{icons.solid.account}</span>
-        <span
-          className={[
-            isHover ? "inline" : "hidden",
-            "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
-          ].join(" ")}
-        >
-          {viewMode === "guest" ? "Guest" : "Username"}
-        </span>
-      </div>
       {items.map((item) => (
         <Link
           href={
@@ -69,7 +58,7 @@ export default function MenuBar(): JSX.Element {
             className={[
               "w-full flex items-center space-x-2 text-primary-700 px-6 py-4 capitalize",
               "hover:bg-primary-400 hover:text-white-100",
-              "last:text-white-100 hover:last:text-primary-700",
+              "last:text-white-100 hover:last:text-primary-700 last:absolute last:bottom-[5%]",
             ].join(" ")}
           >
             <span className="text-4xl">{item.icon}</span>

@@ -5,5 +5,5 @@ export const menuItems: IMenuItem[] = [
   { label: PageLabels.DASHBOARD, icon: icons.solid.home },
   { label: PageLabels.ANALYTICS, icon: icons.outline.analytic },
   { label: PageLabels.PREDICTION, icon: icons.solid.prediction },
-  { label: PageLabels.HISTORY, icon: icons.outline.history },
+  { label: PageLabels.PROFILE, icon: icons.solid.account },
 ];
