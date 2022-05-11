@@ -21,7 +21,7 @@ export default function MenuBar(): JSX.Element {
       newItems.push({ label: "log out", icon: icons.outline.logout });
     }
     setItems(newItems);
-  }, [viewMode]);
+  }, [viewMode, items]);
 
   useEffect(() => {
     const menuElement = menuRef.current;

@@ -44,8 +44,8 @@ export default function Profile(): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {history.map((value) => (
-            <tr>
+          {history.map((value, index) => (
+            <tr key={value.name + " " + index}>
               <td className="border border-primary-500 p-4">
                 {value.created_at}
               </td>
