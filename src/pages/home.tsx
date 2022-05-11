@@ -1,9 +1,9 @@
 import { Layout } from "components/common";
-import { ChartList, NumberList } from "components/dashboard";
-import { IChartData, INumberData } from "interfaces/dashboard.interface";
+import { ChartList, NumberList } from "components/home";
+import { IChartData, INumberData } from "interfaces/home.interface";
 import { useState } from "react";
 
-export default function Dashboard(): JSX.Element {
+export default function Home(): JSX.Element {
   const [numberData, setNumberData] = useState<INumberData[]>([
     { label: "Total records 1", value: 12300, description: "Hello" },
     { label: "Total records 2", value: 12300 },
@@ -23,9 +23,13 @@ export default function Dashboard(): JSX.Element {
 
   return (
     <Layout className="space-y-8 text-primary-700">
-      <h1 className="text-4xl text-center">Dashboard</h1>
-      {numberData && <NumberList numberData={numberData} setNumberData={setNumberData} />}
-      {chartData && <ChartList chartData={chartData} setChartData={setChartData} />}
+      <h1 className="text-4xl text-center">Home</h1>
+      {numberData && (
+        <NumberList numberData={numberData} setNumberData={setNumberData} />
+      )}
+      {chartData && (
+        <ChartList chartData={chartData} setChartData={setChartData} />
+      )}
     </Layout>
   );
 }

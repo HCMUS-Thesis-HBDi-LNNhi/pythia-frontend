@@ -1,5 +1,5 @@
 import { Button, Input, Tag } from "components/common";
-import { RetainModel } from "interfaces/analytics.interface";
+import { RetainModel } from "interfaces/segmentation.interface";
 import { useState } from "react";
 import { TagColor } from "interfaces/common.interface";
 import icons from "const/icons.const";
