@@ -2,7 +2,14 @@ import icons from "const/icons.const";
 import { menuItems } from "const/pages.const";
 import { IMenuItem, PageLabels, ViewMode } from "interfaces/common.interface";
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 
 export default function MenuBar(): JSX.Element {
@@ -10,18 +17,21 @@ export default function MenuBar(): JSX.Element {
   const viewMode: ViewMode | null = useReadLocalStorage("view-mode");
   const [isHover, setIsHover] = useState(false);
 
-  const [items, setItems] = useState<IMenuItem[]>(menuItems);
+  const [items] = useState<IMenuItem[]>(getMenuItem());
 
-  useLayoutEffect(() => {
-    if (!viewMode) return;
-    const newItems = items.slice();
-    if (viewMode === "guest") {
-      newItems.push({ label: PageLabels.LOGIN, icon: icons.outline.login });
-    } else {
-      newItems.push({ label: "log out", icon: icons.outline.logout });
+  function getMenuItem(): IMenuItem[] {
+    switch (viewMode) {
+      case "guest":
+        return [
+          ...menuItems,
+          { label: PageLabels.LOGIN, icon: icons.outline.login },
+        ];
+      case "user":
+        return [...menuItems, { label: "log out", icon: icons.outline.logout }];
+      default:
+        return menuItems;
     }
-    setItems(newItems);
-  }, [viewMode, items]);
+  }
 
   useEffect(() => {
     const menuElement = menuRef.current;
