@@ -1,27 +1,27 @@
 import { Button, Dialog, Input } from "components/common";
 import icons from "const/icons.const";
-import { IChartData } from "interfaces/dashboard.interface";
+import { INumberData } from "interfaces/home.interface";
 import { Dispatch, SetStateAction, useState } from "react";
 import DisplayBox from "./display-box.component";
 
 interface Props {
-  chartData: IChartData[];
-  setChartData: Dispatch<SetStateAction<IChartData[]>>;
+  numberData: INumberData[];
+  setNumberData: Dispatch<SetStateAction<INumberData[]>>;
 }
 
-const defaultData: IChartData = {
+const defaultData: INumberData = {
   label: "",
-  chart: "Some chart",
+  value: 0,
   description: "",
 };
 
-export default function ChartList(props: Props): JSX.Element {
-  const { chartData, setChartData } = props;
+export default function NumberList(props: Props): JSX.Element {
+  const { numberData, setNumberData } = props;
   const [isShow, setIsShow] = useState(false);
-  const [submitData, setSubmitData] = useState<IChartData>(defaultData);
+  const [submitData, setSubmitData] = useState<INumberData>(defaultData);
 
   const updateSubmitData = (
-    key: keyof IChartData,
+    key: keyof INumberData,
     value: string | number | readonly string[]
   ) => setSubmitData({ ...submitData, [key]: value });
 
@@ -31,41 +31,44 @@ export default function ChartList(props: Props): JSX.Element {
   };
 
   function add() {
-    const newData = chartData.slice();
+    const newData = numberData.slice();
     newData.push(submitData);
-    setChartData(newData.slice());
+    setNumberData(newData.slice());
   }
 
   function remove(index: number) {
-    const newData = chartData.slice();
+    const newData = numberData.slice();
     newData.splice(index, 1);
-    setChartData(newData.slice());
+    setNumberData(newData.slice());
   }
 
   return (
-    <main className="grid grid-cols-3">
-      {chartData.map((item, index) => (
+    <main className="grid grid-cols-5">
+      {numberData.map((item, index) => (
         <DisplayBox
           label={item.label}
           key={item.label + "_" + index}
           onClick={() => remove(index)}
         >
-          {item.chart}
+          <div>{item.value}</div>
+          {item.description && <div>{item.description}</div>}
         </DisplayBox>
       ))}
-      <div
-        className={[
-          "border rounded-lg text-center m-2 aspect-4/3",
-          "flex-1 grid hover:shadow-lg",
-        ].join(" ")}
-      >
-        <Button
-          className="text-5xl w-full h-full place-content-center"
-          style="outline"
-          icon={icons.outline.plus}
-          onClick={() => setIsShow(true)}
-        />
-      </div>
+      {numberData.length < 5 && (
+        <div
+          className={[
+            "border rounded-lg text-center m-2 aspect-4/3",
+            "flex-1 grid hover:shadow-lg",
+          ].join(" ")}
+        >
+          <Button
+            className="text-4xl w-full h-full place-content-center"
+            style="outline"
+            icon={icons.outline.plus}
+            onClick={() => setIsShow(true)}
+          />
+        </div>
+      )}
       {isShow && (
         <Dialog className="w-1/2 h-1/2">
           <div className="h-5/6 grid grid-cols-[30%_60%] place-items-center">
@@ -81,10 +84,10 @@ export default function ChartList(props: Props): JSX.Element {
             <label htmlFor="value">Value</label>
             <Input
               id="value"
-              type="text"
+              type="number"
               fill
-              value={submitData.chart?.toString()}
-              setValue={(value) => updateSubmitData("chart", value)}
+              value={submitData.value !== 0 ? submitData.value : undefined}
+              setValue={(value) => updateSubmitData("value", value)}
             />
             <label htmlFor="description">Description</label>
             <Input

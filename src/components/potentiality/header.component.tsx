@@ -1,7 +1,7 @@
 import { Button, Tag } from "components/common";
 import { useState } from "react";
 import { TagColor } from "interfaces/common.interface";
-import { AcquireModel } from "interfaces/prediction.interface";
+import { AcquireModel } from "interfaces/potentiality.interface";
 
 export default function Header(): JSX.Element {
   const [selectModel, setSelectModel] = useState<AcquireModel>(

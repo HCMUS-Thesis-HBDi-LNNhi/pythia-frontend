@@ -24,7 +24,7 @@ export default function Login(): JSX.Element {
       action: () => {
         setViewMode("user");
         // const response = await fetcher.post(API.POST.loginWithGoogle);
-        router.push(`/${PageLabels.DASHBOARD}`);
+        router.push(`/${PageLabels.HOME}`);
       },
     },
     {
@@ -32,7 +32,7 @@ export default function Login(): JSX.Element {
       icon: icons.solid.guest,
       action: () => {
         setViewMode("guest");
-        router.push(`/${PageLabels.DASHBOARD}`);
+        router.push(`/${PageLabels.HOME}`);
       },
     },
   ];

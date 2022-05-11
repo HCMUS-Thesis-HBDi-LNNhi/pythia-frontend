@@ -9,6 +9,6 @@ export default function Router(): void {
 
   useLayoutEffect(() => {
     if (!viewMode) router.push(`/${PageLabels.LOGIN}`);
-    else router.push(`/${PageLabels.DASHBOARD}`);
+    else router.push(`/${PageLabels.HOME}`);
   }, [router, viewMode]);
 }

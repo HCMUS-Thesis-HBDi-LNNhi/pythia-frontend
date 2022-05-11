@@ -4,10 +4,10 @@ export type ViewMode = "guest" | "user";
 
 export enum PageLabels {
   LOGIN = "login",
-  DASHBOARD = "dashboard",
+  HOME = "home",
   PROFILE = "profile",
-  ANALYTICS = "analytics",
-  PREDICTION = "prediction",
+  SEGMENTATION = "segmentation",
+  POTENTIALITY = "potentiality",
 }
 export interface IMenuItem {
   label: PageLabels | "log out";
