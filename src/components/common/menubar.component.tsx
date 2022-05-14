@@ -1,16 +1,11 @@
 import icons from "const/icons.const";
 import { menuItems } from "const/pages.const";
 import { IMenuItem, PageLabels, ViewMode } from "interfaces/common.interface";
-import Link from "next/link";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+
+const Link = dynamic(() => import("next/link"), { ssr: false });
 
 export default function MenuBar(): JSX.Element {
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -50,7 +45,7 @@ export default function MenuBar(): JSX.Element {
     <div
       className={[
         "bg-gradient-to-t from-primary-600 via-primary-300 to-white-100",
-        "h-screen w-20 hover:w-48 duration-500",
+        "h-screen w-20 hover:w-56 duration-500",
         "flex flex-col py-20 space-y-10 relative",
       ].join(" ")}
       ref={menuRef}
