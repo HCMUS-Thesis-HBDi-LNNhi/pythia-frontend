@@ -2,6 +2,8 @@ import React from "react";
 
 export type ViewMode = "guest" | "user";
 
+export type ButtonStyle = "outline" | "solid" | "failure" | "highlight";
+
 export enum PageLabels {
   LOGIN = "login",
   HOME = "home",
@@ -25,4 +27,10 @@ export enum TagColor {
   red,
   green,
   blue,
+}
+
+export interface IChartType {
+  label: string;
+  icon?: React.ReactNode;
+  focusIcon?: React.ReactNode;
 }
