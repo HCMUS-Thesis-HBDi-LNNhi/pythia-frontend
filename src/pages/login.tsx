@@ -25,14 +25,13 @@ export default function Login(): JSX.Element {
         try {
           setViewMode("user");
           const response = await fetcher.get(
-            API.GET.loginWithGoogle(
-              encodeURIComponent(process.env.NEXT_PUBLIC_BASE_URL ?? "")
-            )
+            API.GET.loginWithGoogle(encodeURI(window.location.origin ?? ""))
           );
-          setTimeout(
-            () => router.push(`/redirect/${response.data.login_path}`),
-            5000
-          );
+          const res = await fetcher.get(`${response.data.login_path}`);
+          // setTimeout(
+          //   () => router.push(`/redirect/${response.data.login_path}`),
+          //   20000
+          // );
         } catch (error) {
           console.error(error);
         }
