@@ -1,6 +1,6 @@
 const GET = {
   loginWithGoogle: (redirect_url: string) =>
-    `/login?provider_id=google_oauth2&redirect_url=${redirect_url}`,
+    `/authorize?provider_id=google_oauth2&redirect_url=${redirect_url}`,
 };
 
 const POST = {};

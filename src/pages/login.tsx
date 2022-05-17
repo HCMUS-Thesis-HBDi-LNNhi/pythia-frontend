@@ -27,7 +27,7 @@ export default function Login(): JSX.Element {
           const response = await fetcher.get(
             API.GET.loginWithGoogle(encodeURI(window.location.origin ?? ""))
           );
-          const res = await fetcher.get(`${response.data.login_path}`);
+          // const res = await fetcher.get(`${response.data.login_path}`);
           // setTimeout(
           //   () => router.push(`/redirect/${response.data.login_path}`),
           //   20000
