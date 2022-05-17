@@ -20,6 +20,7 @@ interface Props {
   onClick?: () => void;
   className?: string;
   style?: ButtonStyle;
+  hoverStyle?: boolean;
   icon?: React.ReactNode;
   focusIcon?: React.ReactNode;
   isSelected?: boolean;
@@ -39,8 +40,10 @@ export default function Button(props: Props): JSX.Element {
       className={[
         "rounded-xl text-center px-5",
         "opacity-80 flex items-center",
+        !props.disabled && "hover:opacity-100 hover:font-medium",
         !props.disabled &&
-          "hover:opacity-100 hover:font-medium hover:bg-primary-500 hover:text-white-100",
+          props.hoverStyle &&
+          "hover:bg-primary-500 hover:text-white-100",
         props.isSelected && "bg-primary-500 text-white-100 opacity-100",
         (!props.icon || props.children) && "py-3",
         props.disabled && "bg-slate-300 text-slate-500",

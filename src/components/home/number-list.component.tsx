@@ -1,4 +1,4 @@
-import { Button, Dialog, Input } from "components/common";
+import { Button, Dialog, Input, Select, Textarea } from "components/common";
 import icons from "const/icons.const";
 import { INumberData } from "interfaces/home.interface";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -13,6 +13,8 @@ const defaultData: INumberData = {
   label: "",
   value: 0,
   description: "",
+  report: "segmentation",
+  key: "age",
 };
 
 export default function NumberList(props: Props): JSX.Element {
@@ -22,7 +24,7 @@ export default function NumberList(props: Props): JSX.Element {
 
   const updateSubmitData = (
     key: keyof INumberData,
-    value: string | number | readonly string[]
+    value: string | number | readonly string[] | undefined
   ) => setSubmitData({ ...submitData, [key]: value });
 
   const clear = () => {
@@ -81,18 +83,47 @@ export default function NumberList(props: Props): JSX.Element {
               value={submitData.label}
               setValue={(value) => updateSubmitData("label", value)}
             />
-            <label htmlFor="value">Value</label>
-            <Input
-              id="value"
-              type="number"
+            <label htmlFor="report">Report</label>
+            <Select
+              options={[
+                {
+                  label: "Segmentation report",
+                  value: "segmentation",
+                  id: "segmentation",
+                },
+                {
+                  label: "Potentiality report",
+                  value: "potentiality",
+                  id: "potentiality",
+                },
+              ]}
+              id="report"
               fill
               value={submitData.value !== 0 ? submitData.value : undefined}
-              setValue={(value) => updateSubmitData("value", value)}
+              setValue={(value) => updateSubmitData("report", value)}
+            />
+            <label htmlFor="key">Key</label>
+            <Select
+              options={[
+                {
+                  label: "Age",
+                  value: "age",
+                  id: "age",
+                },
+                {
+                  label: "Gender",
+                  value: "gender",
+                  id: "gender",
+                },
+              ]}
+              id="key"
+              fill
+              value={submitData.value !== 0 ? submitData.value : undefined}
+              setValue={(value) => updateSubmitData("key", value)}
             />
             <label htmlFor="description">Description</label>
-            <Input
+            <Textarea
               id="description"
-              type="text"
               fill
               value={submitData.description}
               setValue={(value) => updateSubmitData("description", value)}

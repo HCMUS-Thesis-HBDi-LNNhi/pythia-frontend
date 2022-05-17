@@ -3,6 +3,8 @@ import React from "react";
 export interface INumberData {
   label: string;
   value: number;
+  report: string;
+  key: string;
   description?: string;
 }
 
