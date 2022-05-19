@@ -7,6 +7,7 @@ import {
   ViewMode,
 } from "interfaces/common.interface";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { fetcher } from "utils/fetcher";
 
@@ -24,18 +25,11 @@ export default function Login(): JSX.Element {
       action: async () => {
         try {
           setViewMode("user");
-          const response = await fetcher.get(
-            API.GET.loginWithGoogle(encodeURI(window.location.origin ?? ""))
-          );
-          // const res = await fetcher.get(`${response.data.login_path}`);
-          // setTimeout(
-          //   () => router.push(`/redirect/${response.data.login_path}`),
-          //   20000
-          // );
+          const response = await fetcher.get(API.GET.loginWithGoogle);
+          router.push(`/redirect/${response.data.login_path}`);
         } catch (error) {
           console.error(error);
         }
-        // router.push(`/${PageLabels.HOME}`);
       },
     },
     {
@@ -47,6 +41,10 @@ export default function Login(): JSX.Element {
       },
     },
   ];
+
+  useEffect(() => {
+    window.localStorage.clear();
+  }, []);
 
   return (
     <main
