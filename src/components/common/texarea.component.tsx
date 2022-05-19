@@ -1,11 +1,6 @@
-import {
-  ChangeEventHandler,
-  FocusEventHandler,
-  HTMLInputTypeAttribute,
-} from "react";
+import { ChangeEventHandler, FocusEventHandler } from "react";
 
 interface Props {
-  type: HTMLInputTypeAttribute;
   placeholder?: string;
   value?: string | number | readonly string[];
   setValue?: (value: string | number | readonly string[]) => void;
@@ -13,14 +8,13 @@ interface Props {
   className?: string;
   id?: string;
   defaultValue?: string | number | readonly string[];
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  onBlur?: FocusEventHandler<HTMLInputElement>;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>;
 }
 
-export default function Input(props: Props): JSX.Element {
+export default function Textarea(props: Props): JSX.Element {
   return (
-    <input
-      type={props.type}
+    <textarea
       defaultValue={props.defaultValue}
       value={props.value}
       onChange={(e) => {

@@ -5,5 +5,17 @@ import MenuBar from "./menubar.component";
 import Input from "./input.component";
 import Tag from "./tag.component";
 import Charts from "./charts";
+import Textarea from "./texarea.component";
+import Select from "./select.component";
 
-export { Button, Dialog, Layout, MenuBar, Input, Tag, Charts };
+export {
+  Button,
+  Dialog,
+  Layout,
+  MenuBar,
+  Input,
+  Tag,
+  Charts,
+  Textarea,
+  Select,
+};
