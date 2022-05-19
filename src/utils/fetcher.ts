@@ -1,10 +1,12 @@
 import * as axios from "axios";
-import { useReadLocalStorage } from "usehooks-ts";
 
 axios.default.interceptors.request.use(function (config) {
-  if (!config.headers) return;
-  const token = useReadLocalStorage<string>("token");
-  config.headers.Authorization = token ?? "";
+  const token = localStorage.getItem("token");
+  if (token)
+    config.headers = {
+      ...config.headers,
+      "X-Access-Token": token,
+    };
   return config;
 });
 
