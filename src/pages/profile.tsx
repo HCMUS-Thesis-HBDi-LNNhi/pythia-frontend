@@ -1,4 +1,4 @@
-import { Layout } from "components/common";
+import { Layout, toast } from "components/common";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -7,13 +7,15 @@ import { fetcher } from "utils/fetcher";
 export default function Profile(): JSX.Element {
   const userId = useReadLocalStorage<string>("user-id");
   const [history, setHistory] = useState<IHistory[]>();
+  const [isLoading, setLoading] = useState(false);
 
   async function fetchHistory(userId: string) {
     try {
+      setLoading(true);
       const response = await fetcher.get(`/users/${userId}/files`);
-      const data: IHistoryResponse = response.data;
+      const responseData: IHistoryResponse = response.data;
       setHistory(
-        data.files.map((value) => {
+        responseData.files.map((value) => {
           return {
             ...value,
             created_at: new Date(value.created_at),
@@ -23,6 +25,10 @@ export default function Profile(): JSX.Element {
       );
     } catch (error) {
       console.error(error);
+      toast("Something went wrong. Please try again!", "failure");
+      setHistory(undefined);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -32,7 +38,7 @@ export default function Profile(): JSX.Element {
   }, [userId]);
 
   return (
-    <Layout className="space-y-8 text-primary-700">
+    <Layout className="space-y-8 text-primary-700" isLoading={isLoading}>
       <h1 className="text-4xl text-center">History</h1>
       {history && history.length > 0 ? (
         <table className="w-full text-center">

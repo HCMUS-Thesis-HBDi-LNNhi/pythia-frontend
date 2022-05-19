@@ -8,11 +8,11 @@ import { useLocalStorage } from "usehooks-ts";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
-  const [userID, setUserID] = useLocalStorage<string | undefined>(
+  const [_userID, setUserID] = useLocalStorage<string | undefined>(
     "user-id",
     undefined
   );
-  const [token, setToken] = useLocalStorage<string | undefined>(
+  const [_token, setToken] = useLocalStorage<string | undefined>(
     "token",
     undefined
   );
@@ -36,8 +36,8 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     const { token, user_id } = router.query;
     if (!token || !user_id) return;
-    setUserID(user_id.toString().replaceAll('"', ""));
-    setToken(token.toString().replaceAll('"', ""));
+    setUserID(user_id.toString());
+    setToken(token.toString());
   }, []);
 
   return (
