@@ -1,4 +1,4 @@
-import { Button } from "components/common";
+import { Button, toast } from "components/common";
 import API from "const/api.const";
 import icons from "const/icons.const";
 import {
@@ -29,6 +29,9 @@ export default function Login(): JSX.Element {
           router.push(`/redirect/${response.data.login_path}`);
         } catch (error) {
           console.error(error);
+          toast("Can't login with google. Please try again");
+          window.localStorage.clear();
+          router.push(`/${PageLabels.LOGIN}`);
         }
       },
     },

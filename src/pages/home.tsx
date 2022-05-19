@@ -1,4 +1,4 @@
-import { Layout, Toast } from "components/common";
+import { Layout } from "components/common";
 import { ChartList, NumberList } from "components/home";
 import { ChartType } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
@@ -8,11 +8,11 @@ import { useLocalStorage } from "usehooks-ts";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
-  const [userID, setUserID] = useLocalStorage<string | undefined>(
+  const [_userID, setUserID] = useLocalStorage<string | undefined>(
     "user-id",
     undefined
   );
-  const [token, setToken] = useLocalStorage<string | undefined>(
+  const [_token, setToken] = useLocalStorage<string | undefined>(
     "token",
     undefined
   );

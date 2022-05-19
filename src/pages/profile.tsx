@@ -1,4 +1,4 @@
-import { Layout } from "components/common";
+import { Layout, toast } from "components/common";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -11,9 +11,9 @@ export default function Profile(): JSX.Element {
   async function fetchHistory(userId: string) {
     try {
       const response = await fetcher.get(`/users/${userId}/files`);
-      const data: IHistoryResponse = response.data;
+      const responseData: IHistoryResponse = response.data;
       setHistory(
-        data.files.map((value) => {
+        responseData.files.map((value) => {
           return {
             ...value,
             created_at: new Date(value.created_at),
@@ -23,6 +23,8 @@ export default function Profile(): JSX.Element {
       );
     } catch (error) {
       console.error(error);
+      toast("Something went wrong. Please try again!");
+      setHistory(undefined);
     }
   }
 
