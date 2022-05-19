@@ -24,7 +24,6 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout className="space-y-8 text-primary-700">
-      <Toast message="Hi there" />
       <h1 className="text-4xl text-center">Home</h1>
       {numberData && (
         <NumberList numberData={numberData} setNumberData={setNumberData} />
