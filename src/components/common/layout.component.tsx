@@ -1,8 +1,10 @@
+import Loading from "./loading.component";
 import MenuBar from "./menubar.component";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
+  isLoading?: boolean;
 }
 
 export default function Layout(props: Props): JSX.Element {
@@ -16,6 +18,7 @@ export default function Layout(props: Props): JSX.Element {
       >
         {props.children}
       </main>
+      {props.isLoading && <Loading />}
     </div>
   );
 }

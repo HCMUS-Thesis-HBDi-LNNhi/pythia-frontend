@@ -8,6 +8,7 @@ import Charts from "./charts";
 import Textarea from "./texarea.component";
 import Select from "./select.component";
 import toast from "./toast.component";
+import Loading from "./loading.component";
 
 export {
   Button,
@@ -20,4 +21,5 @@ export {
   Textarea,
   Select,
   toast,
+  Loading,
 };

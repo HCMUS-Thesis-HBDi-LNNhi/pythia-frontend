@@ -5,7 +5,7 @@ axios.default.interceptors.request.use(function (config) {
   if (token)
     config.headers = {
       ...config.headers,
-      "X-Access-Token": token,
+      "X-Access-Token": token.replaceAll('"', ""),
     };
   return config;
 });

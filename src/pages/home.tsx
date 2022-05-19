@@ -36,8 +36,8 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     const { token, user_id } = router.query;
     if (!token || !user_id) return;
-    setUserID(user_id.toString().replaceAll('"', ""));
-    setToken(token.toString().replaceAll('"', ""));
+    setUserID(user_id.toString());
+    setToken(token.toString());
   }, []);
 
   return (
