@@ -1,11 +1,12 @@
-import { ChartTypes } from "const/common.const";
+import { ChartTypes } from "const/chart.const";
 import icons from "const/icons.const";
+import { ChartType } from "interfaces/common.interface";
 import { Dispatch, SetStateAction } from "react";
 import Button from "../button.component";
 
 interface Props {
-  isSelected: string;
-  setSelected: Dispatch<SetStateAction<string>>;
+  isSelected: ChartType;
+  setSelected: Dispatch<SetStateAction<ChartType>>;
 }
 
 export default function ChartHeader(props: Props): JSX.Element {
@@ -22,9 +23,10 @@ export default function ChartHeader(props: Props): JSX.Element {
             icon={value.icon}
             isSelected={props.isSelected === value.label}
             onClick={() => {
-              props.setSelected(value.label);
+              props.setSelected(value.type);
             }}
             disabled={value.label == ChartTypes[ChartTypes.length - 1].label}
+            hoverStyle
           />
         ))}
       </div>

@@ -10,9 +10,8 @@ import {
   LineElement,
   ArcElement,
 } from "chart.js";
-import { ChartTypes } from "const/common.const";
+import { ChartType } from "interfaces/common.interface";
 import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
-// import { ReGeoMapChart } from "regeo-map-chart";
 
 ChartJS.register(
   Title,
@@ -30,7 +29,7 @@ interface Props {
   chartTitle: string;
   labels: string[];
   data: number[];
-  chartType: string;
+  chartType: ChartType;
   scatterChartData?: { x: number; y: number }[];
 }
 
@@ -38,7 +37,7 @@ export default function ChartBody(props: Props): JSX.Element {
   const { labels, data, chartType, scatterChartData, chartTitle } = props;
 
   switch (chartType) {
-    case ChartTypes[0].label:
+    case ChartType.bar:
       return (
         <Bar
           data={{
@@ -53,7 +52,7 @@ export default function ChartBody(props: Props): JSX.Element {
           }}
         />
       );
-    case ChartTypes[1].label:
+    case ChartType.line:
       return (
         <Line
           data={{
@@ -69,7 +68,7 @@ export default function ChartBody(props: Props): JSX.Element {
           }}
         />
       );
-    case ChartTypes[2].label:
+    case ChartType.pie:
       return (
         <Pie
           options={{ aspectRatio: 2 / 1 }}
@@ -103,7 +102,7 @@ export default function ChartBody(props: Props): JSX.Element {
           }}
         />
       );
-    case ChartTypes[3].label:
+    case ChartType.scatter:
       return (
         <Scatter
           options={{
@@ -124,7 +123,7 @@ export default function ChartBody(props: Props): JSX.Element {
           }}
         />
       );
-    // case ChartTypes[4].label:
+    // case ChartType.geo:
     //   <ReGeoMapChart
     //     data={[
     //       ["Region", "Users", "Active Users"],

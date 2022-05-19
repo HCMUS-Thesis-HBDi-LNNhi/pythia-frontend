@@ -1,61 +1,61 @@
-import { Button, Dialog, Input } from "components/common";
+import { Button } from "components/common";
+import ChartBody from "components/common/charts/body";
 import icons from "const/icons.const";
+import { ChartType } from "interfaces/common.interface";
 import { IChartData } from "interfaces/home.interface";
 import { Dispatch, SetStateAction, useState } from "react";
+import ChartDialog from "./chart-dialog.component";
 import DisplayBox from "./display-box.component";
 
+const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 interface Props {
   chartData: IChartData[];
   setChartData: Dispatch<SetStateAction<IChartData[]>>;
 }
 
-const defaultData: IChartData = {
+const initialData: IChartData = {
   label: "",
-  chart: "Some chart",
-  description: "",
+  report: "segmentation",
+  metric: "age",
+  chartType: ChartType.bar,
 };
 
 export default function ChartList(props: Props): JSX.Element {
-  const { chartData, setChartData } = props;
   const [isShow, setIsShow] = useState(false);
-  const [submitData, setSubmitData] = useState<IChartData>(defaultData);
-
-  const updateSubmitData = (
-    key: keyof IChartData,
-    value: string | number | readonly string[]
-  ) => setSubmitData({ ...submitData, [key]: value });
+  const [submittedData, setSubmittedData] = useState<IChartData>(initialData);
 
   const clear = () => {
-    setSubmitData(defaultData);
+    setSubmittedData(initialData);
     setIsShow(false);
   };
 
-  function add() {
-    const newData = chartData.slice();
-    newData.push(submitData);
-    setChartData(newData.slice());
-  }
-
-  function remove(index: number) {
-    const newData = chartData.slice();
-    newData.splice(index, 1);
-    setChartData(newData.slice());
-  }
-
   return (
     <main className="grid grid-cols-3">
-      {chartData.map((item, index) => (
+      {props.chartData.map((item, index) => (
         <DisplayBox
           label={item.label}
           key={item.label + "_" + index}
-          onClick={() => remove(index)}
+          onClick={() => {
+            const newData = props.chartData.slice();
+            newData.splice(index, 1);
+            props.setChartData(newData.slice());
+          }}
         >
-          {item.chart}
+          <ChartBody
+            chartTitle={item.metric}
+            labels={labels}
+            data={labels.map(() => Math.random() * 100)}
+            scatterChartData={labels.map(() => ({
+              x: Math.random() * 100,
+              y: Math.random() * 100,
+            }))}
+            chartType={item.chartType}
+          />
         </DisplayBox>
       ))}
       <div
         className={[
-          "border rounded-lg text-center m-2 aspect-4/3",
+          "border border-primary-300 rounded-lg text-center m-2 aspect-4/3",
           "flex-1 grid hover:shadow-lg",
         ].join(" ")}
       >
@@ -67,49 +67,17 @@ export default function ChartList(props: Props): JSX.Element {
         />
       </div>
       {isShow && (
-        <Dialog className="w-1/2 h-1/2">
-          <div className="h-5/6 grid grid-cols-[30%_60%] place-items-center">
-            <h6 className="col-span-2">Create a new box</h6>
-            <label htmlFor="label">Label</label>
-            <Input
-              id="label"
-              type="text"
-              fill
-              value={submitData.label}
-              setValue={(value) => updateSubmitData("label", value)}
-            />
-            <label htmlFor="value">Value</label>
-            <Input
-              id="value"
-              type="text"
-              fill
-              value={submitData.chart?.toString()}
-              setValue={(value) => updateSubmitData("chart", value)}
-            />
-            <label htmlFor="description">Description</label>
-            <Input
-              id="description"
-              type="text"
-              fill
-              value={submitData.description}
-              setValue={(value) => updateSubmitData("description", value)}
-            />
-          </div>
-          <div className="flex justify-end space-x-3">
-            <Button onClick={() => clear()} style="failure">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => {
-                add();
-                clear();
-              }}
-              style="highlight"
-            >
-              Accept
-            </Button>
-          </div>
-        </Dialog>
+        <ChartDialog
+          data={submittedData}
+          initialData={initialData}
+          handleSubmit={(values: IChartData) => {
+            const newData = props.chartData.slice();
+            newData.push(values);
+            props.setChartData(newData.slice());
+            clear();
+          }}
+          handleReset={clear}
+        />
       )}
     </main>
   );
