@@ -7,6 +7,7 @@ import Tag from "./tag.component";
 import Charts from "./charts";
 import Textarea from "./texarea.component";
 import Select from "./select.component";
+import Toast from "./toast.component";
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   Charts,
   Textarea,
   Select,
+  Toast,
 };

@@ -1,4 +1,4 @@
-import { Layout } from "components/common";
+import { Layout, Toast } from "components/common";
 import { ChartList, NumberList } from "components/home";
 import { ChartType } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
@@ -8,9 +8,8 @@ export default function Home(): JSX.Element {
   const [numberData, setNumberData] = useState<INumberData[]>([
     {
       label: "label",
-      value: 10,
       report: "segmentation",
-      key: "age",
+      metric: "age",
     },
   ]);
 
@@ -25,6 +24,7 @@ export default function Home(): JSX.Element {
 
   return (
     <Layout className="space-y-8 text-primary-700">
+      <Toast message="Hi there" />
       <h1 className="text-4xl text-center">Home</h1>
       {numberData && (
         <NumberList numberData={numberData} setNumberData={setNumberData} />
