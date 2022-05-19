@@ -27,6 +27,8 @@ export default function Profile(): JSX.Element {
   }
 
   useEffect(() => {
+    console.log("hello", userId);
+
     if (!userId) return;
     fetchHistory(userId);
   }, [userId]);

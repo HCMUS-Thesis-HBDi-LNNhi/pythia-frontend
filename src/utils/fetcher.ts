@@ -2,7 +2,11 @@ import * as axios from "axios";
 
 axios.default.interceptors.request.use(function (config) {
   const token = localStorage.getItem("token");
-  if (token) config.headers = { ...config.headers, Authorization: token };
+  if (token)
+    config.headers = {
+      ...config.headers,
+      "X-Access-Token": token,
+    };
   return config;
 });
 
