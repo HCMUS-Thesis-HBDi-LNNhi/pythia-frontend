@@ -1,5 +1,5 @@
 import { Button } from "components/common";
-// import API from "const/api.const";
+import API from "const/api.const";
 import icons from "const/icons.const";
 import {
   ILoginMethod,
@@ -7,8 +7,9 @@ import {
   ViewMode,
 } from "interfaces/common.interface";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
-// import { fetcher } from "utils/fetcher";
+import { fetcher } from "utils/fetcher";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
@@ -21,10 +22,14 @@ export default function Login(): JSX.Element {
     {
       label: "Login with Google",
       icon: icons.outline.google,
-      action: () => {
-        setViewMode("user");
-        // const response = await fetcher.post(API.POST.loginWithGoogle);
-        router.push(`/${PageLabels.HOME}`);
+      action: async () => {
+        try {
+          setViewMode("user");
+          const response = await fetcher.get(API.GET.loginWithGoogle);
+          router.push(`/redirect/${response.data.login_path}`);
+        } catch (error) {
+          console.error(error);
+        }
       },
     },
     {
@@ -36,6 +41,10 @@ export default function Login(): JSX.Element {
       },
     },
   ];
+
+  useEffect(() => {
+    window.localStorage.clear();
+  }, []);
 
   return (
     <main

@@ -2,9 +2,20 @@ import { Layout, Toast } from "components/common";
 import { ChartList, NumberList } from "components/home";
 import { ChartType } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 export default function Home(): JSX.Element {
+  const router = useRouter();
+  const [userID, setUserID] = useLocalStorage<string | undefined>(
+    "user-id",
+    undefined
+  );
+  const [token, setToken] = useLocalStorage<string | undefined>(
+    "token",
+    undefined
+  );
   const [numberData, setNumberData] = useState<INumberData[]>([
     {
       label: "label",
@@ -21,6 +32,13 @@ export default function Home(): JSX.Element {
       chartType: ChartType.pie,
     },
   ]);
+
+  useEffect(() => {
+    const { token, user_id } = router.query;
+    if (!token || !user_id) return;
+    setUserID(user_id.toString().replaceAll('"', ""));
+    setToken(token.toString().replaceAll('"', ""));
+  }, []);
 
   return (
     <Layout className="space-y-8 text-primary-700">
