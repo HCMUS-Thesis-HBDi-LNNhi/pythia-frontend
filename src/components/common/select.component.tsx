@@ -1,38 +1,37 @@
-type SelectValue = string | number | readonly string[] | undefined;
-
-interface SelectItem {
-  label: string;
-  id: string;
-  value: SelectValue;
-}
+import { ISelectItem, SelectValue } from "interfaces/common.interface";
+import { ChangeEventHandler, FocusEventHandler } from "react";
 
 interface Props {
-  options: SelectItem[];
+  options: ISelectItem[];
   value?: SelectValue;
   setValue?: (value: SelectValue) => void;
   fill?: boolean;
   className?: string;
   id?: string;
   defaultValue?: SelectValue;
+  onChange?: ChangeEventHandler<HTMLSelectElement>;
+  onBlur?: FocusEventHandler<HTMLSelectElement>;
 }
 
 export default function Select(props: Props): JSX.Element {
-  const { value, setValue, fill, className, id, defaultValue } = props;
-
   return (
     <select
-      defaultValue={defaultValue}
-      value={value}
-      onChange={(e) => setValue && setValue(e.target.value)}
+      defaultValue={props.defaultValue}
+      value={props.value}
+      onChange={(e) => {
+        props.setValue && props.setValue(e.target.value);
+        props.onChange && props.onChange(e);
+      }}
+      onBlur={props.onBlur}
       className={[
         "border border-primary-500 rounded p-2",
-        fill && "w-full",
-        className,
+        props.fill && "w-full",
+        props.className,
       ].join(" ")}
-      id={id}
+      id={props.id}
     >
       {props.options.map((item) => (
-        <option key={item.id} value={item.value}>
+        <option key={item.id} value={item.value} disabled={item.disabled}>
           {item.label}
         </option>
       ))}

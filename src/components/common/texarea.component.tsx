@@ -1,3 +1,5 @@
+import { ChangeEventHandler, FocusEventHandler } from "react";
+
 interface Props {
   placeholder?: string;
   value?: string | number | readonly string[];
@@ -6,24 +8,27 @@ interface Props {
   className?: string;
   id?: string;
   defaultValue?: string | number | readonly string[];
+  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>;
 }
 
 export default function Textarea(props: Props): JSX.Element {
-  const { value, setValue, placeholder, fill, className, id, defaultValue } =
-    props;
-
   return (
     <textarea
-      defaultValue={defaultValue}
-      value={value}
-      onChange={(e) => setValue && setValue(e.target.value)}
+      defaultValue={props.defaultValue}
+      value={props.value}
+      onChange={(e) => {
+        props.setValue && props.setValue(e.target.value);
+        props.onChange && props.onChange(e);
+      }}
+      onBlur={props.onBlur}
       className={[
         "border border-primary-500 rounded p-2",
-        fill && "w-full",
-        className,
+        props.fill && "w-full",
+        props.className,
       ].join(" ")}
-      placeholder={placeholder}
-      id={id}
+      placeholder={props.placeholder}
+      id={props.id}
     />
   );
 }

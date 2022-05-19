@@ -1,4 +1,8 @@
-import { HTMLInputTypeAttribute } from "react";
+import {
+  ChangeEventHandler,
+  FocusEventHandler,
+  HTMLInputTypeAttribute,
+} from "react";
 
 interface Props {
   type: HTMLInputTypeAttribute;
@@ -9,33 +13,28 @@ interface Props {
   className?: string;
   id?: string;
   defaultValue?: string | number | readonly string[];
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 export default function Input(props: Props): JSX.Element {
-  const {
-    type,
-    value,
-    setValue,
-    placeholder,
-    fill,
-    className,
-    id,
-    defaultValue,
-  } = props;
-
   return (
     <input
-      type={type}
-      defaultValue={defaultValue}
-      value={value}
-      onChange={(e) => setValue && setValue(e.target.value)}
+      type={props.type}
+      defaultValue={props.defaultValue}
+      value={props.value}
+      onChange={(e) => {
+        props.setValue && props.setValue(e.target.value);
+        props.onChange && props.onChange(e);
+      }}
+      onBlur={props.onBlur}
       className={[
         "border border-primary-500 rounded p-2",
-        fill && "w-full",
-        className,
+        props.fill && "w-full",
+        props.className,
       ].join(" ")}
-      placeholder={placeholder}
-      id={id}
+      placeholder={props.placeholder}
+      id={props.id}
     />
   );
 }

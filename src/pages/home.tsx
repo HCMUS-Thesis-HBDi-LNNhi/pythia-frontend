@@ -1,24 +1,26 @@
 import { Layout } from "components/common";
 import { ChartList, NumberList } from "components/home";
+import { ChartType } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
 import { useState } from "react";
 
 export default function Home(): JSX.Element {
   const [numberData, setNumberData] = useState<INumberData[]>([
-    { label: "Total records 1", value: 12300, description: "Hello" },
-    { label: "Total records 2", value: 12300 },
-    { label: "Total records 3", value: 12300 },
-    { label: "Total records 4", value: 12300 },
+    {
+      label: "label",
+      value: 10,
+      report: "segmentation",
+      key: "age",
+    },
   ]);
 
   const [chartData, setChartData] = useState<IChartData[]>([
-    { label: "Chart A 1", chart: <div>Some chart</div> },
-    { label: "Chart A 2", chart: <div>Some chart</div> },
-    { label: "Chart A 3", chart: <div>Some chart</div> },
-    { label: "Chart A 4", chart: <div>Some chart</div> },
-    { label: "Chart A 5", chart: <div>Some chart</div> },
-    { label: "Chart A 6", chart: <div>Some chart</div> },
-    { label: "Chart A 7", chart: <div>Some chart</div> },
+    {
+      label: "label",
+      report: "segmentation",
+      metric: "age",
+      chartType: ChartType.pie,
+    },
   ]);
 
   return (

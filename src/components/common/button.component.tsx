@@ -6,9 +6,9 @@ const getStyle = (style?: ButtonStyle) => {
     case "solid":
       return "bg-primary-600 text-white-100 hover:shadow-lg";
     case "highlight":
-      return "bg-green-500 text-black hover:shadow-lg";
+      return "bg-green-500 text-primary-700 hover:shadow-lg";
     case "failure":
-      return "bg-red-400 text-black hover:shadow-lg";
+      return "bg-red-400 text-primary-700 hover:shadow-lg";
     case "outline":
     default:
       return "";
@@ -25,6 +25,7 @@ interface Props {
   focusIcon?: React.ReactNode;
   isSelected?: boolean;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 export default function Button(props: Props): JSX.Element {
@@ -37,9 +38,10 @@ export default function Button(props: Props): JSX.Element {
 
   return (
     <button
+      type={props.type}
       className={[
         "rounded-xl text-center px-5",
-        "opacity-80 flex items-center",
+        "opacity-90 flex items-center",
         !props.disabled && "hover:opacity-100 hover:font-medium",
         !props.disabled &&
           props.hoverStyle &&

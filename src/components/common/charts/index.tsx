@@ -1,12 +1,12 @@
 import ChartHeader from "./header";
-import { ChartTypes } from "const/common.const";
 import { useState } from "react";
 import ChartBody from "./body";
+import { ChartType } from "interfaces/common.interface";
 
 const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function Charts(): JSX.Element {
-  const [isSelected, setSelected] = useState<string>(ChartTypes[0].label);
+  const [isSelected, setSelected] = useState<ChartType>(ChartType.bar);
   return (
     <div>
       <ChartHeader isSelected={isSelected} setSelected={setSelected} />
