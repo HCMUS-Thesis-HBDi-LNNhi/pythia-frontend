@@ -1,29 +1,36 @@
-import { Button, Input, Tag } from "components/common";
+import { Button, Dialog, Input, Select, Tag, toast } from "components/common";
 import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { TagColor } from "interfaces/common.interface";
+import { PageLabels, TagColor } from "interfaces/common.interface";
 import icons from "const/icons.const";
 import { useReadLocalStorage } from "usehooks-ts";
 import { handleUpload } from "utils/uploadFile";
+import { useRouter } from "next/router";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header(props: Props): JSX.Element {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const userID = useReadLocalStorage<string>("user-id");
   const [selectModel, setSelectModel] = useState<RetainModel>(
     RetainModel.bg_nbd
   );
   const [isVisible, setIsVisible] = useState(false);
-
   const [file, setFile] = useState<File | null>(null);
+  const [fileType, setFileType] = useState<"demographic" | "transaction">();
 
   useEffect(() => {
-    if (!file || !userID) return;
-    handleUpload(file, userID, props.setLoading);
-  }, [file]);
+    if (!file || !fileType) return;
+    if (!userID) {
+      toast("Something went wrong, please login again!", "failure");
+      router.push(`/${PageLabels.LOGIN}`);
+      return;
+    }
+    handleUpload(file, userID, fileType ?? "demographic", props.setLoading);
+  }, [file, fileType]);
 
   return (
     <main
@@ -49,9 +56,18 @@ export default function Header(props: Props): JSX.Element {
           <strong>Status: </strong>
           <Tag color={TagColor.blue}>In Progress</Tag>
         </div>
+        <Button
+          style="outline"
+          className="border border-primary-500 mr-2"
+          icon={icons.outline.download}
+        >
+          <a href="templates.zip" download="Customer transaction template">
+            Templates
+          </a>
+        </Button>
         <input
           type="file"
-          accept=".csv,.xls"
+          accept=".csv"
           ref={inputRef}
           hidden
           onChange={(e) => {
@@ -60,14 +76,33 @@ export default function Header(props: Props): JSX.Element {
             e.target.value = "";
           }}
         />
-        <Button
-          style="solid"
-          onClick={() => {
+        <Select
+          options={[
+            {
+              label: "Upload data",
+              id: "",
+              value: undefined,
+            },
+            {
+              label: "Upload demographic data",
+              id: "demographic",
+              value: "demographic",
+            },
+            {
+              label: "Upload transaction data",
+              id: "transaction",
+              value: "transaction",
+            },
+          ]}
+          value={fileType}
+          setValue={(value) => {
+            if (value !== "demographic" && value !== "transaction") return;
+            setFileType(value);
             inputRef.current?.click();
           }}
-        >
-          Upload data
-        </Button>
+          className="p-3 bg-none focus:bg-none"
+          style="solid"
+        />
         {selectModel === RetainModel.bg_nbd && (
           <Button
             className="text-3xl"
