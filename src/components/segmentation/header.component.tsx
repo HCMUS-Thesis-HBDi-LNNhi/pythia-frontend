@@ -1,14 +1,29 @@
 import { Button, Input, Tag } from "components/common";
 import { RetainModel } from "interfaces/segmentation.interface";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { TagColor } from "interfaces/common.interface";
 import icons from "const/icons.const";
+import { useReadLocalStorage } from "usehooks-ts";
+import { handleUpload } from "utils/uploadFile";
 
-export default function Header(): JSX.Element {
+interface Props {
+  setLoading: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Header(props: Props): JSX.Element {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const userID = useReadLocalStorage<string>("user-id");
   const [selectModel, setSelectModel] = useState<RetainModel>(
     RetainModel.bg_nbd
   );
   const [isVisible, setIsVisible] = useState(false);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (!file || !userID) return;
+    handleUpload(file, userID, props.setLoading);
+  }, [file]);
 
   return (
     <main
@@ -34,7 +49,25 @@ export default function Header(): JSX.Element {
           <strong>Status: </strong>
           <Tag color={TagColor.blue}>In Progress</Tag>
         </div>
-        <Button style="solid">Upload data</Button>
+        <input
+          type="file"
+          accept=".csv,.xls"
+          ref={inputRef}
+          hidden
+          onChange={(e) => {
+            setFile(e.target.files && e.target.files[0]);
+            // clear input file
+            e.target.value = "";
+          }}
+        />
+        <Button
+          style="solid"
+          onClick={() => {
+            inputRef.current?.click();
+          }}
+        >
+          Upload data
+        </Button>
         {selectModel === RetainModel.bg_nbd && (
           <Button
             className="text-3xl"
