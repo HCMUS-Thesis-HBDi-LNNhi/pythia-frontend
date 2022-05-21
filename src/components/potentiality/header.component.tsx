@@ -1,15 +1,18 @@
-import { Button, Tag } from "components/common";
+import { Button, Tag, toast } from "components/common";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { TagColor } from "interfaces/common.interface";
+import { PageLabels, TagColor } from "interfaces/common.interface";
 import { AcquireModel } from "interfaces/potentiality.interface";
 import { useReadLocalStorage } from "usehooks-ts";
 import { handleUpload } from "utils/uploadFile";
+import { useRouter } from "next/router";
+import icons from "const/icons.const";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header(props: Props): JSX.Element {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const userID = useReadLocalStorage<string>("user-id");
   const [selectModel, setSelectModel] = useState<AcquireModel>(
@@ -18,8 +21,15 @@ export default function Header(props: Props): JSX.Element {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (!file || !userID) return;
-    handleUpload(file, userID, props.setLoading);
+    if (!file) {
+      return;
+    }
+    if (!userID) {
+      toast("Something went wrong, please login again!", "failure");
+      router.push(`/${PageLabels.LOGIN}`);
+      return;
+    }
+    handleUpload(file, userID, "demographic", props.setLoading);
   }, [file]);
 
   return (
@@ -45,9 +55,21 @@ export default function Header(props: Props): JSX.Element {
           <strong>Status: </strong>
           <Tag color={TagColor.blue}>In Progress</Tag>
         </div>
+        <Button
+          style="outline"
+          className="border border-primary-500 mr-2"
+          icon={icons.outline.download}
+        >
+          <a
+            href="templates/Customer-demographic-template.csv"
+            download="Customer transaction template"
+          >
+            Templates
+          </a>
+        </Button>
         <input
           type="file"
-          accept=".csv,.xls"
+          accept=".csv"
           ref={inputRef}
           hidden
           onChange={(e) => {

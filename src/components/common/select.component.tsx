@@ -3,6 +3,7 @@ import { ChangeEventHandler, FocusEventHandler } from "react";
 
 interface Props {
   options: ISelectItem[];
+  style?: "outline" | "solid";
   value?: SelectValue;
   setValue?: (value: SelectValue) => void;
   fill?: boolean;
@@ -24,7 +25,10 @@ export default function Select(props: Props): JSX.Element {
       }}
       onBlur={props.onBlur}
       className={[
-        "border border-primary-500 rounded p-2",
+        "border border-primary-500 p-2",
+        props.style === "solid"
+          ? "bg-primary-500 text-white-100 text-center rounded-xl"
+          : "rounded",
         props.fill && "w-full",
         props.className,
       ].join(" ")}

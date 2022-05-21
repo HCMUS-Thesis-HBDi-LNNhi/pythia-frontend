@@ -25,6 +25,7 @@ const outline = {
   scatter_chart: <Icon icon="carbon:chart-scatter" />,
   geo_chart: <Icon icon="gis:world-map-alt" />,
   pin: <Icon icon="bi:pin-angle" />,
+  download: <Icon icon="akar-icons:download" />,
 };
 
 const solid = {
