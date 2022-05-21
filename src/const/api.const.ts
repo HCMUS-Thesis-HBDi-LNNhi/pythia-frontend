@@ -2,7 +2,9 @@ const GET = {
   loginWithGoogle: "/login?provider_id=google_oauth2",
 };
 
-const POST = {};
+const POST = {
+  uploadFile: "/files",
+};
 
 const API = { GET, POST };
 

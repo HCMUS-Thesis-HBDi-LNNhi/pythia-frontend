@@ -34,7 +34,7 @@ export default function Login(): JSX.Element {
           }
         } catch (error) {
           console.error(error);
-          toast("Can't login with google. Please try again");
+          toast("Can't login with google. Please try again", "failure");
           window.localStorage.clear();
           router.push(`/${PageLabels.LOGIN}`);
         } finally {

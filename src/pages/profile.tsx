@@ -3,6 +3,7 @@ import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { fetcher } from "utils/fetcher";
+import { formatDate } from "utils/formatDate";
 
 export default function Profile(): JSX.Element {
   const userId = useReadLocalStorage<string>("user-id");
@@ -44,29 +45,37 @@ export default function Profile(): JSX.Element {
         <table className="w-full text-center">
           <thead>
             <tr className="text-lg font-bold bg-primary-200">
-              <th className="border border-primary-500 w-2/5 p-4">
+              <th className="border border-primary-500 w-1/3 p-4">
                 Upload time
               </th>
-              <th className="border border-primary-500 w-2/5 p-4">Filename</th>
-              <th className="border border-primary-500 w-1/5 p-4">Size</th>
+              <th className="border border-primary-500 w-1/3 p-4">Filename</th>
+              <th className="border border-primary-500 w-1/6 p-4">
+                Total rows
+              </th>
+              <th className="border border-primary-500 w-1/6 p-4">File type</th>
             </tr>
           </thead>
           <tbody>
             {history.map((value, index) => (
               <tr key={value.name + " " + index}>
                 <td className="border border-primary-500 p-4">
-                  {value.created_at}
+                  {formatDate(value.created_at)}
                 </td>
                 <td className="border border-primary-500 p-4">{value.name}</td>
                 <td className="border border-primary-500 p-4">
                   {value.num_rows}
+                </td>
+                <td className="border border-primary-500 p-4">
+                  {value.file_type}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       ) : (
-        <div className="text-center py-10">No history found</div>
+        <div className="text-center py-10">
+          {!isLoading && "No history found"}
+        </div>
       )}
     </Layout>
   );

@@ -35,10 +35,9 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     const { token, user_id } = router.query;
-    if (!token || !user_id) return;
-    setUserID(user_id.toString());
-    setToken(token.toString());
-  }, []);
+    setUserID(user_id?.toString());
+    setToken(token?.toString());
+  }, [router]);
 
   return (
     <Layout className="space-y-8 text-primary-700">
