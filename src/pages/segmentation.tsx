@@ -1,14 +1,19 @@
-import { Chart, Header } from "components/segmentation";
-import { Layout } from "components/common";
+import { Header } from "components/sections/segmentation";
+import { Layout, Charts, Pane } from "components/common";
 import { useState } from "react";
 
 export default function Segmentation(): JSX.Element {
   const [isLoading, setLoading] = useState(false);
   return (
-    <Layout className="space-y-8 text-primary-700" isLoading={isLoading}>
-      <h1 className="text-4xl text-center">Segmentation</h1>
+    <Layout
+      title="Segmentation"
+      className="space-y-8 text-primary-700"
+      isLoading={isLoading}
+    >
       <Header setLoading={setLoading} />
-      <Chart />
+      <Pane height="h-fit">
+        <Charts />
+      </Pane>
     </Layout>
   );
 }

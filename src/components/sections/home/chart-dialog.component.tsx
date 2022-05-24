@@ -1,5 +1,4 @@
-import { Button, Dialog, Input, Select, Textarea } from "components/common";
-import ChartBody from "components/common/charts/body";
+import { Button, Dialog, Input, Select } from "components/common";
 import { ChartOptions } from "const/chart.const";
 import {
   PotentialityOptions,
@@ -13,13 +12,6 @@ import { IReport } from "interfaces/report.interface";
 
 const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-interface Props {
-  data: IChartData;
-  initialData: IChartData;
-  handleSubmit: (values: IChartData) => void;
-  handleReset: () => void;
-}
-
 const getMetricOptions = (report: keyof IReport): ISelectItem[] => {
   switch (report) {
     case "segmentation":
@@ -30,6 +22,13 @@ const getMetricOptions = (report: keyof IReport): ISelectItem[] => {
       return [];
   }
 };
+
+interface Props {
+  data: IChartData;
+  initialData: IChartData;
+  handleSubmit: (values: IChartData) => void;
+  handleReset: () => void;
+}
 
 export default function ChartDialog(props: Props): JSX.Element {
   return (
@@ -154,7 +153,7 @@ export default function ChartDialog(props: Props): JSX.Element {
               <h2 className="text-center font-medium text-primary-600 text-lg pb-6">
                 Preview
               </h2>
-              <ChartBody
+              {/* <ChartBody
                 chartTitle={values.metric}
                 labels={labels}
                 data={labels.map(() => Math.random() * 100)}
@@ -163,7 +162,7 @@ export default function ChartDialog(props: Props): JSX.Element {
                   y: Math.random() * 100,
                 }))}
                 chartType={values.chartType}
-              />
+              /> */}
             </main>
           </div>
         )}

@@ -11,7 +11,7 @@ interface Props {
 
 export default function ChartHeader(props: Props): JSX.Element {
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-fit">
       <div className="flex">
         {ChartTypes.map((value) => (
           <Button

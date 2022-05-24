@@ -1,14 +1,19 @@
-import { Chart, Header } from "components/potentiality";
-import { Layout } from "components/common";
+import { Header } from "components/sections/potentiality";
+import { Charts, Layout, Pane } from "components/common";
 import { useState } from "react";
 
 export default function Potentiality(): JSX.Element {
   const [isLoading, setLoading] = useState(false);
   return (
-    <Layout className="space-y-8 text-primary-700" isLoading={isLoading}>
-      <h1 className="text-4xl text-center">Potentiality</h1>
+    <Layout
+      title="Potentiality"
+      className="space-y-8 text-primary-700"
+      isLoading={isLoading}
+    >
       <Header setLoading={setLoading} />
-      <Chart />
+      <Pane height="h-fit">
+        <Charts />
+      </Pane>
     </Layout>
   );
 }

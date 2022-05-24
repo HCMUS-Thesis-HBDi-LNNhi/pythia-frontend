@@ -1,5 +1,5 @@
 import { Layout } from "components/common";
-import { ChartList, NumberList } from "components/home";
+import { ChartList, NumberList } from "components/sections/home";
 import { ChartType } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
 import { useRouter } from "next/router";
@@ -40,8 +40,7 @@ export default function Home(): JSX.Element {
   }, [router]);
 
   return (
-    <Layout className="space-y-8 text-primary-700">
-      <h1 className="text-4xl text-center">Home</h1>
+    <Layout title="Home" className="space-y-8 text-primary-700">
       {numberData && (
         <NumberList numberData={numberData} setNumberData={setNumberData} />
       )}

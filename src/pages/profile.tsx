@@ -39,8 +39,11 @@ export default function Profile(): JSX.Element {
   }, [userId]);
 
   return (
-    <Layout className="space-y-8 text-primary-700" isLoading={isLoading}>
-      <h1 className="text-4xl text-center">History</h1>
+    <Layout
+      title="History"
+      className="space-y-8 text-primary-700"
+      isLoading={isLoading}
+    >
       {history && history.length > 0 ? (
         <table className="w-full text-center">
           <thead>

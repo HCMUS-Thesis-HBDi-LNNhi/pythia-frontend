@@ -9,6 +9,7 @@ import Textarea from "./texarea.component";
 import Select from "./select.component";
 import toast from "./toast.component";
 import Loading from "./loading.component";
+import Pane from "./pane.component";
 
 export {
   Button,
@@ -22,4 +23,5 @@ export {
   Select,
   toast,
   Loading,
+  Pane,
 };
