@@ -18,7 +18,6 @@ export default function Header(props: Props): JSX.Element {
   const [selectModel, setSelectModel] = useState<RetainModel>(
     RetainModel.bg_nbd
   );
-  const [isVisible, setIsVisible] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<"demographic" | "transaction">();
 
@@ -103,17 +102,8 @@ export default function Header(props: Props): JSX.Element {
           className="p-3 bg-none focus:bg-none"
           style="solid"
         />
-        {selectModel === RetainModel.bg_nbd && (
-          <Button
-            className="text-3xl"
-            icon={
-              isVisible ? icons.outline.chevron_up : icons.outline.chevron_down
-            }
-            onClick={() => setIsVisible(!isVisible)}
-          />
-        )}
       </div>
-      {isVisible && (
+      {selectModel === RetainModel.bg_nbd && (
         <form className="flex space-x-4 items-center">
           <label htmlFor="last_day">
             <strong>Last observed day: </strong>
