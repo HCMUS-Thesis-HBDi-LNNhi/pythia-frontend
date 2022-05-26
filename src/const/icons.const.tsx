@@ -26,6 +26,15 @@ const outline = {
   geo_chart: <Icon icon="gis:world-map-alt" />,
   pin: <Icon icon="bi:pin-angle" />,
   download: <Icon icon="akar-icons:download" />,
+  money: <Icon icon="healthicons:money-bag-outline" />,
+  transactions: <Icon icon="icon-park-outline:bill" />,
+  age: <Icon icon="cil:baby-carriage" />,
+  gender: <Icon icon="icons8:gender" />,
+  country: <Icon icon="bi:flag" />,
+  city: <Icon icon="healthicons:city-outline" />,
+  job_title: <Icon icon="healthicons:city-worker-outline" />,
+  job_industry: <Icon icon="cil:industry" />,
+  broom: <Icon icon="la:broom" />,
 };
 
 const solid = {
@@ -50,6 +59,12 @@ const solid = {
   line_chart: <Icon icon="healthicons:chart-line-negative" />,
   geo_chart: <Icon icon="gis:world-map-alt-o" />,
   pin: <Icon icon="bi:pin-angle-fill" />,
+  money: <Icon icon="healthicons:money-bag" />,
+  transaction: <Icon icon="icon-park-solid:bill" />,
+  age: <Icon icon="bxs:baby-carriage" />,
+  country: <Icon icon="bi:flag-fill" />,
+  city: <Icon icon="healthicons:city" />,
+  job_title: <Icon icon="healthicons:city-worker" />,
 };
 
 const colored = {

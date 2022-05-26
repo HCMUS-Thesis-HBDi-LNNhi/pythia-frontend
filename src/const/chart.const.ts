@@ -1,5 +1,12 @@
-import { ChartType, IChart, ISelectItem } from "interfaces/common.interface";
+import {
+  ChartType,
+  IChart,
+  IChartOptions,
+  ISelectItem,
+} from "interfaces/common.interface";
 import icons from "./icons.const";
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 export const ChartTypes: IChart[] = [
   {
@@ -34,7 +41,7 @@ export const ChartTypes: IChart[] = [
   },
 ];
 
-export const ChartOptions: ISelectItem[] = [
+export const ChartSelectOptions: ISelectItem[] = [
   {
     label: "Bar chart",
     id: ChartType.bar,
@@ -61,3 +68,10 @@ export const ChartOptions: ISelectItem[] = [
     value: ChartType.geo,
   },
 ];
+
+export const initialChartOptions: IChartOptions = {
+  transaction: "totalAmount",
+  customer: "age",
+  years: { from: CURRENT_YEAR, to: CURRENT_YEAR },
+  quarters: { from: 1, to: 4 },
+};

@@ -1,6 +1,4 @@
-import { Button, Dialog, Input, Select, Textarea } from "components/common";
-import ChartBody from "components/common/charts/body";
-import { ChartOptions } from "const/chart.const";
+import { Button, Dialog, Input, Select } from "components/common";
 import {
   PotentialityOptions,
   ReportOptions,
@@ -10,8 +8,6 @@ import { Formik, FormikErrors } from "formik";
 import { ISelectItem } from "interfaces/common.interface";
 import { IChartData, INumberData } from "interfaces/home.interface";
 import { IReport } from "interfaces/report.interface";
-
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 interface Props {
   data: INumberData;

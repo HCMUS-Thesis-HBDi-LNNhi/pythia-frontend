@@ -1,5 +1,4 @@
-import { Button } from "components/common";
-import ChartBody from "components/common/charts/body";
+import { Button, ChartHeader, ChartBody } from "components/common";
 import icons from "const/icons.const";
 import { ChartType } from "interfaces/common.interface";
 import { IChartData } from "interfaces/home.interface";
@@ -23,6 +22,7 @@ const initialData: IChartData = {
 export default function ChartList(props: Props): JSX.Element {
   const [isShow, setIsShow] = useState(false);
   const [submittedData, setSubmittedData] = useState<IChartData>(initialData);
+  const [chartType, _setChartType] = useState<ChartType>(ChartType.bar);
 
   const clear = () => {
     setSubmittedData(initialData);
@@ -42,14 +42,14 @@ export default function ChartList(props: Props): JSX.Element {
           }}
         >
           <ChartBody
-            chartTitle={item.metric}
-            labels={labels}
-            data={labels.map(() => Math.random() * 100)}
-            scatterChartData={labels.map(() => ({
+            chartType={chartType}
+            chartTitle="Charts"
+            categoricalData={labels}
+            quantitativeData={labels.map(() => Math.random() * 100)}
+            scatterData={labels.map(() => ({
               x: Math.random() * 100,
               y: Math.random() * 100,
             }))}
-            chartType={item.chartType}
           />
         </DisplayBox>
       ))}
