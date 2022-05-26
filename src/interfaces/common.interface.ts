@@ -16,6 +16,8 @@ export enum ChartType {
   "geo" = "geo",
 }
 
+export type ScatterDataType = { x: number; y: number };
+
 export type MetricType =
   | keyof ICustomerDemographic
   | keyof ICustomerTransaction;
@@ -23,9 +25,22 @@ export type MetricType =
 export enum PageLabels {
   LOGIN = "login",
   HOME = "home",
+  CHARTS = "charts",
   PROFILE = "profile",
   SEGMENTATION = "segmentation",
   POTENTIALITY = "potentiality",
+}
+
+export interface IChartYear {
+  from: number;
+  to: number;
+}
+
+export interface IChartOptions {
+  transaction: "totalAmount" | "totalTransactions";
+  customer: "age" | "gender" | "country" | "city" | "jobTitle" | "jobIndustry";
+  years: IChartYear;
+  quarters: IChartYear;
 }
 export interface IMenuItem {
   label: PageLabels | "log out";

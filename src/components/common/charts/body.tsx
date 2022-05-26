@@ -10,8 +10,11 @@ import {
   LineElement,
   ArcElement,
 } from "chart.js";
-import { ChartType } from "interfaces/common.interface";
-import { Bar, Line, Pie, Scatter } from "react-chartjs-2";
+import { ChartType, ScatterDataType } from "interfaces/common.interface";
+import BarChart from "./bar";
+import LineChart from "./line";
+import PieChart from "./pie";
+import ScatterChart from "./scatter";
 
 ChartJS.register(
   Title,
@@ -26,114 +29,46 @@ ChartJS.register(
 );
 
 interface Props {
-  chartTitle: string;
-  labels: string[];
-  data: number[];
   chartType: ChartType;
-  scatterChartData?: { x: number; y: number }[];
+  chartTitle: string;
+  categoricalData: string[];
+  quantitativeData: number[];
+  scatterData?: ScatterDataType[];
 }
 
 export default function ChartBody(props: Props): JSX.Element {
-  const { labels, data, chartType, scatterChartData, chartTitle } = props;
-
-  switch (chartType) {
+  switch (props.chartType) {
     case ChartType.bar:
       return (
-        <Bar
-          data={{
-            labels,
-            datasets: [
-              {
-                label: chartTitle,
-                data,
-                backgroundColor: "rgba(255, 99, 132, 0.5)",
-              },
-            ],
-          }}
+        <BarChart
+          chartTitle={props.chartTitle}
+          labels={props.categoricalData}
+          data={props.quantitativeData}
         />
       );
     case ChartType.line:
       return (
-        <Line
-          data={{
-            labels,
-            datasets: [
-              {
-                label: chartTitle,
-                data,
-                borderColor: "rgb(255, 99, 132)",
-                backgroundColor: "rgba(255, 99, 132, 0.5)",
-              },
-            ],
-          }}
+        <LineChart
+          chartTitle={props.chartTitle}
+          labels={props.categoricalData}
+          data={props.quantitativeData}
         />
       );
     case ChartType.pie:
       return (
-        <Pie
-          options={{ aspectRatio: 2 / 1 }}
-          data={{
-            labels,
-            datasets: [
-              {
-                label: chartTitle,
-                data,
-                backgroundColor: [
-                  "rgba(255, 99, 132, 0.5)",
-                  "rgba(54, 162, 235, 0.5)",
-                  "rgba(255, 109, 12, 0.5)",
-                  "rgba(255, 206, 86, 0.5)",
-                  "rgba(75, 192, 192, 0.5)",
-                  "rgba(153, 102, 255, 0.5)",
-                  "rgba(255, 159, 64, 0.5)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          }}
+        <PieChart
+          chartTitle={props.chartTitle}
+          labels={props.categoricalData}
+          data={props.quantitativeData}
         />
       );
     case ChartType.scatter:
       return (
-        <Scatter
-          options={{
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          }}
-          data={{
-            datasets: [
-              {
-                label: chartTitle,
-                data: scatterChartData,
-                backgroundColor: "rgba(255, 99, 132, 1)",
-              },
-            ],
-          }}
+        <ScatterChart
+          chartTitle={props.chartTitle}
+          data={props.scatterData ?? []}
         />
       );
-    // case ChartType.geo:
-    //   <ReGeoMapChart
-    //     data={[
-    //       ["Region", "Users", "Active Users"],
-    //       ["de", 252552, 25000],
-    //       ["us", 852552, 162306],
-    //       ["br", 452552, 52794],
-    //       ["ca", 544445, 27229],
-    //       ["fr", 652552, 277416],
-    //       ["ru", 752751, 27410],
-    //     ]}
-    //     width={350}
-    //     datalessRegionColor="#FDE2E2"
-    //     datafulRegionColor="#1AC258"
-    //     backgroundColor="#fff"
-    //     hideMapLegend={true}
-    //     strokeColor="#737373"
-    //     tooltipBackgroundColor="#082032"
-    //     style={{ maxWidth: 500 }} // the styled applied to the div that wraps the svg
-    //   />;
     default:
       return <div>Wrong chart type</div>;
   }

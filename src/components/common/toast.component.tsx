@@ -13,5 +13,5 @@ export default function toast(message: string, type: ToastType = "general") {
   document.body.appendChild(toast);
   setTimeout(() => {
     toast.remove();
-  }, 5000);
+  }, 2000);
 }

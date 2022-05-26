@@ -5,14 +5,15 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "../button.component";
 
 interface Props {
-  isSelected: ChartType;
-  setSelected: Dispatch<SetStateAction<ChartType>>;
+  chosenChart: ChartType;
+  setChosenChart: Dispatch<SetStateAction<ChartType>>;
+  allowPin?: boolean;
 }
 
 export default function ChartHeader(props: Props): JSX.Element {
   return (
-    <div className="flex w-full h-full">
-      <div className="flex">
+    <div className="grid grid-cols-[30%,30%,40%] gap-2 place-content-between w-full h-fit">
+      <div className="flex col-span-2">
         {ChartTypes.map((value) => (
           <Button
             key={value.label}
@@ -21,16 +22,18 @@ export default function ChartHeader(props: Props): JSX.Element {
               "last:border-r last:rounded-r first:rounded-l",
             ].join(" ")}
             icon={value.icon}
-            isSelected={props.isSelected === value.label}
+            isSelected={props.chosenChart === value.type}
             onClick={() => {
-              props.setSelected(value.type);
+              props.setChosenChart(value.type);
             }}
             disabled={value.label == ChartTypes[ChartTypes.length - 1].label}
             hoverStyle
           />
         ))}
       </div>
-      <Button className="text-2xl ml-auto" icon={icons.outline.pin}></Button>
+      {props.allowPin && (
+        <Button className="text-2xl ml-auto" icon={icons.outline.pin}></Button>
+      )}
     </div>
   );
 }

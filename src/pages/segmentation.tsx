@@ -1,14 +1,38 @@
-import { Chart, Header } from "components/segmentation";
-import { Layout } from "components/common";
+import { Header } from "components/sections/segmentation";
+import { Layout, Pane, ChartHeader, ChartBody } from "components/common";
+import { ChartType } from "interfaces/common.interface";
 import { useState } from "react";
+
+const labels = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 export default function Segmentation(): JSX.Element {
   const [isLoading, setLoading] = useState(false);
+  const [chartType, setChartType] = useState<ChartType>(ChartType.bar);
+
   return (
-    <Layout className="space-y-8 text-primary-700" isLoading={isLoading}>
-      <h1 className="text-4xl text-center">Segmentation</h1>
+    <Layout
+      title="Segmentation"
+      className="space-y-8 text-primary-700"
+      isLoading={isLoading}
+    >
       <Header setLoading={setLoading} />
-      <Chart />
+      <Pane height="h-fit" className="space-y-4">
+        <ChartHeader
+          chosenChart={chartType}
+          setChosenChart={setChartType}
+          allowPin
+        />
+        <ChartBody
+          chartType={chartType}
+          chartTitle="Charts"
+          categoricalData={labels}
+          quantitativeData={labels.map(() => Math.random() * 100)}
+          scatterData={labels.map(() => ({
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+          }))}
+        />
+      </Pane>
     </Layout>
   );
 }
