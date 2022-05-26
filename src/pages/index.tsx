@@ -22,5 +22,5 @@ export default function Router(): void {
     }
     if (!viewMode) router.push(`/${PageLabels.LOGIN}`);
     else router.push(`/${PageLabels.HOME}`);
-  }, [router, viewMode]);
+  }, [router, viewMode, setUserID, setToken]);
 }

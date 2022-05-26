@@ -30,7 +30,7 @@ export default function Header(props: Props): JSX.Element {
       return;
     }
     handleUpload(file, userID, "demographic", props.setLoading);
-  }, [file]);
+  }, [file, props.setLoading, router, userID]);
 
   return (
     <main

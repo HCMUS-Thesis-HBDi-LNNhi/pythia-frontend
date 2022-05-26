@@ -72,13 +72,13 @@ interface Props extends TooltipProps {
 export default function Tooltip(props: Props): JSX.Element {
   switch (props.position) {
     case "left":
-      return <TooltipLeft text={props.text} children={props.children} />;
+      return <TooltipLeft text={props.text}>{props.children}</TooltipLeft>;
     case "right":
-      return <TooltipRight text={props.text} children={props.children} />;
+      return <TooltipRight text={props.text}>{props.children}</TooltipRight>;
     case "top":
-      return <TooltipTop text={props.text} children={props.children} />;
+      return <TooltipTop text={props.text}>{props.children}</TooltipTop>;
     case "bottom":
     default:
-      return <TooltipBottom text={props.text} children={props.children} />;
+      return <TooltipBottom text={props.text}>{props.children}</TooltipBottom>;
   }
 }

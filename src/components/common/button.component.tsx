@@ -34,7 +34,7 @@ export default function Button(props: Props): JSX.Element {
   useEffect(() => {
     if (!ref.current || !props.isSelected) return;
     ref.current.focus();
-  }, [ref.current, props.isSelected]);
+  }, [props.isSelected]);
 
   return (
     <button
