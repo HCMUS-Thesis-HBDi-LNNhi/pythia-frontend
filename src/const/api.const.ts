@@ -1,6 +1,6 @@
 const GET = {
   loginWithGoogle: "/login?provider_id=google_oauth2",
-  healthCheck: "/health-check",
+  healthCheck: "/health_check",
 };
 
 const POST = {
