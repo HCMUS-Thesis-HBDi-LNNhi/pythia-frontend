@@ -6,17 +6,13 @@ import {
   ChartOptions,
 } from "components/common";
 import { ChartType, IChartOptions } from "interfaces/common.interface";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const labels = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 export default function Charts(): JSX.Element {
   const [chartType, setChartType] = useState<ChartType>(ChartType.bar);
-  const [chartOptions, setChartOptions] = useState<IChartOptions>();
-
-  useEffect(() => {
-    console.log(chartOptions);
-  }, [chartOptions]);
+  const [_chartOptions, setChartOptions] = useState<IChartOptions>();
 
   return (
     <Layout title="Charts">
