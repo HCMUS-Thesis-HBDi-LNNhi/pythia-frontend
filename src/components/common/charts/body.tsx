@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { ChartType, ScatterDataType } from "interfaces/common.interface";
 import BarChart from "./bar";
+import GeoChart from "./geo";
 import LineChart from "./line";
 import PieChart from "./pie";
 import ScatterChart from "./scatter";
@@ -69,6 +70,8 @@ export default function ChartBody(props: Props): JSX.Element {
           data={props.scatterData ?? []}
         />
       );
+    case ChartType.geo:
+      return <GeoChart />;
     default:
       return <div>Wrong chart type</div>;
   }
