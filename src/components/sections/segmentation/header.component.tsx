@@ -1,4 +1,12 @@
-import { Button, Dialog, Input, Select, Tag, toast } from "components/common";
+import {
+  Button,
+  Dialog,
+  Input,
+  Select,
+  Tag,
+  toast,
+  UploadButton,
+} from "components/common";
 import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { PageLabels, TagColor } from "interfaces/common.interface";
@@ -38,6 +46,29 @@ export default function Header(props: Props): JSX.Element {
         "p-4 space-y-4",
       ].join(" ")}
     >
+      <div className="flex items-center">
+        <strong className="mr-4">Demographic data: </strong>
+        <UploadButton
+          fileType="demographic"
+          setLoading={props.setLoading}
+          label="Upload data"
+        />
+        <strong className="mx-4">Transactions data: </strong>
+        <UploadButton
+          fileType="transaction"
+          setLoading={props.setLoading}
+          label="Upload data"
+        />
+        <Button
+          style="outline"
+          className="border border-primary-500 mr-2 ml-auto"
+          icon={icons.outline.download}
+        >
+          <a href="templates.zip" download="Customer transaction template">
+            Templates
+          </a>
+        </Button>
+      </div>
       <div className="flex justify-end items-center w-full">
         <label htmlFor="model">
           <strong>Models: </strong>
@@ -55,53 +86,6 @@ export default function Header(props: Props): JSX.Element {
           <strong>Status: </strong>
           <Tag color={TagColor.blue}>In Progress</Tag>
         </div>
-        <Button
-          style="outline"
-          className="border border-primary-500 mr-2"
-          icon={icons.outline.download}
-        >
-          <a href="templates.zip" download="Customer transaction template">
-            Templates
-          </a>
-        </Button>
-        <input
-          type="file"
-          accept=".csv"
-          ref={inputRef}
-          hidden
-          onChange={(e) => {
-            setFile(e.target.files && e.target.files[0]);
-            // clear input file
-            e.target.value = "";
-          }}
-        />
-        <Select
-          options={[
-            {
-              label: "Upload data",
-              id: "",
-              value: undefined,
-            },
-            {
-              label: "Upload demographic data",
-              id: "demographic",
-              value: "demographic",
-            },
-            {
-              label: "Upload transaction data",
-              id: "transaction",
-              value: "transaction",
-            },
-          ]}
-          value={fileType}
-          setValue={(value) => {
-            if (value !== "demographic" && value !== "transaction") return;
-            setFileType(value);
-            inputRef.current?.click();
-          }}
-          className="p-3 bg-none focus:bg-none"
-          style="solid"
-        />
       </div>
       {selectModel === RetainModel.bg_nbd && (
         <form className="flex space-x-4 items-center">

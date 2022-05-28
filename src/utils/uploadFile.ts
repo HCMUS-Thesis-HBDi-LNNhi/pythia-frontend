@@ -1,12 +1,13 @@
 import { toast } from "components/common";
 import API from "const/api.const";
+import { FileType } from "interfaces/utils.interface";
 import { Dispatch, SetStateAction } from "react";
 import { fetcher } from "./fetcher";
 
 export const handleUpload = async (
   file: File,
   userID: string,
-  type: "demographic" | "transaction",
+  type: FileType,
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {

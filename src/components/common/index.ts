@@ -1,4 +1,5 @@
-import Button from "./button.component";
+import Button from "./buttons/button.component";
+import UploadButton from "./buttons/uploadButton.component";
 import Dialog from "./dialog.component";
 import Layout from "./layout.component";
 import MenuBar from "./menubar.component";
@@ -17,6 +18,7 @@ import Radio from "./radio.component";
 
 export {
   Button,
+  UploadButton,
   Dialog,
   Layout,
   MenuBar,
