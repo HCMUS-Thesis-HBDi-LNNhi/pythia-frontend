@@ -1,6 +1,3 @@
-import DisplayBox from "./display-box.component";
-import NumberList from "./number-list.component";
-import ChartList from "./chart-list.component";
-import ChartDialog from "./chart-dialog.component";
+import ChartList from "./chart-list";
 
-export { DisplayBox, NumberList, ChartList, ChartDialog };
+export { ChartList };
