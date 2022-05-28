@@ -23,7 +23,7 @@ export default function Home(): JSX.Element {
     },
   ]);
 
-  const [firstUser, _setFirstUser] = useState(true);
+  const [firstUser, _setFirstUser] = useState(false);
 
   return (
     <>

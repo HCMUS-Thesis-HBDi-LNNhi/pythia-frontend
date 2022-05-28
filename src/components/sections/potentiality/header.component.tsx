@@ -1,10 +1,7 @@
-import { Button, Tag, toast } from "components/common";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { PageLabels, TagColor } from "interfaces/common.interface";
+import { Button, Tag, UploadButton } from "components/common";
+import { Dispatch, SetStateAction, useState } from "react";
+import { TagColor } from "interfaces/common.interface";
 import { AcquireModel } from "interfaces/potentiality.interface";
-import { useReadLocalStorage } from "usehooks-ts";
-import { handleUpload } from "utils/uploadFile";
-import { useRouter } from "next/router";
 import icons from "const/icons.const";
 
 interface Props {
@@ -12,25 +9,9 @@ interface Props {
 }
 
 export default function Header(props: Props): JSX.Element {
-  const router = useRouter();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const userID = useReadLocalStorage<string>("user-id");
   const [selectModel, setSelectModel] = useState<AcquireModel>(
     AcquireModel.clustering
   );
-  const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
-    if (!userID) {
-      toast("Something went wrong, please login again!", "failure");
-      router.push(`/${PageLabels.LOGIN}`);
-      return;
-    }
-    handleUpload(file, userID, "demographic", props.setLoading);
-  }, [file, props.setLoading, router, userID]);
 
   return (
     <main
@@ -67,25 +48,7 @@ export default function Header(props: Props): JSX.Element {
             Templates
           </a>
         </Button>
-        <input
-          type="file"
-          accept=".csv"
-          ref={inputRef}
-          hidden
-          onChange={(e) => {
-            setFile(e.target.files && e.target.files[0]);
-            // clear input file
-            e.target.value = "";
-          }}
-        />
-        <Button
-          style="solid"
-          onClick={() => {
-            inputRef.current?.click();
-          }}
-        >
-          Upload data
-        </Button>
+        <UploadButton setLoading={props.setLoading} fileType="demographic" />
       </div>
     </main>
   );
