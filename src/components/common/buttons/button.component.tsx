@@ -1,14 +1,14 @@
 import { ButtonStyle } from "interfaces/common.interface";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const getStyle = (style?: ButtonStyle) => {
   switch (style) {
     case "solid":
-      return "bg-primary-600 text-white-100 hover:shadow-lg";
+      return "bg-primary-600 text-white-100 shadow-lg";
     case "highlight":
-      return "bg-green-500 text-primary-700 hover:shadow-lg";
+      return "bg-green-500 text-primary-700 shadow-lg";
     case "failure":
-      return "bg-red-400 text-primary-700 hover:shadow-lg";
+      return "bg-red-400 text-primary-700 shadow-lg";
     case "outline":
     default:
       return "";
@@ -40,7 +40,7 @@ export default function Button(props: Props): JSX.Element {
     <button
       type={props.type}
       className={[
-        "rounded-xl text-center px-5 shadow-lg",
+        "rounded-xl text-center px-5",
         "opacity-90 flex items-center",
         !props.disabled && "hover:opacity-100 hover:font-medium",
         !props.disabled &&

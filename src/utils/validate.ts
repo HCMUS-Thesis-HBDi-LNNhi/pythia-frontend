@@ -1,5 +1,5 @@
 import { toast } from "components/common";
-import { IChartOptions } from "interfaces/common.interface";
+import { IChartOptions } from "interfaces/chart.interface";
 
 const MIN_YEAR = 1900;
 const MAX_YEAR = new Date().getFullYear();

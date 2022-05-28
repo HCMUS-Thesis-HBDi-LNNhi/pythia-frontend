@@ -1,6 +1,6 @@
 import { ChartTypes } from "const/chart.const";
 import icons from "const/icons.const";
-import { ChartType } from "interfaces/common.interface";
+import { ChartType } from "interfaces/chart.interface";
 import { Dispatch, SetStateAction } from "react";
 import Button from "../buttons/button.component";
 

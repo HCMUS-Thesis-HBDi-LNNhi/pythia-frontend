@@ -2,7 +2,11 @@ import { Button, Radio } from "components/common";
 import { initialChartOptions } from "const/chart.const";
 import icons from "const/icons.const";
 import { Field, Form, Formik } from "formik";
-import { IChartOptions } from "interfaces/common.interface";
+import {
+  CustomerDataType,
+  IChartOptions,
+  TransactionDataType,
+} from "interfaces/chart.interface";
 import { ChartOptionsValidate } from "utils/validate";
 
 const Heading = (props: { label: string }): JSX.Element => (
@@ -47,13 +51,17 @@ const InputTransactions = (): JSX.Element => (
     aria-labelledby="my-radio-group"
     className="space-y-2 grid grid-cols-2 gap-x-12 mb-4"
   >
-    <Radio groupName="transaction" value="totalAmount" label="Total amount">
+    <Radio
+      groupName="transaction"
+      value={TransactionDataType.totalAmount}
+      label={TransactionDataType.totalAmount}
+    >
       <div className="text-3xl">{icons.outline.money}</div>
     </Radio>
     <Radio
       groupName="transaction"
-      value="totalTransactions"
-      label="Total transactions"
+      value={TransactionDataType.totalTransactions}
+      label={TransactionDataType.totalTransactions}
     >
       <div className="text-3xl">{icons.outline.transactions}</div>
     </Radio>
@@ -66,22 +74,46 @@ const InputCustomers = (): JSX.Element => (
     aria-labelledby="my-radio-group"
     className="space-y-2 grid grid-cols-2 gap-x-12"
   >
-    <Radio groupName="customer" value="age" label="Age">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.age}
+      label={CustomerDataType.age}
+    >
       <div className="text-3xl">{icons.outline.age}</div>
     </Radio>
-    <Radio groupName="customer" value="gender" label="Gender">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.gender}
+      label={CustomerDataType.gender}
+    >
       <div className="text-3xl">{icons.outline.gender}</div>
     </Radio>
-    <Radio groupName="customer" value="country" label="Country">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.country}
+      label={CustomerDataType.country}
+    >
       <div className="text-3xl">{icons.outline.country}</div>
     </Radio>
-    <Radio groupName="customer" value="city" label="City">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.city}
+      label={CustomerDataType.city}
+    >
       <div className="text-3xl">{icons.outline.city}</div>
     </Radio>
-    <Radio groupName="customer" value="jobTitle" label="Job title">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.jobTitle}
+      label={CustomerDataType.jobTitle}
+    >
       <div className="text-3xl">{icons.outline.job_title}</div>
     </Radio>
-    <Radio groupName="customer" value="jobIndustry" label="Job Industry">
+    <Radio
+      groupName="customer"
+      value={CustomerDataType.jobIndustry}
+      label={CustomerDataType.jobIndustry}
+    >
       <div className="text-3xl">{icons.outline.job_industry}</div>
     </Radio>
   </ul>
