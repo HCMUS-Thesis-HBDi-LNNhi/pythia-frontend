@@ -7,11 +7,11 @@ export default function Instructions(): JSX.Element {
       <ul>
         <li>
           <input type="radio" />
-          <label>Step 1: Upload customers' demographic data</label>
+          <label>Step 1: Upload customer demographic data</label>
         </li>
         <li>
           <input type="radio" />
-          <label>Step 2: Upload customers' transactions data</label>
+          <label>Step 2: Upload customer transactions data</label>
         </li>
       </ul>
     </Dialog>
