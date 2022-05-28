@@ -1,4 +1,4 @@
-import Loading from "./loading.component";
+import Loading from "../loading.component";
 import MenuBar from "./menubar.component";
 
 interface Props {
