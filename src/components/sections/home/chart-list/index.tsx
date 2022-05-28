@@ -63,11 +63,11 @@ export default function ChartList(props: Props): JSX.Element {
     } finally {
       props.setLoading(false);
     }
-  }, [userID]);
+  }, [userID, props]);
 
   useEffect(() => {
     fetchChartData();
-  }, [userID, fetchChartData]);
+  }, [userID, props, fetchChartData]);
 
   return (
     <main className="grid grid-cols-3">
