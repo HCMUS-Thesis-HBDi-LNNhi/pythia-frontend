@@ -1,12 +1,6 @@
 import { Button, ChartBody, toast } from "components/common";
 import icons from "const/icons.const";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
 import API from "const/api.const";
