@@ -30,7 +30,7 @@ export default function ChartList(props: Props): JSX.Element {
   const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
-  const fetchChartData = useCallback(async () => {
+  async function fetchChartData() {
     if (!userID) return;
     try {
       props.setLoading(true);
@@ -63,11 +63,11 @@ export default function ChartList(props: Props): JSX.Element {
     } finally {
       props.setLoading(false);
     }
-  }, [userID, props]);
+  }
 
   useEffect(() => {
     fetchChartData();
-  }, [userID, props, fetchChartData]);
+  }, []);
 
   return (
     <main className="grid grid-cols-3">
