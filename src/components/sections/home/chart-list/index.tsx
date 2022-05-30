@@ -1,12 +1,6 @@
 import { Button, ChartBody, toast } from "components/common";
 import icons from "const/icons.const";
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
 import API from "const/api.const";
@@ -18,10 +12,14 @@ import {
   IChartDataResponse,
   TransactionDataType,
 } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
+import { normalizedData } from "utils/handleData";
 
 const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 interface Props {
+  userID: string | null;
+  data: IData;
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -71,26 +69,32 @@ export default function ChartList(props: Props): JSX.Element {
 
   return (
     <main className="grid grid-cols-3">
-      {chartData.map((item) => (
-        <ChartContainer
-          key={item.id}
-          chartID={item.id}
-          label={`${item.transaction} of ${item.customer}`}
-          handleReload={() => fetchChartData()}
-          setLoading={props.setLoading}
-        >
-          <ChartBody
-            chartType={item.chartType}
-            chartTitle={item.customer}
-            categoricalData={labels}
-            quantitativeData={labels.map(() => Math.random() * 100)}
-            scatterData={labels.map(() => ({
-              x: Math.random() * 100,
-              y: Math.random() * 100,
-            }))}
-          />
-        </ChartContainer>
-      ))}
+      {chartData.map((item, index) => {
+        const input = normalizedData(props.data, item);
+        const female = input.get("0");
+        index === 0 && console.log(input);
+        if (!female) return;
+        return (
+          <ChartContainer
+            key={item.id}
+            chartID={item.id}
+            label={`${item.transaction} of ${item.customer}`}
+            handleReload={() => fetchChartData()}
+            setLoading={props.setLoading}
+          >
+            <ChartBody
+              chartType={item.chartType}
+              chartTitle={item.customer}
+              categoricalData={Object.keys(female)}
+              quantitativeData={Object.values(female)}
+              scatterData={labels.map(() => ({
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+              }))}
+            />
+          </ChartContainer>
+        );
+      })}
       <div
         className={[
           "border border-primary-300 rounded-lg text-center m-2 aspect-4/3",
