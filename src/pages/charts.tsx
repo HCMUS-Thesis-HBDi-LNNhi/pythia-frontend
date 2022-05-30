@@ -5,7 +5,7 @@ import {
   ChartBody,
   ChartOptions,
 } from "components/common";
-import { ChartType, IChartOptions } from "interfaces/common.interface";
+import { ChartType, IChartOptions } from "interfaces/chart.interface";
 import React, { useState } from "react";
 
 const labels = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];

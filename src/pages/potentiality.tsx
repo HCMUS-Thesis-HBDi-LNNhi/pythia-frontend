@@ -1,6 +1,6 @@
 import { Header } from "components/sections/potentiality";
 import { Layout, Pane, ChartHeader, ChartBody } from "components/common";
-import { ChartType } from "interfaces/common.interface";
+import { ChartType } from "interfaces/chart.interface";
 import { useState } from "react";
 
 const labels = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];

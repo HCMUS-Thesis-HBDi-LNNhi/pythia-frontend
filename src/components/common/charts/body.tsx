@@ -10,7 +10,7 @@ import {
   LineElement,
   ArcElement,
 } from "chart.js";
-import { ChartType, ScatterDataType } from "interfaces/common.interface";
+import { ChartType, ScatterDataType } from "interfaces/chart.interface";
 import BarChart from "./bar";
 import GeoChart from "./geo";
 import LineChart from "./line";

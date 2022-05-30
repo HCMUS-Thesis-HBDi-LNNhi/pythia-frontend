@@ -25,4 +25,11 @@ const post = (
   return axios.default.post(process.env.NEXT_PUBLIC_DOMAIN + url, data, config);
 };
 
-export const fetcher = { get, post };
+const handleDelete = (
+  url: string,
+  config?: axios.AxiosRequestConfig<any>
+): Promise<axios.AxiosResponse<any, any>> => {
+  return axios.default.delete(process.env.NEXT_PUBLIC_DOMAIN + url, config);
+};
+
+export const fetcher = { get, post, handleDelete };
