@@ -1,9 +1,14 @@
+import { ChartColor } from "const/chart.const";
 import { Bar } from "react-chartjs-2";
 
 interface Props {
-  labels: unknown[];
-  chartTitle: string;
-  data: unknown[];
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+  }[];
+  xLabel?: string;
+  yLabel?: string;
 }
 
 export default function BarChart(props: Props): JSX.Element {
@@ -11,13 +16,35 @@ export default function BarChart(props: Props): JSX.Element {
     <Bar
       data={{
         labels: props.labels,
-        datasets: [
-          {
-            label: props.chartTitle,
-            data: props.data,
-            backgroundColor: "#5880A2",
+        datasets: props.datasets.map((value, index) => ({
+          ...value,
+          backgroundColor:
+            index < ChartColor.length ? ChartColor[index] : "#5880A2",
+          borderColor:
+            index < ChartColor.length ? ChartColor[index] : "#5880A2",
+        })),
+      }}
+      options={{
+        scales: {
+          x: {
+            title: {
+              display: !!props.xLabel,
+              text: props.xLabel,
+              font: {
+                weight: "bold",
+              },
+            },
           },
-        ],
+          y: {
+            title: {
+              display: !!props.xLabel,
+              text: props.yLabel,
+              font: {
+                weight: "bold",
+              },
+            },
+          },
+        },
       }}
     />
   );

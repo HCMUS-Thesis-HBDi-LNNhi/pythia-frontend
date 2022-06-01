@@ -23,7 +23,7 @@ export default function Charts(): JSX.Element {
             setChosenChart={setChartType}
             allowPin
           />
-          <ChartBody
+          {/* <ChartBody
             chartType={chartType}
             chartTitle="Charts"
             categoricalData={labels}
@@ -32,7 +32,7 @@ export default function Charts(): JSX.Element {
               x: Math.random() * 100,
               y: Math.random() * 100,
             }))}
-          />
+          /> */}
         </Pane>
         <Pane width="w-1/5 ml-4">
           <ChartOptions setChartOptions={setChartOptions} />

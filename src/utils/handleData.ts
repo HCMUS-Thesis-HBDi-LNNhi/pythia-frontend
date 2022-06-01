@@ -2,15 +2,13 @@ import { toast } from "components/common";
 import API from "const/api.const";
 import {
   ChartType,
-  CustomerDataType,
-  IChartData,
+  IChartOptions,
   IChartYear,
-  TransactionDataType,
 } from "interfaces/chart.interface";
-import { IData, IDimCustomer, IFactTable } from "interfaces/data.interface";
+import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
 import { fetcher } from "./fetcher";
 
-export async function fetchData(
+export async function handleFetchData(
   id: string,
   setLoading: (value: boolean) => void
 ): Promise<IData | undefined> {
@@ -42,35 +40,42 @@ function getDateKeys(quarters: IChartYear, years: IChartYear): string[] {
   return result;
 }
 
-export function normalizedData(data: IData, chartData: IChartData) {
-  switch (chartData.chartType) {
+export function normalizedData(
+  data: IData,
+  chartType: ChartType,
+  chartOptions: IChartOptions,
+  quantitative: keyof IFactData,
+  /** User defined */
+  categorical: keyof IDimCustomer
+) {
+  const dateKeys = getDateKeys(chartOptions.quarters, chartOptions.years);
+
+  switch (chartType) {
     case ChartType.scatter:
     // return new Map<string, { [key: string]: number }>({'0' : {}});
     case ChartType.geo:
     // return new Map<string, { [key: string]: number }>({});
     default:
-      const dateKeys = getDateKeys(chartData.quarters, chartData.years);
-
       const result = new Map<string, { [key: string]: number }>();
 
       data.dim_customers.forEach((customer) => {
-        const mapKey = customer.gender !== "" ? customer.gender : "2";
+        let mapKey = customer[categorical];
 
         dateKeys.forEach((dateKey) => {
           const factKey = `${customer.customer_id}_${dateKey}`;
           const customerFact = data.fact_transactions[factKey];
 
           if (customerFact) {
-            const totalAmount = customerFact.total_amount;
+            const quantitativeValue = customerFact[quantitative];
             const mapValue = result.get(mapKey) ?? {};
 
             result.set(mapKey, {
               ...mapValue,
-              [dateKey]: Math.round(totalAmount),
+              [dateKey]: Math.round(quantitativeValue),
             });
           }
         });
       });
-      return result;
+      return { result, dateKeys };
   }
 }

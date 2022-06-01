@@ -1,37 +1,13 @@
-import { Button, toast } from "components/common";
-import API from "const/api.const";
+import { Button } from "components/common";
 import icons from "const/icons.const";
-import { Dispatch, SetStateAction } from "react";
-import { fetcher } from "utils/fetcher";
 
 interface Props {
-  chartID: string;
   label: string;
   children: React.ReactNode;
-  handleReload: () => void;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  delete: () => void;
 }
 
 export default function ChartContainer(props: Props): JSX.Element {
-  async function handleDelete() {
-    try {
-      props.setLoading(true);
-      const response = await fetcher.handleDelete(
-        API.DELETE.deletePinnedChart(props.chartID)
-      );
-      if (response.status === 204) {
-        props.handleReload();
-      } else {
-        throw response;
-      }
-    } catch (error) {
-      toast("Something went wrong, please try again!", "failure");
-      console.error(error);
-    } finally {
-      props.setLoading(false);
-    }
-  }
-
   return (
     <div
       className={[
@@ -47,7 +23,7 @@ export default function ChartContainer(props: Props): JSX.Element {
         className="text-lg place-self-end absolute !p-2"
         style="outline"
         icon={icons.solid.trash}
-        onClick={() => handleDelete()}
+        onClick={() => props.delete()}
       />
     </div>
   );

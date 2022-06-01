@@ -1,7 +1,23 @@
 export enum Gender {
-  "Female" = "0",
-  "Male" = "1",
-  "Others" = "2",
+  female = "0",
+  male = "1",
+  others = "",
+}
+
+export enum Age {
+  /** Under 18 */
+  teen = "0",
+  /** 18 to 25 */
+  young_adult = "1",
+  /** 26 to 65 */
+  adult = "2",
+  /** Over 65 */
+  elder = "3",
+}
+
+export enum FactDataLabels {
+  num_trans = "Number of transactions",
+  total_amount = "Total amount",
 }
 
 export interface IDimCustomer {
@@ -12,7 +28,6 @@ export interface IDimCustomer {
   gender: string;
   job_industry: string;
   job_title: string;
-  wealth_segment: string;
 }
 
 export interface IDimDate {
@@ -23,14 +38,17 @@ export interface IDimDate {
   year: number;
 }
 
-export interface IFactTable {
+export interface IFactData {
+  num_trans: number;
+  total_amount: number;
+}
+
+export interface IFactTable extends IFactData {
   account_id: string;
   customer_id: string;
   date_key: string;
   first_transaction: string;
   last_transaction: string;
-  num_trans: number;
-  total_amount: number;
 }
 
 export interface IData {
@@ -38,3 +56,9 @@ export interface IData {
   dim_dates: IDimDate[];
   fact_transactions: { [key: string]: IFactTable };
 }
+
+export const initialData: IData = {
+  dim_customers: [],
+  dim_dates: [],
+  fact_transactions: {},
+};

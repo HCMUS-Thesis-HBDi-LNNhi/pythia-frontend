@@ -22,7 +22,7 @@ export default function Potentiality(): JSX.Element {
           setChosenChart={setChartType}
           allowPin
         />
-        <ChartBody
+        {/* <ChartBody
           chartType={chartType}
           chartTitle="Charts"
           categoricalData={labels}
@@ -31,7 +31,7 @@ export default function Potentiality(): JSX.Element {
             x: Math.random() * 100,
             y: Math.random() * 100,
           }))}
-        />
+        /> */}
       </Pane>
     </Layout>
   );

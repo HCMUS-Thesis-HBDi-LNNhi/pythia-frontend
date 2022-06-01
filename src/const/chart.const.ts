@@ -11,6 +11,15 @@ import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
+export const ChartColor = [
+  "#F47A1F",
+  "#FDBB2F",
+  "#377B2B",
+  "#7AC142",
+  "#007CC3",
+  "#00529B",
+];
+
 export const initialChartOptions: IChartOptions = {
   transaction: TransactionDataType.totalAmount,
   customer: CustomerDataType.age,

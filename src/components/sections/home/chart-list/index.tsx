@@ -1,25 +1,15 @@
-import { Button, ChartBody, toast } from "components/common";
-import icons from "const/icons.const";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useReadLocalStorage } from "usehooks-ts";
+import icons from "const/icons.const";
+import { Button, ChartBody } from "components/common";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
-import API from "const/api.const";
-import { useReadLocalStorage } from "usehooks-ts";
-import { fetcher } from "utils/fetcher";
-import {
-  CustomerDataType,
-  IChartData,
-  IChartDataResponse,
-  TransactionDataType,
-} from "interfaces/chart.interface";
-import { IData } from "interfaces/data.interface";
-import { normalizedData } from "utils/handleData";
-
-const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+import { ChartType, IChartData } from "interfaces/chart.interface";
+import { IData, initialData } from "interfaces/data.interface";
+import { handleDelete, handleFetchChart } from "./fetcher";
+import { handleFetchData } from "utils/handleData";
 
 interface Props {
-  userID: string | null;
-  data: IData;
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -27,74 +17,41 @@ export default function ChartList(props: Props): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
   const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
+  const [data, setData] = useState<IData>();
 
-  async function fetchChartData() {
+  const fetchData = () => {
     if (!userID) return;
-    try {
-      props.setLoading(true);
-      const response = await fetcher.get(API.GET.getPinnedCharts(userID));
-      if (response.status === 200) {
-        const data: { charts: IChartDataResponse[] } = response.data;
-        if (data.charts.length === 0) return;
-        setChartData(
-          data.charts.map((item) => {
-            if (!item.id) throw { ...item, message: "Missing pinned chart ID" };
-            const fromDate = item.from_date.split("_");
-            const toDate = item.to_date.split("_");
-            return {
-              quarters: {
-                from: parseInt(fromDate[0]),
-                to: parseInt(toDate[0]),
-              },
-              years: { from: parseInt(fromDate[1]), to: parseInt(toDate[1]) },
-              chartType: item.chart_type,
-              id: item.id,
-              transaction: item.transaction_category as TransactionDataType,
-              customer: item.customer_category as CustomerDataType,
-            };
-          })
-        );
-      } else throw response;
-    } catch (error) {
-      toast("Something went wrong, please try again!", "failure");
-      console.error(error);
-    } finally {
-      props.setLoading(false);
-    }
-  }
+    handleFetchData(userID, props.setLoading).then((res) => setData(res));
+    handleFetchChart(userID, props.setLoading).then((res) => setChartData(res));
+  };
+
+  const clear = () => {
+    setIsShow(false);
+  };
+
+  const renderChart = (chartData: IChartData) => (
+    <ChartContainer
+      key={chartData.id}
+      label={`${chartData.transaction} of ${chartData.customer}`}
+      delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
+    >
+      <ChartBody
+        data={data ?? initialData}
+        chartType={ChartType.bar}
+        chartOptions={chartData}
+        quantitative="total_amount"
+        categorical="gender"
+      />
+    </ChartContainer>
+  );
 
   useEffect(() => {
-    fetchChartData();
+    fetchData();
   }, []);
 
   return (
-    <main className="grid grid-cols-3">
-      {chartData.map((item, index) => {
-        const input = normalizedData(props.data, item);
-        const female = input.get("0");
-        index === 0 && console.log(input);
-        if (!female) return;
-        return (
-          <ChartContainer
-            key={item.id}
-            chartID={item.id}
-            label={`${item.transaction} of ${item.customer}`}
-            handleReload={() => fetchChartData()}
-            setLoading={props.setLoading}
-          >
-            <ChartBody
-              chartType={item.chartType}
-              chartTitle={item.customer}
-              categoricalData={Object.keys(female)}
-              quantitativeData={Object.values(female)}
-              scatterData={labels.map(() => ({
-                x: Math.random() * 100,
-                y: Math.random() * 100,
-              }))}
-            />
-          </ChartContainer>
-        );
-      })}
+    <main className="grid grid-cols-2">
+      {chartData.map((item) => renderChart(item))}
       <div
         className={[
           "border border-primary-300 rounded-lg text-center m-2 aspect-4/3",
@@ -111,9 +68,9 @@ export default function ChartList(props: Props): JSX.Element {
       {isShow && userID && (
         <ChartDialog
           userID={userID}
-          handleReset={() => setIsShow(false)}
-          handleReload={() => fetchChartData()}
           setLoading={props.setLoading}
+          reload={fetchData}
+          clear={clear}
         />
       )}
     </main>
