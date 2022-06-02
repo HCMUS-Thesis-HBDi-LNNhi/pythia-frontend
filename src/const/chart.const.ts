@@ -1,10 +1,8 @@
 import {
   ChartType,
-  CustomerDataType,
   IChart,
   IChartOptions,
   ReportLabel,
-  TransactionDataType,
 } from "interfaces/chart.interface";
 import { ISelectItem } from "interfaces/common.interface";
 import icons from "./icons.const";
@@ -21,8 +19,8 @@ export const ChartColor = [
 ];
 
 export const initialChartOptions: IChartOptions = {
-  transaction: TransactionDataType.totalAmount,
-  customer: CustomerDataType.age,
+  y: "total_amount",
+  x: "dob",
   years: { from: CURRENT_YEAR, to: CURRENT_YEAR },
   quarters: { from: 1, to: 4 },
 };

@@ -7,13 +7,13 @@ import {
 } from "components/common";
 import { initialChartOptions } from "const/chart.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
 import { Dispatch, SetStateAction, useState } from "react";
 import { handleCreateChart } from "./fetcher";
 
-const labels = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-
 interface Props {
   userID: string;
+  data: IData;
   setLoading: Dispatch<SetStateAction<boolean>>;
   reload: () => void;
   clear: () => void;
@@ -36,14 +36,9 @@ export default function ChartDialog(props: Props): JSX.Element {
           <ChartHeader chosenChart={chartType} setChosenChart={setChartType} />
           <div className="mt-8" />
           <ChartBody
-            chartType={chartType}
-            chartTitle={chartOptions.customer}
-            categoricalData={labels}
-            quantitativeData={labels.map(() => Math.random() * 100)}
-            scatterData={labels.map(() => ({
-              x: Math.random() * 100,
-              y: Math.random() * 100,
-            }))}
+            data={props.data}
+            chartType={ChartType.pie}
+            chartOptions={chartOptions}
           />
           <div className="flex mt-auto w-full justify-end space-x-4">
             <Button

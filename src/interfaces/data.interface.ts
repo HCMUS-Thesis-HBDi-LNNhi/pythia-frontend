@@ -20,6 +20,17 @@ export enum FactDataLabels {
   total_amount = "Total amount",
 }
 
+export enum CategoryDataLabels {
+  city = "City",
+  country = "Country",
+  customer_id = "Customer ID",
+  dob = "Age",
+  gender = "Gender",
+  job_industry = "Job industry",
+  job_title = "Job title",
+  date_key = "Quarters",
+}
+
 export interface IDimCustomer {
   city: string;
   country: string;
@@ -56,9 +67,3 @@ export interface IData {
   dim_dates: IDimDate[];
   fact_transactions: { [key: string]: IFactTable };
 }
-
-export const initialData: IData = {
-  dim_customers: [],
-  dim_dates: [],
-  fact_transactions: {},
-};

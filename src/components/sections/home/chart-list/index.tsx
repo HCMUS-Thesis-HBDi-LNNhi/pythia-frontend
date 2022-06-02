@@ -1,15 +1,25 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
 import { Button, ChartBody } from "components/common";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
 import { ChartType, IChartData } from "interfaces/chart.interface";
-import { IData, initialData } from "interfaces/data.interface";
+import {
+  CategoryDataLabels,
+  FactDataLabels,
+  IData,
+} from "interfaces/data.interface";
 import { handleDelete, handleFetchChart } from "./fetcher";
-import { handleFetchData } from "utils/handleData";
 
 interface Props {
+  data: IData;
   setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -17,11 +27,9 @@ export default function ChartList(props: Props): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
   const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
-  const [data, setData] = useState<IData>();
 
   const fetchData = () => {
     if (!userID) return;
-    handleFetchData(userID, props.setLoading).then((res) => setData(res));
     handleFetchChart(userID, props.setLoading).then((res) => setChartData(res));
   };
 
@@ -32,25 +40,26 @@ export default function ChartList(props: Props): JSX.Element {
   const renderChart = (chartData: IChartData) => (
     <ChartContainer
       key={chartData.id}
-      label={`${chartData.transaction} of ${chartData.customer}`}
+      label={`${FactDataLabels[chartData.y]} of ${
+        CategoryDataLabels[chartData.x]
+      }`}
       delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
     >
       <ChartBody
-        data={data ?? initialData}
-        chartType={ChartType.bar}
+        data={props.data}
+        chartType={ChartType.line}
         chartOptions={chartData}
-        quantitative="total_amount"
-        categorical="gender"
       />
     </ChartContainer>
   );
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   return (
-    <main className="grid grid-cols-2">
+    <main className="grid grid-cols-1 lg:grid-cols-2">
       {chartData.map((item) => renderChart(item))}
       <div
         className={[
@@ -68,6 +77,7 @@ export default function ChartList(props: Props): JSX.Element {
       {isShow && userID && (
         <ChartDialog
           userID={userID}
+          data={props.data}
           setLoading={props.setLoading}
           reload={fetchData}
           clear={clear}

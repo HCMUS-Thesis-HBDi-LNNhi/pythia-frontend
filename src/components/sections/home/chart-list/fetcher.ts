@@ -2,33 +2,39 @@ import { toast } from "components/common";
 import API from "const/api.const";
 import {
   ChartType,
-  CustomerDataType,
   IChartData,
-  IChartDataResponse,
+  IChartPayload,
   IChartOptions,
-  TransactionDataType,
 } from "interfaces/chart.interface";
+import { IDimCustomer, IFactData } from "interfaces/data.interface";
 import { fetcher } from "utils/fetcher";
 
-function normalizedData(data: IChartDataResponse): IChartData {
+interface IResponse extends IChartPayload {
+  id: string;
+}
+
+function normalizedData(data: IResponse): IChartData {
+  const x = data.x as keyof IDimCustomer | "date_key";
+  const y = data.y as keyof IFactData;
+  const z = data.z as keyof IDimCustomer;
+
+  const id = data.id;
+  const chartType = data.chart_type;
   if (!data.id) throw { ...data, message: "Missing pinned chart ID" };
   const fromDate = data.from_date.split("_");
   const toDate = data.to_date.split("_");
 
-  const id = data.id;
-  const chartType = data.chart_type;
-  const transaction = data.transaction_category as TransactionDataType;
-  const customer = data.customer_category as CustomerDataType;
   const quarters = {
     from: parseInt(fromDate[0]),
     to: parseInt(toDate[0]),
   };
   const years = { from: parseInt(fromDate[1]), to: parseInt(toDate[1]) };
   return {
+    x,
+    y,
+    z,
     id,
     chartType,
-    transaction,
-    customer,
     quarters,
     years,
   };
@@ -42,9 +48,7 @@ export async function handleFetchChart(
     setLoading(true);
     const response = await fetcher.get(API.GET.getPinnedCharts(userID));
     if (response.status !== 200) throw response;
-    return response.data.charts.map((item: IChartDataResponse) =>
-      normalizedData(item)
-    );
+    return response.data.charts.map((item: IResponse) => normalizedData(item));
   } catch (error) {
     toast("Something went wrong, please try again!", "failure");
     console.error(error);
@@ -68,13 +72,14 @@ export async function handleCreateChart(
       "_"
     );
     const toDate = [chartOptions.quarters.to, chartOptions.years.to].join("_");
-    const payload: IChartDataResponse = {
+    const payload: IChartPayload = {
       user_id: userID,
       chart_type: chartType,
       from_date: fromDate,
       to_date: toDate,
-      customer_category: chartOptions.customer,
-      transaction_category: chartOptions.transaction,
+      x: chartOptions.x,
+      y: chartOptions.y,
+      z: chartOptions.z,
     };
     const response = await fetcher.post(API.POST.createPinnedChart, payload);
     if (response.status === 204) reload();

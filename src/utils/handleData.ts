@@ -5,7 +5,7 @@ import {
   IChartOptions,
   IChartYear,
 } from "interfaces/chart.interface";
-import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
+import { IData, IDimCustomer } from "interfaces/data.interface";
 import { fetcher } from "./fetcher";
 
 export async function handleFetchData(
@@ -40,42 +40,98 @@ function getDateKeys(quarters: IChartYear, years: IChartYear): string[] {
   return result;
 }
 
+function getXKeys(data: IData, x: keyof IDimCustomer): string[] {
+  return Array.from(new Set(data.dim_customers.map((value) => value[x])));
+}
+
 export function normalizedData(
   data: IData,
   chartType: ChartType,
-  chartOptions: IChartOptions,
-  quantitative: keyof IFactData,
-  /** User defined */
-  categorical: keyof IDimCustomer
+  chartOptions: IChartOptions
 ) {
-  const dateKeys = getDateKeys(chartOptions.quarters, chartOptions.years);
+  const { x, y, z, quarters, years } = chartOptions;
+
+  const dateKeys = getDateKeys(quarters, years);
+  let xKeys: string[] = [];
+  if (x === "date_key") xKeys = dateKeys;
+  else xKeys = getXKeys(data, x);
 
   switch (chartType) {
+    // 2Q, 1C
     case ChartType.scatter:
-    // return new Map<string, { [key: string]: number }>({'0' : {}});
+    // 1Q, Country/City
     case ChartType.geo:
-    // return new Map<string, { [key: string]: number }>({});
+    // 1Q, 2C
     default:
-      const result = new Map<string, { [key: string]: number }>();
+      if (z) {
+        // 3D chart
+        const result = new Map<string, { [key: string]: number }>();
 
-      data.dim_customers.forEach((customer) => {
-        let mapKey = customer[categorical];
+        if (x === "date_key") {
+          data.dim_customers.forEach((customer) => {
+            let mapKey = customer[z];
+            dateKeys.forEach((dateKey) => {
+              const factKey = `${customer.customer_id}_${dateKey}`;
+              const customerFact = data.fact_transactions[factKey];
 
-        dateKeys.forEach((dateKey) => {
-          const factKey = `${customer.customer_id}_${dateKey}`;
-          const customerFact = data.fact_transactions[factKey];
+              if (customerFact) {
+                const quantitativeValue = Math.round(customerFact[y]);
+                const mapValue = result.get(mapKey) ?? {};
+                const dateValue = mapValue[dateKey] ?? 0;
 
-          if (customerFact) {
-            const quantitativeValue = customerFact[quantitative];
-            const mapValue = result.get(mapKey) ?? {};
-
-            result.set(mapKey, {
-              ...mapValue,
-              [dateKey]: Math.round(quantitativeValue),
+                result.set(mapKey, {
+                  ...mapValue,
+                  [dateKey]: dateValue + quantitativeValue,
+                });
+              }
             });
-          }
-        });
-      });
-      return { result, dateKeys };
+          });
+        } else {
+          //do something
+        }
+        return {
+          result,
+          xKeys,
+        };
+      } else {
+        // 2D chart
+        const result = new Map<string, number>();
+        if (x !== "date_key") {
+          data.dim_customers.forEach((customer) => {
+            let mapKey = customer[x];
+            const mapValue = result.get(mapKey) ?? 0;
+            let sum = 0;
+            dateKeys.forEach((dateKey) => {
+              const factKey = `${customer.customer_id}_${dateKey}`;
+              const customerFact = data.fact_transactions[factKey];
+              if (customerFact) {
+                sum += Math.round(customerFact[y]);
+              }
+            });
+            result.set(mapKey, mapValue + sum);
+          });
+        } else {
+          dateKeys.forEach((dateKey) => {
+            const mapKey = dateKey;
+            const mapValue = result.get(mapKey) ?? 0;
+            let sum = 0;
+            data.dim_customers.forEach((customer) => {
+              const factKey = `${customer.customer_id}_${dateKey}`;
+              const customerFact = data.fact_transactions[factKey];
+              if (customerFact) {
+                sum += Math.round(customerFact[y]);
+              }
+            });
+            result.set(mapKey, mapValue + sum);
+          });
+        }
+        return {
+          result,
+          xKeys:
+            x === "date_key"
+              ? xKeys.map((value) => `Q${value.replace("_", "/")}`)
+              : xKeys,
+        };
+      }
   }
 }

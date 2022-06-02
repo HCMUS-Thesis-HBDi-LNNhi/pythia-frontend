@@ -12,12 +12,11 @@ import {
 } from "chart.js";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
 import {
+  CategoryDataLabels,
   FactDataLabels,
-  Gender,
   IData,
-  IDimCustomer,
-  IFactData,
 } from "interfaces/data.interface";
+import { getCategoryLabels } from "utils/category";
 import { normalizedData } from "utils/handleData";
 import BarChart from "./bar";
 import LineChart from "./line";
@@ -39,56 +38,18 @@ interface Props {
   data: IData;
   chartType: ChartType;
   chartOptions: IChartOptions;
-  quantitative: keyof IFactData;
-  /** User defined */
-  categorical: keyof IDimCustomer;
 }
 
-const xLabel = "Quarter";
-
-const getCategoryLabels = (category: keyof IDimCustomer, key: string) => {
-  switch (category) {
-    case "gender":
-      switch (key) {
-        case "0":
-          return "Female";
-        case "1":
-          return "Male";
-        default:
-          return "Others";
-      }
-    case "dob":
-      switch (key) {
-        case "0":
-          return "Teen";
-        case "1":
-          return "Young adult";
-        case "2":
-          return "Adult";
-        default:
-          return "Elder";
-      }
-    default:
-      return key;
-  }
-};
-
 export default function ChartBody(props: Props): JSX.Element {
-  const input = normalizedData(
-    props.data,
-    props.chartType,
-    props.chartOptions,
-    props.quantitative,
-    props.categorical
-  );
-
-  const labels = input.dateKeys.map((value) => `Q${value.replace("_", "/")}`);
-
+  const input = normalizedData(props.data, props.chartType, props.chartOptions);
+  const labels = input.xKeys;
   const datasets: { label: string; data: number[] }[] = [];
-
   input.result.forEach((value, key) =>
     datasets.push({
-      label: getCategoryLabels(props.categorical, key),
+      label: getCategoryLabels(
+        props.chartOptions.x === "date_key" ? "gender" : props.chartOptions.x,
+        key
+      ),
       data: Object.values(value),
     })
   );
@@ -99,8 +60,8 @@ export default function ChartBody(props: Props): JSX.Element {
         <BarChart
           labels={labels}
           datasets={datasets}
-          xLabel={xLabel}
-          yLabel={FactDataLabels[props.quantitative]}
+          xLabel={CategoryDataLabels[props.chartOptions.x]}
+          yLabel={FactDataLabels[props.chartOptions.y]}
         />
       );
     case ChartType.line:
@@ -108,8 +69,8 @@ export default function ChartBody(props: Props): JSX.Element {
         <LineChart
           labels={labels}
           datasets={datasets}
-          xLabel={xLabel}
-          yLabel={FactDataLabels[props.quantitative]}
+          xLabel={CategoryDataLabels[props.chartOptions.x]}
+          yLabel={FactDataLabels[props.chartOptions.y]}
         />
       );
     case ChartType.pie:
