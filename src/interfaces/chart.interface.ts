@@ -1,5 +1,3 @@
-import { IDimCustomer, IFactData } from "./data.interface";
-
 export type MetricType =
   | keyof ICustomerDemographic
   | keyof ICustomerTransaction;
@@ -10,6 +8,20 @@ export enum ChartType {
   line = "line",
   scatter = "scatter",
   geo = "geo",
+}
+
+export enum TransactionDataType {
+  totalAmount = "Total Amount",
+  totalTransactions = "Total Transactions",
+}
+
+export enum CustomerDataType {
+  age = "Age",
+  gender = "Gender",
+  country = "Country",
+  city = "City",
+  jobTitle = "Job Title",
+  jobIndustry = "Job Industry",
 }
 
 export type ScatterDataType = { x: number; y: number };
@@ -27,9 +39,8 @@ export interface IChartYear {
 }
 
 export interface IChartOptions {
-  x: keyof IDimCustomer | "date_key";
-  y: keyof IFactData;
-  z?: keyof IDimCustomer;
+  transaction: TransactionDataType;
+  customer: CustomerDataType;
   years: IChartYear;
   quarters: IChartYear;
 }
@@ -39,19 +50,14 @@ export interface IChartData extends IChartOptions {
   chartType: ChartType;
 }
 
-export interface IChartPayload {
-  user_id: string;
+export interface IChartDataResponse {
+  id?: string;
   chart_type: ChartType;
+  customer_category: string;
   from_date: string;
   to_date: string;
-  x: string;
-  y: string;
-  z?: string;
-}
-
-export interface IDataset {
-  label: string;
-  data: number[];
+  transaction_category: string;
+  user_id: string;
 }
 
 export interface ICustomerDemographic {
