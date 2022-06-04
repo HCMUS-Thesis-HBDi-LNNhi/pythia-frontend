@@ -31,6 +31,7 @@ export default function ChartHeader(props: Props): JSX.Element {
           />
         ))}
       </div>
+      {/* TODO: Implement pinned chart */}
       {props.allowPin && (
         <Button className="text-2xl ml-auto" icon={icons.outline.pin}></Button>
       )}
