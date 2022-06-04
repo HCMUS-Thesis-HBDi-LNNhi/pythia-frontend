@@ -1,12 +1,10 @@
 import { ChartColor } from "const/chart.const";
+import { IDataset } from "interfaces/chart.interface";
 import { Bar } from "react-chartjs-2";
 
 interface Props {
   labels: string[];
-  datasets: {
-    label: string;
-    data: number[];
-  }[];
+  datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
 }

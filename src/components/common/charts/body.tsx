@@ -10,17 +10,18 @@ import {
   LineElement,
   ArcElement,
 } from "chart.js";
-import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
   IData,
 } from "interfaces/data.interface";
-import { getCategoryLabels } from "utils/category";
-import { normalizedData } from "utils/handleData";
+import { useEffect, useState } from "react";
+import { getXKeys, handle2DData, handle3DData } from "utils/handleData";
 import BarChart from "./bar";
 import LineChart from "./line";
 import PieChart from "./pie";
+import ScatterChart from "./scatter";
 
 ChartJS.register(
   Title,
@@ -41,27 +42,77 @@ interface Props {
 }
 
 export default function ChartBody(props: Props): JSX.Element {
-  const input = normalizedData(props.data, props.chartType, props.chartOptions);
-  const labels = input.xKeys;
-  const datasets: { label: string; data: number[] }[] = [];
-  input.result.forEach((value, key) =>
-    datasets.push({
-      label: getCategoryLabels(
-        props.chartOptions.x === "date_key" ? "gender" : props.chartOptions.x,
-        key
-      ),
-      data: Object.values(value),
-    })
-  );
+  const { data, chartType, chartOptions } = props;
 
-  switch (props.chartType) {
+  const [labels, setLabels] = useState<string[]>([]);
+  const [datasets, setDatasets] = useState<IDataset[]>([]);
+
+  const getLabels = (xKeys: string[], chartOptions: IChartOptions) => {
+    switch (chartOptions.x) {
+      case "date_key":
+        setLabels(xKeys.map((value) => `Q${value.replace("_", "/")}`));
+        break;
+      case "dob":
+        setLabels(["Teen", "Young adult", "Adult", "Elder"]);
+        break;
+      case "gender":
+        setLabels(["Female", "Male", "Others"]);
+        break;
+      default:
+        setLabels(xKeys);
+        break;
+    }
+  };
+
+  const getDatasets = (
+    xKeys: string[],
+    data: IData,
+    chartType: ChartType,
+    chartOptions: IChartOptions
+  ) => {
+    // 3D charts
+    if (chartOptions.z) {
+      //TODO: Implement 3D charts
+    }
+    // 2D charts
+    else {
+      const input = handle2DData(data, chartType, chartOptions, xKeys);
+
+      if (chartType === ChartType.scatter) {
+        const newDatasets: IDataset[] = [];
+        input.forEach((value, key) => {
+          newDatasets.push({
+            label: key,
+            data: value,
+          });
+        });
+        setDatasets(newDatasets);
+      } else {
+        const inputValues = Array.from(input.values());
+        setDatasets([
+          {
+            label: CategoryDataLabels[chartOptions.x],
+            data: inputValues.map((value) => value[0]),
+          },
+        ]);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const xKeys = getXKeys(data, chartOptions);
+    getLabels(xKeys, chartOptions);
+    getDatasets(xKeys, data, chartType, chartOptions);
+  }, [data, chartOptions, chartType]);
+
+  switch (chartType) {
     case ChartType.bar:
       return (
         <BarChart
           labels={labels}
           datasets={datasets}
-          xLabel={CategoryDataLabels[props.chartOptions.x]}
-          yLabel={FactDataLabels[props.chartOptions.y]}
+          xLabel={CategoryDataLabels[chartOptions.x]}
+          yLabel={FactDataLabels[chartOptions.y]}
         />
       );
     case ChartType.line:
@@ -69,13 +120,27 @@ export default function ChartBody(props: Props): JSX.Element {
         <LineChart
           labels={labels}
           datasets={datasets}
-          xLabel={CategoryDataLabels[props.chartOptions.x]}
-          yLabel={FactDataLabels[props.chartOptions.y]}
+          xLabel={CategoryDataLabels[chartOptions.x]}
+          yLabel={FactDataLabels[chartOptions.y]}
         />
       );
     case ChartType.pie:
-      return <PieChart labels={labels} datasets={datasets} />;
+      return (
+        <>
+          {datasets.map((dataset) => (
+            <PieChart labels={labels} datasets={dataset} key={dataset.label} />
+          ))}
+        </>
+      );
     case ChartType.scatter:
+      return (
+        <ScatterChart
+          labels={labels}
+          datasets={datasets}
+          xLabel={FactDataLabels.num_trans}
+          yLabel={FactDataLabels.total_amount}
+        />
+      );
     case ChartType.geo:
       return <div>WIP</div>;
     default:

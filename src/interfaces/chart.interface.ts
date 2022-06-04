@@ -49,6 +49,11 @@ export interface IChartPayload {
   z?: string;
 }
 
+export interface IDataset {
+  label: string;
+  data: number[];
+}
+
 export interface ICustomerDemographic {
   customerID: string;
   // dob: Date; => receive dob from DB & calculate age ???

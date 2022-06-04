@@ -19,7 +19,7 @@ const InputDate = (props: {
 }): JSX.Element => (
   <div>
     <Heading label={props.label} />
-    <div className="py-2 flex items-center space-x-2">
+    <div className="py-2 pr-3 flex items-center space-x-2">
       <Field
         type="number"
         className="border border-primary-700 p-1 rounded w-1/3 text-center"
@@ -36,13 +36,17 @@ const InputDate = (props: {
 
 const InputTransactions = (props: {
   label: string;
+  className: string;
   groupName: string;
   fieldValue: (keyof typeof FactDataLabels)[];
   icons: React.ReactNode[];
 }): JSX.Element => (
-  <div>
+  <div className={props.className}>
     <Heading label={props.label} />
-    <ul role="group" className="space-y-2 grid grid-cols-2 lg:gap-x-12">
+    <ul
+      role="group"
+      className="space-y-2 grid grid-cols-7 lg:grid-cols-2 lg:gap-x-12"
+    >
       {props.fieldValue.map((value, index) => (
         <Radio
           key={value}
@@ -69,7 +73,7 @@ const InputCustomers = (props: {
     <ul
       role="group"
       className={[
-        "space-y-2 grid grid-cols-3",
+        "space-y-2 grid grid-cols-7",
         "lg:grid-cols-2 lg:gap-x-12",
       ].join(" ")}
     >
@@ -94,6 +98,7 @@ const IconsCustomer = [
   icons.outline.city,
   icons.outline.job_title,
   icons.outline.job_industry,
+  icons.outline.calendar,
 ];
 
 const IconsTransaction = [icons.outline.money, icons.outline.transactions];
@@ -131,7 +136,7 @@ export default function ChartOptions(props: Props): JSX.Element {
           />
           <InputCustomers
             label="X Axis"
-            className="col-span-2"
+            className="col-span-3"
             groupName="x"
             fieldValue={[
               "dob",
@@ -140,18 +145,20 @@ export default function ChartOptions(props: Props): JSX.Element {
               "city",
               "job_title",
               "job_industry",
+              "date_key",
             ]}
             icons={IconsCustomer}
           />
           <InputTransactions
             label="Y Axis"
+            className="col-span-3"
             groupName="y"
             fieldValue={["total_amount", "num_trans"]}
             icons={IconsTransaction}
           />
           <InputCustomers
             label="Z Axis"
-            className="col-span-2"
+            className="col-span-3"
             groupName="z"
             fieldValue={[
               "dob",
