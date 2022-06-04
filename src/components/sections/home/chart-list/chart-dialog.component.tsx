@@ -37,7 +37,7 @@ export default function ChartDialog(props: Props): JSX.Element {
           <div className="mt-8" />
           <ChartBody
             data={props.data}
-            chartType={ChartType.pie}
+            chartType={chartType}
             chartOptions={chartOptions}
           />
           <div className="flex mt-auto w-full justify-end space-x-4">

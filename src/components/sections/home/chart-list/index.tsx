@@ -1,16 +1,10 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
 import { Button, ChartBody } from "components/common";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
-import { ChartType, IChartData } from "interfaces/chart.interface";
+import { IChartData } from "interfaces/chart.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
@@ -47,7 +41,7 @@ export default function ChartList(props: Props): JSX.Element {
     >
       <ChartBody
         data={props.data}
-        chartType={ChartType.line}
+        chartType={chartData.chartType}
         chartOptions={chartData}
       />
     </ChartContainer>
