@@ -109,7 +109,7 @@ export default function render2DCharts(
   const dateKeys = getDateKeys(quarters, years);
 
   switch (true) {
-    // TODO: implement for Geo chart
+    //TODO: Implement for Geo chart
     case x === "date_key" && chartType === ChartType.geo:
       return new Map();
     case x === "dob" && chartType === ChartType.geo:

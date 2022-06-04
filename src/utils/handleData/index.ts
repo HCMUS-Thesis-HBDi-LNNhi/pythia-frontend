@@ -5,9 +5,8 @@ import { Age, IData } from "interfaces/data.interface";
 import { fetcher } from "../fetcher";
 
 import handle2DData from "./handle2DData";
-import handle3DData from "./handle3DData";
 
-export { handle2DData, handle3DData };
+export { handle2DData };
 
 const CURRENT_YEAR = new Date().getFullYear();
 

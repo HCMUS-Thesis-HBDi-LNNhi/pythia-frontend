@@ -156,7 +156,8 @@ export default function ChartOptions(props: Props): JSX.Element {
             fieldValue={["total_amount", "num_trans"]}
             icons={IconsTransaction}
           />
-          <InputCustomers
+          {/*TODO: Implement 3D charts */}
+          {/* <InputCustomers
             label="Z Axis"
             className="col-span-3"
             groupName="z"
@@ -169,7 +170,7 @@ export default function ChartOptions(props: Props): JSX.Element {
               "job_industry",
             ]}
             icons={IconsCustomer}
-          />
+          /> */}
           <div className="mt-auto pt-4 col-span-3 grid place-items-center">
             <Button style="solid" type="submit">
               Draw chart

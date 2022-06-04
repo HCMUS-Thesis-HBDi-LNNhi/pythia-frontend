@@ -17,7 +17,7 @@ import {
   IData,
 } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
-import { getXKeys, handle2DData, handle3DData } from "utils/handleData";
+import { getXKeys, handle2DData } from "utils/handleData";
 import BarChart from "./bar";
 import LineChart from "./line";
 import PieChart from "./pie";
@@ -77,7 +77,6 @@ export default function ChartBody(props: Props): JSX.Element {
     // 2D charts
     else {
       const input = handle2DData(data, chartType, chartOptions, xKeys);
-
       if (chartType === ChartType.scatter) {
         const newDatasets: IDataset[] = [];
         input.forEach((value, key) => {
