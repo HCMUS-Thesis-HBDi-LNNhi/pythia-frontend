@@ -1,30 +1,32 @@
+import { ChartColor } from "const/chart.const";
+import { IDataset } from "interfaces/chart.interface";
 import { Pie } from "react-chartjs-2";
 
 interface Props {
-  labels: unknown[];
-  chartTitle: string;
-  data: unknown[];
+  labels: string[];
+  /** Datasets length must be under 4 */
+  /** Data must be from 0 to 1 */
+  datasets: IDataset;
+  displayLegend?: boolean;
 }
 
 export default function PieChart(props: Props): JSX.Element {
   return (
     <Pie
-      options={{ aspectRatio: 2 / 1 }}
+      options={{
+        aspectRatio: 2 / 1,
+        plugins: {
+          legend: {
+            display: props.displayLegend,
+          },
+        },
+      }}
       data={{
         labels: props.labels,
         datasets: [
           {
-            label: props.chartTitle,
-            data: props.data,
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.5)",
-              "rgba(54, 162, 235, 0.5)",
-              "rgba(255, 109, 12, 0.5)",
-              "rgba(255, 206, 86, 0.5)",
-              "rgba(75, 192, 192, 0.5)",
-              "rgba(153, 102, 255, 0.5)",
-              "rgba(255, 159, 64, 0.5)",
-            ],
+            ...props.datasets,
+            backgroundColor: ChartColor,
             borderWidth: 1,
           },
         ],
