@@ -40,6 +40,18 @@ export default function ScatterChart(props: Props): JSX.Element {
           },
         },
       }}
+      data={{
+        datasets: props.datasets.map((value, index) => ({
+          label: props.labels[index],
+          data: [
+            {
+              x: value.data[1],
+              y: value.data[0],
+            },
+          ],
+          backgroundColor: ChartColor[index % ChartColor.length],
+        })),
+      }}
     />
   );
 }
