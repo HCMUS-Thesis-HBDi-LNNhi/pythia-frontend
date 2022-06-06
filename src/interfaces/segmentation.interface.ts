@@ -30,3 +30,21 @@ export const initialRFMResponse: IRFMResponse = {
     total_amount: {},
   },
 };
+
+export interface IBGNBDResult {
+  T: number;
+  id: string;
+  predict: number;
+  t_x: number;
+  x: number;
+}
+
+export interface IBGNBDResponse {
+  account_id: string;
+  bgnbd: IBGNBDResult[];
+}
+
+export const initialBGNBDResponse: IBGNBDResponse = {
+  account_id: "",
+  bgnbd: [],
+};

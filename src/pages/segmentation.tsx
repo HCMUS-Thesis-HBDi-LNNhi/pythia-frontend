@@ -3,6 +3,7 @@ import { Layout } from "components/common";
 import { useState } from "react";
 import { RetainModel } from "interfaces/segmentation.interface";
 import { useReadLocalStorage } from "usehooks-ts";
+import BGNBDBody from "components/sections/segmentation/bgnbd-body.component";
 
 export default function Segmentation(): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
@@ -22,10 +23,8 @@ export default function Segmentation(): JSX.Element {
         setSelectedModel={setSelectedModel}
         setLoading={setLoading}
       />
-
-      {/* TODO: Implement segmentation charts */}
       {selectedModel === RetainModel.bg_nbd ? (
-        <div>WIP</div>
+        <BGNBDBody userID={userID} setLoading={setLoading} />
       ) : (
         <RFMBody userID={userID} setLoading={setLoading} />
       )}

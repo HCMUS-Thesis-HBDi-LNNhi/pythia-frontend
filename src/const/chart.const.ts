@@ -13,12 +13,14 @@ export const ChartColor = [
   "red",
   "green",
   "orange",
-  "blue",
-  "yellow",
+  "darkblue",
+  "gold",
   "brown",
-  "purple",
+  "turquoise",
   "black",
   "pink",
+  "purple",
+  "teal",
 ];
 
 export const initialChartOptions: IChartOptions = {
