@@ -15,11 +15,6 @@ interface Props {
 export default function Header(props: Props): JSX.Element {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
-  const [selectModel, setSelectModel] = useState<RetainModel>(
-    RetainModel.bg_nbd
-  );
-  const [file, _setFile] = useState<File | null>(null);
-  const [fileType, _setFileType] = useState<"demographic" | "transaction">();
 
   useEffect(() => {
     if (!userID) {
