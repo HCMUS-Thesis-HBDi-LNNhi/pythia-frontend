@@ -10,7 +10,12 @@ import {
   LineElement,
   ArcElement,
 } from "chart.js";
-import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
+import {
+  ChartType,
+  IChartOptions,
+  IDataset,
+  IScatterDataset,
+} from "interfaces/chart.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
@@ -46,6 +51,7 @@ export default function ChartBody(props: Props): JSX.Element {
 
   const [labels, setLabels] = useState<string[]>([]);
   const [datasets, setDatasets] = useState<IDataset[]>([]);
+  const [scatterDatasets, setScatterDatasets] = useState<IScatterDataset[]>([]);
 
   const getLabels = (xKeys: string[], chartOptions: IChartOptions) => {
     switch (chartOptions.x) {
@@ -77,15 +83,16 @@ export default function ChartBody(props: Props): JSX.Element {
     // 2D charts
     else {
       const input = handle2DData(data, chartType, chartOptions, xKeys);
+      //FIXME: Better scatter chart
       if (chartType === ChartType.scatter) {
-        const newDatasets: IDataset[] = [];
+        const newDatasets: IScatterDataset[] = [];
         input.forEach((value, key) => {
           newDatasets.push({
             label: key,
-            data: value,
+            data: [{ x: value[0], y: value[1] }],
           });
         });
-        setDatasets(newDatasets);
+        setScatterDatasets(newDatasets);
       } else {
         const inputValues = Array.from(input.values());
         setDatasets([
@@ -134,8 +141,7 @@ export default function ChartBody(props: Props): JSX.Element {
     case ChartType.scatter:
       return (
         <ScatterChart
-          labels={labels}
-          datasets={datasets}
+          datasets={scatterDatasets}
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
         />

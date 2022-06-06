@@ -18,6 +18,9 @@ export enum Age {
 export enum FactDataLabels {
   num_trans = "Number of transactions",
   total_amount = "Total amount",
+  recency = "Recency",
+  cluster_id = "Cluster",
+  customer_id = "Customer ID",
 }
 
 export enum CategoryDataLabels {

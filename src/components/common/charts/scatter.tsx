@@ -1,10 +1,9 @@
 import { ChartColor } from "const/chart.const";
-import { IDataset } from "interfaces/chart.interface";
+import { IScatterDataset } from "interfaces/chart.interface";
 import { Scatter } from "react-chartjs-2";
 
 interface Props {
-  labels: string[];
-  datasets: IDataset[];
+  datasets: IScatterDataset[];
   xLabel?: string;
   yLabel?: string;
 }
@@ -12,6 +11,12 @@ interface Props {
 export default function ScatterChart(props: Props): JSX.Element {
   return (
     <Scatter
+      data={{
+        datasets: props.datasets.map((value, index) => ({
+          ...value,
+          backgroundColor: ChartColor[index % ChartColor.length],
+        })),
+      }}
       options={{
         scales: {
           x: {
@@ -34,18 +39,6 @@ export default function ScatterChart(props: Props): JSX.Element {
             beginAtZero: true,
           },
         },
-      }}
-      data={{
-        datasets: props.datasets.map((value, index) => ({
-          label: props.labels[index],
-          data: [
-            {
-              x: value.data[1],
-              y: value.data[0],
-            },
-          ],
-          backgroundColor: ChartColor[index % ChartColor.length],
-        })),
       }}
     />
   );
