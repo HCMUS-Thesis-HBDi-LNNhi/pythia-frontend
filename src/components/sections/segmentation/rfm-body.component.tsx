@@ -33,6 +33,7 @@ export default function RFMBody(props: Props): JSX.Element {
     fetchRFMResult(props.userID, props.setLoading).then(
       (value) => value && setRFMResult(value)
     );
+    // eslint-disable-next-line
   }, [props.userID]);
 
   useLayoutEffect(() => {
