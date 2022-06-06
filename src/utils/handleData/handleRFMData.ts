@@ -9,7 +9,7 @@ const getNumTransDatasets = (
 ): IScatterDataset[] => {
   const uniqueKeys = Array.from(
     new Set(Object.values(rfmResult.rfm.num_trans))
-  ).sort();
+  ).sort((a, b) => a - b);
   const result = new Map();
   customerIndexes
     .map((value) => parseInt(value))

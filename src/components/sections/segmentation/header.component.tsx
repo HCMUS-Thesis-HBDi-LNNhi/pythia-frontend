@@ -64,8 +64,8 @@ export default function Header(props: Props): JSX.Element {
             value={props.selectedModel}
             onChange={(e) => props.setSelectedModel(parseInt(e.target.value))}
           >
-            <option value={RetainModel.bg_nbd}>BG-NBD Model</option>
             <option value={RetainModel.rfm}>RFM Value</option>
+            <option value={RetainModel.bg_nbd}>BG-NBD Model</option>
           </select>
         </div>
         <div className="flex items-center space-x-4">
