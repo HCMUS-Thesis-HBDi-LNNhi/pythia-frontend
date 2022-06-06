@@ -12,8 +12,6 @@ export enum ChartType {
   geo = "geo",
 }
 
-export type ScatterDataType = { x: number; y: number };
-
 export interface IChart {
   label: string;
   type: ChartType;
@@ -52,6 +50,11 @@ export interface IChartPayload {
 export interface IDataset {
   label: string;
   data: number[];
+}
+
+export interface IScatterDataset {
+  label: string;
+  data: { x: number; y: number }[];
 }
 
 export interface ICustomerDemographic {

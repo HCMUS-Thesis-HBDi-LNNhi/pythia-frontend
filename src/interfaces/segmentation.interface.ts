@@ -5,7 +5,7 @@ export enum RetainModel {
 
 export interface IRFMResult {
   cluster_id: { [key: number]: number };
-  customer_id: { [key: number]: string };
+  customer_id: { [key: number]: number };
   num_trans: { [key: number]: number };
   recency: { [key: number]: number };
   total_amount: { [key: number]: number };

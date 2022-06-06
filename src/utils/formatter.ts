@@ -8,6 +8,3 @@ export const formatDate = (
   }).format(date);
   return dateString + ", " + timeString;
 };
-
-export const removeDuplicateValues = (arr: Object[]) =>
-  arr.filter((value) => value !== {});

@@ -10,7 +10,7 @@ const Link = dynamic(() => import("next/link"), { ssr: false });
 export default function MenuBar(): JSX.Element {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const viewMode: ViewMode | null = useReadLocalStorage("view-mode");
-  const [isHover, setIsHover] = useState(false);
+  const [_isHover, setIsHover] = useState(false);
 
   const [items] = useState<IMenuItem[]>(getMenuItem());
 
@@ -45,7 +45,8 @@ export default function MenuBar(): JSX.Element {
     <div
       className={[
         "bg-gradient-to-t from-primary-600 via-primary-300 to-white-100",
-        "h-screen w-20 hover:w-56 duration-500",
+        // "h-screen w-20 hover:w-56 duration-500",
+        "h-screen w-56 duration-500",
         "flex flex-col py-20 space-y-4 relative",
       ].join(" ")}
       ref={menuRef}
@@ -68,10 +69,10 @@ export default function MenuBar(): JSX.Element {
           >
             <span className="text-4xl">{item.icon}</span>
             <span
-              className={[
-                isHover ? "inline" : "hidden",
-                "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
-              ].join(" ")}
+            // className={[
+            //   isHover ? "inline" : "hidden",
+            //   "animate-[ping_300ms_cubic-bezier(0,0,0.2,1)_reverse]",
+            // ].join(" ")}
             >
               {item.label}
             </span>
