@@ -3,6 +3,7 @@ const GET = {
   healthCheck: "/health_check",
   getPinnedCharts: (id: string) => `/users/${id}/pinned_charts`,
   getData: (id: string) => `/users/${id}/data_warehouse`,
+  getRFMResult: (id: string) => `/users/${id}/rfm_result`,
 };
 
 const POST = {
