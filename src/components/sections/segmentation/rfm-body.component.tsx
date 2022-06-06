@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Pane } from "components/common";
 import icons from "const/icons.const";
 import { FactDataLabels } from "interfaces/data.interface";
@@ -9,9 +9,8 @@ import {
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
 import ScatterChart from "components/common/charts/scatter";
-import { IScatterDataset } from "interfaces/chart.interface";
 
-const RFMHeader = (props: { label: string }): JSX.Element => (
+const Header = (props: { label: string }): JSX.Element => (
   <div className="w-full h-fit flex justify-between items-center">
     <div>{props.label}</div>
     <Button className="text-2xl" icon={icons.outline.pin}></Button>
@@ -25,8 +24,6 @@ interface Props {
 
 export default function RFMBody(props: Props): JSX.Element {
   const [rfmResult, setRFMResult] = useState<IRFMResponse>(initialRFMResponse);
-  const [numTransDatasets, setNumTransDatasets] = useState<IScatterDataset[]>();
-  const [CLVDatasets, setCLVDatasets] = useState<IScatterDataset[]>();
 
   useEffect(() => {
     if (!props.userID) return;
@@ -36,39 +33,43 @@ export default function RFMBody(props: Props): JSX.Element {
     // eslint-disable-next-line
   }, [props.userID]);
 
-  useLayoutEffect(() => {
-    const newNumTransDatasets = getDatasets(
-      "total_amount",
-      "recency",
-      "num_trans",
-      rfmResult
-    );
-    const newCLVDatasets = getDatasets(
-      "num_trans",
-      "recency",
-      "clv",
-      rfmResult
-    );
-    setNumTransDatasets(newNumTransDatasets);
-    setCLVDatasets(newCLVDatasets);
-  }, [rfmResult]);
-
   return (
     <>
       <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <RFMHeader label="Grouped by number of transactions" />
+        <Header label="Grouped by number of transactions" />
         <ScatterChart
           xLabel={FactDataLabels.total_amount}
           yLabel={FactDataLabels.recency}
-          datasets={numTransDatasets ?? []}
+          datasets={getDatasets(
+            "total_amount",
+            "recency",
+            "num_trans",
+            rfmResult
+          )}
         />
       </Pane>
       <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <RFMHeader label="Grouped by Customer Lifetime Value" />
+        <Header label="Grouped by Customer Lifetime Value" />
+        <ScatterChart
+          xLabel={FactDataLabels.total_amount}
+          yLabel={FactDataLabels.recency}
+          datasets={getDatasets("total_amount", "recency", "clv", rfmResult)}
+        />
+      </Pane>
+      <Pane height="h-fit" className="space-y-4 overflow-hidden">
+        <Header label="Grouped by Customer Lifetime Value" />
         <ScatterChart
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
-          datasets={CLVDatasets ?? []}
+          datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
+        />
+      </Pane>
+      <Pane height="h-fit" className="space-y-4 overflow-hidden">
+        <Header label="Grouped by Customer Lifetime Value" />
+        <ScatterChart
+          xLabel={FactDataLabels.num_trans}
+          yLabel={FactDataLabels.total_amount}
+          datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}
         />
       </Pane>
     </>
