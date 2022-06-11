@@ -1,69 +1,66 @@
-// import { useEffect, useRef } from "react";
-// import { Chart, GoogleChartWrapper } from "react-google-charts";
+import { useEffect, useRef } from "react";
+import { Chart, GoogleChartWrapper } from "react-google-charts";
 
-// interface Props {
-//   label: string;
-//   data: [string, number][];
-// }
+interface Props {
+  label: string;
+  data: [string, number][];
+}
 
-// export default function GeoChart(props: Props): JSX.Element {
-//   const ref = useRef<Chart>(null);
+export default function GeoChart(props: Props): JSX.Element {
+  const ref = useRef<Chart>(null);
 
-//   const originalWarn = console.warn;
+  function handleReadyState(chartWrapper: GoogleChartWrapper) {
+    const chart = chartWrapper.getChart();
+    const selection = chart.getSelection();
+    console.log("ready", selection);
+  }
 
-//   console.warn = function (...args) {
-//     const arg = args && args[0];
+  function handleSelectState(chartWrapper: GoogleChartWrapper) {
+    const chart = chartWrapper.getChart();
+    const selection = chart.getSelection();
+    console.log("select", selection);
+  }
 
-//     if (arg && arg.includes("Attempting to load version '51' of Google Charts"))
-//       return;
+  useEffect(() => {
+    const ignoreString = "Attempting to load version '51' of Google Charts";
+    const originalWarn = console.warn;
+    console.warn = function (...args) {
+      const arg = args && args[0];
+      if (arg && arg.includes(ignoreString)) return;
+      originalWarn(...args);
+    };
+  }, []);
 
-//     originalWarn(...args);
-//   };
-
-//   function handleReadyState(chartWrapper: GoogleChartWrapper) {
-//     const chart = chartWrapper.getChart();
-//     const selection = chart.getSelection();
-//     console.log("ready", selection);
-//   }
-
-//   function handleSelectState(chartWrapper: GoogleChartWrapper) {
-//     const chart = chartWrapper.getChart();
-//     const selection = chart.getSelection();
-//     console.log("select", selection);
-//   }
-
-//   useEffect(() => {});
-
-//   return (
-//     <Chart
-//       ref={ref}
-//       chartType="GeoChart"
-//       width="100%"
-//       height="90%"
-//       data={[["Country", props.label], ...props.data]}
-//       options={{
-//         // region: "002", // Africa
-//         backgroundColor: "#DBE9F5",
-//       }}
-//       chartEvents={[
-//         {
-//           eventName: "ready",
-//           callback: ({ chartWrapper }) => handleReadyState(chartWrapper),
-//         },
-//         {
-//           eventName: "select",
-//           callback: ({ chartWrapper }) => handleSelectState(chartWrapper),
-//         },
-//       ]}
-//     />
-//   );
-// }
+  return (
+    <Chart
+      ref={ref}
+      chartType="GeoChart"
+      width="100%"
+      height="90%"
+      data={[["Country", props.label], ...props.data]}
+      options={{
+        // region: "002", // Africa
+        backgroundColor: "#DBE9F5",
+      }}
+      chartEvents={[
+        {
+          eventName: "ready",
+          callback: ({ chartWrapper }) => handleReadyState(chartWrapper),
+        },
+        {
+          eventName: "select",
+          callback: ({ chartWrapper }) => handleSelectState(chartWrapper),
+        },
+      ]}
+    />
+  );
+}
 
 // import { Chart } from '';
 
-export default function GeoChart(): JSX.Element {
-  return <div>Geo chart</div>;
-}
+// export default function GeoChart(): JSX.Element {
+//   return <div>Geo chart</div>;
+// }
 //   const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
 //     type: 'choropleth',
 //     data: {

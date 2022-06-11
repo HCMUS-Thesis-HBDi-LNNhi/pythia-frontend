@@ -73,15 +73,15 @@ export default function ChartBody(props: Props): JSX.Element {
     case ChartType.geo:
       return (
         <GeoChart
-        // label="total amount"
-        // data={[
-        //   ["Germany", 200],
-        //   ["United States", 300],
-        //   ["Brazil", 400],
-        //   ["Canada", 500],
-        //   ["France", 600],
-        //   ["RU", 700],
-        // ]}
+          label="total amount"
+          data={[
+            ["Germany", 200],
+            ["United States", 300],
+            ["Brazil", 400],
+            ["Canada", 500],
+            ["France", 600],
+            ["RU", 700],
+          ]}
         />
       );
     default:
