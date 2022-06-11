@@ -36,6 +36,7 @@ const outline = {
   job_industry: <Icon icon="cil:industry" />,
   broom: <Icon icon="la:broom" />,
   back: <Icon icon="akar-icons:arrow-back" />,
+  calendar: <Icon icon="akar-icons:calendar" />,
 };
 
 const solid = {

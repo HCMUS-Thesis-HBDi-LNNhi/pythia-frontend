@@ -46,6 +46,7 @@ export default function MenuBar(): JSX.Element {
       className={[
         "bg-gradient-to-t from-primary-600 via-primary-300 to-white-100",
         "h-screen w-20 hover:w-56 duration-500",
+        // "h-screen w-56 duration-500",
         "flex flex-col py-20 space-y-4 relative",
       ].join(" ")}
       ref={menuRef}
