@@ -1,4 +1,4 @@
-import { ChartColor } from "const/chart.const";
+import colors from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
 import { Pie } from "react-chartjs-2";
 
@@ -26,7 +26,7 @@ export default function PieChart(props: Props): JSX.Element {
         datasets: [
           {
             ...props.datasets,
-            backgroundColor: ChartColor,
+            backgroundColor: colors,
             borderWidth: 1,
           },
         ],

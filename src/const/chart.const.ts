@@ -9,20 +9,6 @@ import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-export const ChartColor = [
-  "red",
-  "green",
-  "orange",
-  "darkblue",
-  "gold",
-  "brown",
-  "turquoise",
-  "black",
-  "pink",
-  "purple",
-  "teal",
-];
-
 export const initialChartOptions: IChartOptions = {
   y: "total_amount",
   x: "dob",
