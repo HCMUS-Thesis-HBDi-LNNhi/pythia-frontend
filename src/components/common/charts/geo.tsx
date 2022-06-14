@@ -1,91 +1,117 @@
-import { useEffect, useRef } from "react";
-import { Chart, GoogleChartWrapper } from "react-google-charts";
+import { Chart, getElementAtEvent } from "react-chartjs-2";
+import { topojson } from "chartjs-chart-geo";
+import { useEffect, useRef, useState } from "react";
+import { numericToAlpha2 } from "i18n-iso-countries";
 
-interface Props {
-  label: string;
-  data: [string, number][];
-}
-
-export default function GeoChart(props: Props): JSX.Element {
-  const ref = useRef<Chart>(null);
-
-  function handleReadyState(chartWrapper: GoogleChartWrapper) {
-    const chart = chartWrapper.getChart();
-    const selection = chart.getSelection();
-    console.log("ready", selection);
-  }
-
-  function handleSelectState(chartWrapper: GoogleChartWrapper) {
-    const chart = chartWrapper.getChart();
-    const selection = chart.getSelection();
-    console.log("select", selection);
-  }
+/* const USPageMap = () => {
+  const [nation, setNation] = useState<any>();
+  const [states, setStates] = useState<any>([]);
 
   useEffect(() => {
-    const ignoreString = "Attempting to load version '51' of Google Charts";
-    const originalWarn = console.warn;
-    console.warn = function (...args) {
-      const arg = args && args[0];
-      if (arg && arg.includes(ignoreString)) return;
-      originalWarn(...args);
-    };
+    fetch("https://unpkg.com/us-atlas/states-10m.json")
+      .then((response) => response.json())
+      .then((us) => {
+        // @ts-ignore
+        setNation(ChartGeo.topojson.feature(us, us.objects.nation).features[0]);
+        // @ts-ignore
+        setStates(ChartGeo.topojson.feature(us, us.objects.states).features);
+      });
   }, []);
 
   return (
     <Chart
-      ref={ref}
-      chartType="GeoChart"
-      width="100%"
-      height="90%"
-      data={[["Country", props.label], ...props.data]}
-      options={{
-        // region: "002", // Africa
-        backgroundColor: "#DBE9F5",
+      type="choropleth"
+      data={{
+        labels: states.map((d: any) => d.properties.name),
+        datasets: [
+          {
+            label: "States",
+            outline: nation,
+            data: states.map((d: any) => ({
+              feature: d,
+              value: Math.random() * 10,
+            })),
+          },
+        ],
       }}
-      chartEvents={[
-        {
-          eventName: "ready",
-          callback: ({ chartWrapper }) => handleReadyState(chartWrapper),
+    />
+  );
+};
+
+export default USPageMap; */
+
+interface IFeature {
+  geometry: { type: string; coordinates: any };
+  id: string;
+  properties: { name: string };
+  type: string;
+}
+
+export default function WorldMap() {
+  const chartRef = useRef();
+  const [data, setData] = useState<IFeature[]>([]);
+
+  useEffect(() => {
+    fetch("https://unpkg.com/world-atlas/countries-50m.json")
+      .then((response) => response.json())
+      .then((value) => {
+        const countries: IFeature[] =
+          // @ts-ignore
+          topojson.feature(value, value.objects.countries).features;
+        setData(countries);
+      });
+  }, []);
+
+  const onClick = (event: any) => {
+    const { current: chart } = chartRef;
+
+    if (!chart) {
+      return;
+    }
+
+    const chosen = getElementAtEvent(chart, event);
+
+    console.log(chosen);
+  };
+
+  const arr = new Map([
+    ["UK", 100],
+    ["US", 300],
+    ["RU", 500],
+    ["VN", 800],
+  ]);
+
+  return (
+    <Chart
+      ref={chartRef}
+      type="choropleth"
+      data={{
+        labels: data.map((feature) => feature.properties.name),
+        datasets: [
+          {
+            label: "Countries",
+            data: data.map((feature) => ({
+              feature,
+              value: arr.get(numericToAlpha2(feature.id)) ?? 0,
+            })),
+            outlineBackgroundColor: "#F5F5F5",
+          },
+        ],
+      }}
+      options={{
+        showOutline: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
         },
-        {
-          eventName: "select",
-          callback: ({ chartWrapper }) => handleSelectState(chartWrapper),
+        scales: {
+          xy: {
+            projection: "equirectangular",
+          },
         },
-      ]}
+      }}
+      onClick={onClick}
     />
   );
 }
-
-// import { Chart } from '';
-
-// export default function GeoChart(): JSX.Element {
-//   return <div>Geo chart</div>;
-// }
-//   const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
-//     type: 'choropleth',
-//     data: {
-//       labels: countries.map((d) => d.properties.name),
-//       datasets: [{
-//         label: 'Countries',
-//         data: countries.map((d) => ({feature: d, value: Math.random()})),
-//       }]
-//     },
-//     options: {
-//       showOutline: true,
-//       showGraticule: true,
-//       plugins: {
-//         legend: {
-//           display: false
-//         },
-//       },
-//       scales: {
-//         xy: {
-//           projection: 'equalEarth'
-//         }
-//       }
-//     }
-//   });
-// });
-
-//   return <div></div>;
-// }
