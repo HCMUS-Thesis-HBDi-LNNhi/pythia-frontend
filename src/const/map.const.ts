@@ -1,6 +1,4 @@
-import { IMapJson } from "interfaces/chart.interface";
-
-const WORLD_JSON: IMapJson = {
+const WORLD_JSON = {
   world: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json",
     objectsKey: "countries1",
@@ -13,7 +11,7 @@ const WORLD_JSON: IMapJson = {
   },
 };
 
-const CONTINENTS_JSON: IMapJson = {
+const CONTINENTS_JSON = {
   africa: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/continents/africa.json",
     objectsKey: "continent_Africa_subunits",
@@ -46,7 +44,7 @@ const CONTINENTS_JSON: IMapJson = {
   },
 };
 
-const COUNTRIES_JSON: IMapJson = {
+const COUNTRIES_JSON = {
   algeria: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/algeria/algeria-provinces.json",
     objectsKey: "DZA_adm1",
