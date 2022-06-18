@@ -26,7 +26,6 @@ export default function ChartHeader(props: Props): JSX.Element {
             onClick={() => {
               props.setChosenChart(value.type);
             }}
-            disabled={value.label == ChartTypes[ChartTypes.length - 1].label}
             hoverStyle
           />
         ))}

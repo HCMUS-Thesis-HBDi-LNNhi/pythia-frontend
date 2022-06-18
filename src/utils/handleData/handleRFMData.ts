@@ -1,4 +1,5 @@
 import { IScatterDataset } from "interfaces/chart.interface";
+import { Transaction } from "interfaces/data.interface";
 import { IRFMResponse, IRFMResult } from "interfaces/segmentation.interface";
 
 const getNumTransDatasets = (
@@ -7,21 +8,21 @@ const getNumTransDatasets = (
   x: { [key: number]: number },
   y: { [key: number]: number }
 ): IScatterDataset[] => {
-  const uniqueKeys = Array.from(
-    new Set(Object.values(rfmResult.rfm.num_trans))
-  ).sort((a, b) => a - b);
   const result = new Map();
   customerIndexes
     .map((value) => parseInt(value))
     .forEach((customerIndex) => {
-      const mapKey = rfmResult.rfm.num_trans[customerIndex];
+      const mapKey =
+        rfmResult.rfm.num_trans[customerIndex] <= 6
+          ? Transaction.under6
+          : Transaction.over6;
       const mapValue = result.get(mapKey) ?? [];
       result.set(mapKey, [
         ...mapValue,
         { x: x[customerIndex], y: y[customerIndex] },
       ]);
     });
-  return uniqueKeys.map((value) => ({
+  return Object.values(Transaction).map((value) => ({
     label: value.toString(),
     data: result.get(value) ?? [],
   }));

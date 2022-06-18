@@ -15,6 +15,11 @@ export enum Age {
   elder = "3",
 }
 
+export enum Transaction {
+  under6 = "Under 6 transactions",
+  over6 = "Over 6 transactions",
+}
+
 export enum FactDataLabels {
   num_trans = "Number of transactions",
   total_amount = "Total amount",

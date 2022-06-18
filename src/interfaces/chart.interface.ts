@@ -14,6 +14,21 @@ export enum ChartType {
 
 export type ScatterDataType = { x: number; y: number };
 
+export interface IMapJson {
+  [key: string]: {
+    url: string;
+    objectsKey: string;
+    propertiesKey: string;
+  };
+}
+
+export interface IFeature {
+  geometry: { type: string; coordinates: any };
+  id: string;
+  properties: { [key: string]: string };
+  type: string;
+}
+
 export interface IChart {
   label: string;
   type: ChartType;
@@ -52,7 +67,7 @@ export interface IChartPayload {
 export interface IDataset {
   label: string;
   data: number[];
-  }
+}
 
 export interface IScatterDataset {
   label: string;

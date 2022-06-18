@@ -35,7 +35,7 @@ export default function Charts(): JSX.Element {
             allowPin
           />
           {data && (
-            <div className="grid place-items-center w-full h-full">
+            <div className="grid place-content-center h-[90%]">
               <ChartBody
                 data={data}
                 chartType={chartType}
