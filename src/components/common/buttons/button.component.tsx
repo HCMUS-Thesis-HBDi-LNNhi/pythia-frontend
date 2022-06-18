@@ -1,14 +1,14 @@
 import { ButtonStyle } from "interfaces/common.interface";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const getStyle = (style?: ButtonStyle) => {
   switch (style) {
     case "solid":
-      return "bg-primary-600 text-white-100 hover:shadow-lg";
+      return "bg-primary-600 text-white-100 shadow-lg";
     case "highlight":
-      return "bg-green-500 text-primary-700 hover:shadow-lg";
+      return "bg-green-500 text-primary-700 shadow-lg";
     case "failure":
-      return "bg-red-400 text-primary-700 hover:shadow-lg";
+      return "bg-red-400 text-primary-700 shadow-lg";
     case "outline":
     default:
       return "";

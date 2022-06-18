@@ -1,26 +1,8 @@
-import {
-  ICustomerDemographic,
-  ICustomerTransaction,
-} from "interfaces/report.interface";
 import React from "react";
 
 export type ViewMode = "guest" | "user";
 
 export type ButtonStyle = "outline" | "solid" | "failure" | "highlight";
-
-export enum ChartType {
-  "bar" = "bar",
-  "pie" = "pie",
-  "line" = "line",
-  "scatter" = "scatter",
-  "geo" = "geo",
-}
-
-export type ScatterDataType = { x: number; y: number };
-
-export type MetricType =
-  | keyof ICustomerDemographic
-  | keyof ICustomerTransaction;
 
 export enum PageLabels {
   LOGIN = "login",
@@ -31,17 +13,6 @@ export enum PageLabels {
   POTENTIALITY = "potentiality",
 }
 
-export interface IChartYear {
-  from: number;
-  to: number;
-}
-
-export interface IChartOptions {
-  transaction: "totalAmount" | "totalTransactions";
-  customer: "age" | "gender" | "country" | "city" | "jobTitle" | "jobIndustry";
-  years: IChartYear;
-  quarters: IChartYear;
-}
 export interface IMenuItem {
   label: PageLabels | "log out";
   icon: React.ReactNode;
@@ -58,13 +29,6 @@ export enum TagColor {
   red,
   green,
   blue,
-}
-
-export interface IChart {
-  label: string;
-  type: ChartType;
-  icon?: React.ReactNode;
-  focusIcon?: React.ReactNode;
 }
 
 export type SelectValue = string | number | readonly string[] | undefined;

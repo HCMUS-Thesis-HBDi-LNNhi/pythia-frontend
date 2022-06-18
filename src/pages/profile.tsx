@@ -3,7 +3,7 @@ import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { fetcher } from "utils/fetcher";
-import { formatDate } from "utils/formatDate";
+import { formatDate } from "utils/formatter";
 
 export default function Profile(): JSX.Element {
   const userId = useReadLocalStorage<string>("user-id");

@@ -2,11 +2,33 @@ import {
   ChartType,
   IChart,
   IChartOptions,
-  ISelectItem,
-} from "interfaces/common.interface";
+  ReportLabel,
+} from "interfaces/chart.interface";
+import { ISelectItem } from "interfaces/common.interface";
 import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
+
+export const ChartColor = [
+  "red",
+  "green",
+  "orange",
+  "darkblue",
+  "gold",
+  "brown",
+  "turquoise",
+  "black",
+  "pink",
+  "purple",
+  "teal",
+];
+
+export const initialChartOptions: IChartOptions = {
+  y: "total_amount",
+  x: "dob",
+  years: { from: CURRENT_YEAR, to: CURRENT_YEAR },
+  quarters: { from: 1, to: 4 },
+};
 
 export const ChartTypes: IChart[] = [
   {
@@ -69,9 +91,44 @@ export const ChartSelectOptions: ISelectItem[] = [
   },
 ];
 
-export const initialChartOptions: IChartOptions = {
-  transaction: "totalAmount",
-  customer: "age",
-  years: { from: CURRENT_YEAR, to: CURRENT_YEAR },
-  quarters: { from: 1, to: 4 },
-};
+export const ReportOptions: ISelectItem[] = [
+  {
+    label: ReportLabel.segmentation,
+    id: "segmentation",
+    value: "segmentation",
+  },
+  {
+    label: ReportLabel.potentiality,
+    id: "potentiality",
+    value: "potentiality",
+  },
+];
+
+export const PotentialityOptions: ISelectItem[] = [
+  { label: "Age", id: "age", value: "age" },
+  { label: "Gender", id: "gender", value: "gender" },
+  { label: "Country", id: "country", value: "country" },
+
+  { label: "City", id: "city", value: "city" },
+  { label: "Job Title", id: "jobTitle", value: "jobTitle" },
+  { label: "Job Industry", id: "jobIndustry", value: "jobIndustry" },
+  {
+    label: "Wealth Segment",
+    id: "wealthSegment",
+    value: "wealthSegment",
+  },
+];
+
+export const SegmentationOptions: ISelectItem[] = [
+  ...PotentialityOptions,
+  {
+    label: "Transaction Date",
+    id: "transactionDate",
+    value: "transactionDate",
+  },
+  {
+    label: "Transaction Amount",
+    id: "transactionAmount",
+    value: "transactionAmount",
+  },
+];

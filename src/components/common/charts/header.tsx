@@ -1,6 +1,6 @@
 import { ChartTypes } from "const/chart.const";
 import icons from "const/icons.const";
-import { ChartType } from "interfaces/common.interface";
+import { ChartType } from "interfaces/chart.interface";
 import { Dispatch, SetStateAction } from "react";
 import Button from "../buttons/button.component";
 
@@ -31,6 +31,7 @@ export default function ChartHeader(props: Props): JSX.Element {
           />
         ))}
       </div>
+      {/* TODO: Implement pinned chart */}
       {props.allowPin && (
         <Button className="text-2xl ml-auto" icon={icons.outline.pin}></Button>
       )}
