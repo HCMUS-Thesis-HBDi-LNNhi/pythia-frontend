@@ -46,7 +46,7 @@ import {
 } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
 import { getXKeys } from "utils/handleData";
-import { getDatasets, getLabels } from "./helper";
+import { get2DDatasets, get3DDatasets, getLabels } from "./helper";
 import BarChart from "./bar";
 import GeoChart from "./geo";
 import LineChart from "./line";
@@ -67,7 +67,10 @@ export default function ChartBody(props: Props): JSX.Element {
   useEffect(() => {
     const xKeys = getXKeys(data, chartOptions);
     setLabels(getLabels(xKeys, chartOptions));
-    setDatasets(getDatasets(xKeys, data, chartType, chartOptions));
+    const newDatasets = chartOptions.z
+      ? get3DDatasets()
+      : get2DDatasets(xKeys, data, chartType, chartOptions);
+    setDatasets(newDatasets);
   }, [data, chartOptions, chartType]);
 
   switch (chartType) {
@@ -115,7 +118,8 @@ export default function ChartBody(props: Props): JSX.Element {
         />
       );
     case ChartType.geo:
-      return <GeoChart />;
+      //@ts-ignore
+      return <GeoChart datasets={datasets} />;
     default:
       return <div>Wrong chart type</div>;
   }

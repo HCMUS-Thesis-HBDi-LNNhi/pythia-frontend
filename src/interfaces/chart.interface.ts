@@ -25,7 +25,7 @@ export interface IMapJson {
 export interface IFeature {
   geometry: { type: string; coordinates: any };
   id: string;
-  properties: { name: string };
+  properties: { [key: string]: string };
   type: string;
 }
 
