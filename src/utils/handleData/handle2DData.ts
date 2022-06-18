@@ -2,6 +2,33 @@ import { ChartType, IChartOptions } from "interfaces/chart.interface";
 import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
 import { getAgeKeyFromDOB, getDateKeys } from ".";
 
+function render_geo(
+  data: IData,
+  dateKeys: string[],
+  x: "city" | "country",
+  y: keyof IFactData
+): Map<string, number[]> {
+  const result = new Map<string, number[]>();
+  const uniqueKeys = Array.from(
+    new Set(data.dim_customers.map((value) => value[x]))
+  );
+  uniqueKeys.forEach((value) => result.set(value, [0]));
+  data.dim_customers.forEach((customer) => {
+    const mapKey = customer[x];
+    const mapValue = result.get(mapKey) ?? [0];
+    let sum = 0;
+    dateKeys.forEach((dateKey) => {
+      const factKey = `${customer.customer_id}_${dateKey}`;
+      const customerFact = data.fact_transactions[factKey];
+      if (customerFact) {
+        sum += Math.round(customerFact[y]);
+      }
+    });
+    result.set(mapKey, [mapValue[0] + sum]);
+  });
+  return result;
+}
+
 /** result: {x, [total_amount, num_trans]} */
 function render_dateKey_scatter(data: IData, dateKeys: string[]) {
   const result = new Map<string, number[]>();
@@ -108,24 +135,15 @@ export default function render2DCharts(
   const { x, y, quarters, years } = chartOptions;
   const dateKeys = getDateKeys(quarters, years);
 
-  switch (true) {
-    //TODO: Implement for Geo chart
-    case x === "date_key" && chartType === ChartType.geo:
-      return new Map();
-    case x === "dob" && chartType === ChartType.geo:
-      return new Map();
-    case chartType === ChartType.geo:
-      return new Map();
-
-    case x === "date_key" && chartType === ChartType.scatter:
-      return render_dateKey_scatter(data, dateKeys);
-    case chartType === ChartType.scatter:
-      //@ts-ignore
-      return render_default_scatter(data, xKeys, dateKeys, x);
-    case x === "date_key":
-      return render_dateKey_default(data, dateKeys, y);
+  switch (chartType) {
+    case ChartType.geo:
+      if (x === "city") return render_geo(data, dateKeys, x, y);
+      else return render_geo(data, dateKeys, "country", y);
+    case ChartType.scatter:
+      if (x === "date_key") return render_dateKey_scatter(data, dateKeys);
+      else return render_default_scatter(data, xKeys, dateKeys, x);
     default:
-      //@ts-ignore
-      return render_default(data, xKeys, dateKeys, x, y);
+      if (x === "date_key") return render_dateKey_default(data, dateKeys, y);
+      else return render_default(data, xKeys, dateKeys, x, y);
   }
 }

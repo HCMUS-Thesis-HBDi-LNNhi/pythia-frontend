@@ -1,0 +1,25 @@
+const colors: string[] = [
+  "skyBlue",
+  "royalBlue",
+  "darkBlue",
+  "darkGreen",
+  "seaGreen",
+  "lightGreen",
+  "wheat",
+  "yellow",
+  "gold",
+  "orange",
+  "darkOrange",
+  "chocolate",
+  "darkRed",
+  "red",
+  "orangeRed",
+  "lightPink",
+  "paleVioletRed",
+  "deepPink",
+  "purple",
+  "violet",
+  "thistle",
+];
+
+export default colors;

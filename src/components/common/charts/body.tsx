@@ -11,22 +11,11 @@ import {
   ArcElement,
 } from "chart.js";
 import {
-  ChartType,
-  IChartOptions,
-  IDataset,
-  IScatterDataset,
-} from "interfaces/chart.interface";
-import {
-  CategoryDataLabels,
-  FactDataLabels,
-  IData,
-} from "interfaces/data.interface";
-import { useEffect, useState } from "react";
-import { getXKeys, handle2DData } from "utils/handleData";
-import BarChart from "./bar";
-import LineChart from "./line";
-import PieChart from "./pie";
-import ScatterChart from "./scatter";
+  ChoroplethController,
+  ProjectionScale,
+  ColorScale,
+  GeoFeature,
+} from "chartjs-chart-geo";
 
 ChartJS.register(
   Title,
@@ -37,8 +26,32 @@ ChartJS.register(
   BarElement,
   PointElement,
   LineElement,
-  ArcElement
+  ArcElement,
+  ChoroplethController,
+  ProjectionScale,
+  ColorScale,
+  GeoFeature
 );
+
+import {
+  ChartType,
+  IChartOptions,
+  IDataset,
+  IScatterDataset,
+} from "interfaces/chart.interface";
+import {
+  IData,
+  CategoryDataLabels,
+  FactDataLabels,
+} from "interfaces/data.interface";
+import { useEffect, useState } from "react";
+import { getXKeys } from "utils/handleData";
+import { get2DDatasets, get3DDatasets, getLabels } from "./helper";
+import BarChart from "./bar";
+import GeoChart from "./geo";
+import LineChart from "./line";
+import PieChart from "./pie";
+import ScatterChart from "./scatter";
 
 interface Props {
   data: IData;
@@ -48,67 +61,16 @@ interface Props {
 
 export default function ChartBody(props: Props): JSX.Element {
   const { data, chartType, chartOptions } = props;
-
   const [labels, setLabels] = useState<string[]>([]);
-  const [datasets, setDatasets] = useState<IDataset[]>([]);
-  const [scatterDatasets, setScatterDatasets] = useState<IScatterDataset[]>([]);
-
-  const getLabels = (xKeys: string[], chartOptions: IChartOptions) => {
-    switch (chartOptions.x) {
-      case "date_key":
-        setLabels(xKeys.map((value) => `Q${value.replace("_", "/")}`));
-        break;
-      case "dob":
-        setLabels(["Teen", "Young adult", "Adult", "Elder"]);
-        break;
-      case "gender":
-        setLabels(["Female", "Male", "Others"]);
-        break;
-      default:
-        setLabels(xKeys);
-        break;
-    }
-  };
-
-  const getDatasets = (
-    xKeys: string[],
-    data: IData,
-    chartType: ChartType,
-    chartOptions: IChartOptions
-  ) => {
-    // 3D charts
-    if (chartOptions.z) {
-      //TODO: Implement 3D charts
-    }
-    // 2D charts
-    else {
-      const input = handle2DData(data, chartType, chartOptions, xKeys);
-      //FIXME: Better scatter chart
-      if (chartType === ChartType.scatter) {
-        const newDatasets: IScatterDataset[] = [];
-        input.forEach((value, key) => {
-          newDatasets.push({
-            label: key,
-            data: [{ x: value[0], y: value[1] }],
-          });
-        });
-        setScatterDatasets(newDatasets);
-      } else {
-        const inputValues = Array.from(input.values());
-        setDatasets([
-          {
-            label: CategoryDataLabels[chartOptions.x],
-            data: inputValues.map((value) => value[0]),
-          },
-        ]);
-      }
-    }
-  };
+  const [datasets, setDatasets] = useState<IDataset[] | IScatterDataset[]>([]);
 
   useEffect(() => {
     const xKeys = getXKeys(data, chartOptions);
-    getLabels(xKeys, chartOptions);
-    getDatasets(xKeys, data, chartType, chartOptions);
+    setLabels(getLabels(xKeys, chartOptions));
+    const newDatasets = chartOptions.z
+      ? get3DDatasets()
+      : get2DDatasets(xKeys, data, chartType, chartOptions);
+    setDatasets(newDatasets);
   }, [data, chartOptions, chartType]);
 
   switch (chartType) {
@@ -116,15 +78,18 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <BarChart
           labels={labels}
+          //@ts-ignore
           datasets={datasets}
           xLabel={CategoryDataLabels[chartOptions.x]}
           yLabel={FactDataLabels[chartOptions.y]}
         />
       );
+
     case ChartType.line:
       return (
         <LineChart
           labels={labels}
+          //@ts-ignore
           datasets={datasets}
           xLabel={CategoryDataLabels[chartOptions.x]}
           yLabel={FactDataLabels[chartOptions.y]}
@@ -134,20 +99,27 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <>
           {datasets.map((dataset) => (
-            <PieChart labels={labels} datasets={dataset} key={dataset.label} />
+            <PieChart
+              labels={labels}
+              //@ts-ignore
+              datasets={dataset}
+              key={dataset.label}
+            />
           ))}
         </>
       );
     case ChartType.scatter:
       return (
         <ScatterChart
-          datasets={scatterDatasets}
+          //@ts-ignore
+          datasets={datasets}
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
         />
       );
     case ChartType.geo:
-      return <div>WIP</div>;
+      //@ts-ignore
+      return <GeoChart datasets={datasets} />;
     default:
       return <div>Wrong chart type</div>;
   }

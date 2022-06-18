@@ -51,14 +51,6 @@ export default function RFMBody(props: Props): JSX.Element {
       <Pane height="h-fit" className="space-y-4 overflow-hidden">
         <Header label="Grouped by Customer Lifetime Value" />
         <ScatterChart
-          xLabel={FactDataLabels.total_amount}
-          yLabel={FactDataLabels.recency}
-          datasets={getDatasets("total_amount", "recency", "clv", rfmResult)}
-        />
-      </Pane>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by Customer Lifetime Value" />
-        <ScatterChart
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}

@@ -35,7 +35,10 @@ const outline = {
   job_title: <Icon icon="healthicons:city-worker-outline" />,
   job_industry: <Icon icon="cil:industry" />,
   broom: <Icon icon="la:broom" />,
+  back: <Icon icon="akar-icons:arrow-back" />,
   calendar: <Icon icon="akar-icons:calendar" />,
+  zoomIn: <Icon icon="akar-icons:zoom-in" />,
+  zoomOut: <Icon icon="akar-icons:zoom-out" />,
 };
 
 const solid = {

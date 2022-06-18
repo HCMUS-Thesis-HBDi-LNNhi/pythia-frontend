@@ -1,4 +1,4 @@
-import { ChartColor } from "const/chart.const";
+import colors from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
 import { Bar } from "react-chartjs-2";
 
@@ -16,10 +16,8 @@ export default function BarChart(props: Props): JSX.Element {
         labels: props.labels,
         datasets: props.datasets.map((value, index) => ({
           ...value,
-          backgroundColor:
-            index < ChartColor.length ? ChartColor[index] : "#5880A2",
-          borderColor:
-            index < ChartColor.length ? ChartColor[index] : "#5880A2",
+          backgroundColor: index < colors.length ? colors[index] : "#5880A2",
+          borderColor: index < colors.length ? colors[index] : "#5880A2",
         })),
       }}
       options={{
