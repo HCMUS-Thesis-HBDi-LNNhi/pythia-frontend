@@ -96,6 +96,7 @@ export default function WorldMap(props: Props) {
           }
         }}
         className="flex justify-end"
+        style="outline"
       >
         {chosen === "world_continents" ? "Countries world map" : "Go back"}
       </Button>

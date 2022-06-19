@@ -40,7 +40,7 @@ export default function Button(props: Props): JSX.Element {
     <button
       type={props.type}
       className={[
-        "rounded-xl text-center px-5 shadow-lg",
+        "rounded-xl text-center px-5",
         "opacity-90 flex items-center",
         !props.disabled && "hover:opacity-100 hover:font-medium",
         !props.disabled &&
