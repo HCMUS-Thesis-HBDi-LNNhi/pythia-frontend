@@ -12,7 +12,7 @@ interface Props {
   datasets: IDataset[];
 }
 
-export default function WorldMap(props: Props) {
+export default function GeoChart(props: Props) {
   const chartRef = useRef<ChartJSOrUndefined<any>>(undefined);
   const [initialData, setInitialData] = useState<IFeature[]>([]);
   const [previous, setPrevious] = useState<(keyof typeof MAP_JSON)[]>([]);

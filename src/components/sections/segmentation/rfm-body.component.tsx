@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Button, Pane } from "components/common";
+import { BarChart, Button, Pane, ScatterChart } from "components/common";
 import icons from "const/icons.const";
 import { FactDataLabels } from "interfaces/data.interface";
 import {
@@ -8,8 +8,6 @@ import {
 } from "interfaces/segmentation.interface";
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
-import ScatterChart from "components/common/charts/scatter";
-import BarChart from "components/common/charts/bar";
 
 const RFMItems = (props: {
   label?: string;

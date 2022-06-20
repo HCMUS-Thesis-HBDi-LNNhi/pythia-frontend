@@ -1,39 +1,4 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  PointElement,
-  LineElement,
-  ArcElement,
-} from "chart.js";
-import {
-  ChoroplethController,
-  ProjectionScale,
-  ColorScale,
-  GeoFeature,
-} from "chartjs-chart-geo";
-
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  PointElement,
-  LineElement,
-  ArcElement,
-  ChoroplethController,
-  ProjectionScale,
-  ColorScale,
-  GeoFeature
-);
-
-import {
   ChartType,
   IChartOptions,
   IDataset,
