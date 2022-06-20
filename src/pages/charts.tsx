@@ -37,21 +37,23 @@ export default function Charts(): JSX.Element {
   useEffect(() => {
     const params = router.query;
     if (!params) return;
-    setChartType(params.type as ChartType);
-    const from =
-      typeof params.from === "string"
-        ? params.from?.split("_").map((v) => parseInt(v))
-        : [];
-    const to =
-      typeof params.to === "string"
-        ? params.to?.split("_").map((v) => parseInt(v))
-        : [];
-    setChartOptions({
-      x: params.x as keyof IDimCustomer | "date_key",
-      y: params.y as keyof IFactData,
-      quarters: { from: from[0], to: to[0] },
-      years: { from: from[1], to: to[1] },
-    });
+    if (params.type) setChartType(params.type as ChartType);
+    if (params.from && params.to && params.x && params.y) {
+      const from =
+        typeof params.from === "string"
+          ? params.from?.split("_").map((v) => parseInt(v))
+          : [];
+      const to =
+        typeof params.to === "string"
+          ? params.to?.split("_").map((v) => parseInt(v))
+          : [];
+      setChartOptions({
+        x: params.x as keyof IDimCustomer | "date_key",
+        y: params.y as keyof IFactData,
+        quarters: { from: from[0], to: to[0] },
+        years: { from: from[1], to: to[1] },
+      });
+    }
   }, [data]);
 
   return (
