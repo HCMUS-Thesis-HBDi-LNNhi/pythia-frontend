@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
 import { Button, ChartBody, toast } from "components/common";
-import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
 import { IChartData } from "interfaces/chart.interface";
 import {
@@ -22,7 +21,6 @@ interface Props {
 export default function ChartList(props: Props): JSX.Element {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
-  const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
   const fetchData = () => {
@@ -36,25 +34,27 @@ export default function ChartList(props: Props): JSX.Element {
     }
   };
 
-  const clear = () => {
-    setIsShow(false);
+  const renderChart = (chartData: IChartData) => {
+    const from = chartData.quarters.from + "_" + chartData.years.from;
+    const to = chartData.quarters.to + "_" + chartData.years.to;
+    const query = `type=${chartData.chartType}&from=${from}&to=${to}&x=${chartData.x}&y=${chartData.y}`;
+    return (
+      <ChartContainer
+        key={chartData.id}
+        label={`${FactDataLabels[chartData.y]} of ${
+          CategoryDataLabels[chartData.x]
+        }`}
+        delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
+        onClick={() => router.push(`/${PageLabels.CHARTS}?${query}`)}
+      >
+        <ChartBody
+          data={props.data}
+          chartType={chartData.chartType}
+          chartOptions={chartData}
+        />
+      </ChartContainer>
+    );
   };
-
-  const renderChart = (chartData: IChartData) => (
-    <ChartContainer
-      key={chartData.id}
-      label={`${FactDataLabels[chartData.y]} of ${
-        CategoryDataLabels[chartData.x]
-      }`}
-      delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
-    >
-      <ChartBody
-        data={props.data}
-        chartType={chartData.chartType}
-        chartOptions={chartData}
-      />
-    </ChartContainer>
-  );
 
   useEffect(() => {
     fetchData();
@@ -74,18 +74,9 @@ export default function ChartList(props: Props): JSX.Element {
           className="text-5xl w-full h-full place-content-center"
           style="outline"
           icon={icons.outline.plus}
-          onClick={() => setIsShow(true)}
+          onClick={() => router.push(`/${PageLabels.CHARTS}`)}
         />
       </div>
-      {isShow && userID && (
-        <ChartDialog
-          userID={userID}
-          data={props.data}
-          setLoading={props.setLoading}
-          reload={fetchData}
-          clear={clear}
-        />
-      )}
     </main>
   );
 }

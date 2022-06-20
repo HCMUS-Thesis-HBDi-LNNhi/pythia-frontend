@@ -8,9 +8,11 @@ interface Props {
   chosenChart: ChartType;
   setChosenChart: Dispatch<SetStateAction<ChartType>>;
   allowPin?: boolean;
+  createChart?: () => void;
 }
 
 export default function ChartHeader(props: Props): JSX.Element {
+  const { allowPin, createChart, chosenChart, setChosenChart } = props;
   return (
     <div className="grid grid-cols-[30%,30%,40%] gap-2 place-content-between w-full h-fit">
       <div className="flex col-span-2">
@@ -22,17 +24,20 @@ export default function ChartHeader(props: Props): JSX.Element {
               "last:border-r last:rounded-r first:rounded-l",
             ].join(" ")}
             icon={value.icon}
-            isSelected={props.chosenChart === value.type}
+            isSelected={chosenChart === value.type}
             onClick={() => {
-              props.setChosenChart(value.type);
+              setChosenChart(value.type);
             }}
             hoverStyle
           />
         ))}
       </div>
-      {/* TODO: Implement pinned chart */}
-      {props.allowPin && (
-        <Button className="text-2xl ml-auto" icon={icons.outline.pin}></Button>
+      {allowPin && createChart && (
+        <Button
+          className="text-2xl ml-auto"
+          icon={icons.outline.pin}
+          onClick={() => createChart()}
+        ></Button>
       )}
     </div>
   );

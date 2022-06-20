@@ -5,6 +5,7 @@ interface Props {
   label: string;
   children: React.ReactNode;
   delete: () => void;
+  onClick: () => void;
 }
 
 export default function ChartContainer(props: Props): JSX.Element {
@@ -18,9 +19,12 @@ export default function ChartContainer(props: Props): JSX.Element {
       <div className="w-5/6 py-3 font-semibold border-b border-primary-300 place-self-center">
         {props.label}
       </div>
-      <div className="w-full h-full p-8 grid place-content-center">
+      <button
+        className="w-full h-full p-8 grid place-content-center"
+        onClick={() => props.onClick()}
+      >
         {props.children}
-      </div>
+      </button>
       <Button
         className="text-lg place-self-end absolute !p-2"
         style="outline"

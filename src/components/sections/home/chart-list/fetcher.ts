@@ -63,7 +63,6 @@ export async function handleCreateChart(
   chartOptions: IChartOptions,
   chartType: ChartType,
   setLoading: (value: boolean) => void,
-  reload: () => void,
   clear: () => void
 ): Promise<void> {
   try {
@@ -82,8 +81,7 @@ export async function handleCreateChart(
       z: chartOptions.z,
     };
     const response = await fetcher.post(API.POST.createPinnedChart, payload);
-    if (response.status === 204) reload();
-    else throw response;
+    if (response.status !== 204) throw response;
   } catch (error) {
     toast("Something went wrong, please try again!", "failure");
     console.error(error);
