@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Button, Pane } from "components/common";
 import icons from "const/icons.const";
 import { FactDataLabels } from "interfaces/data.interface";
@@ -9,13 +9,22 @@ import {
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
 import ScatterChart from "components/common/charts/scatter";
+import BarChart from "components/common/charts/bar";
 
-const Header = (props: { label: string }): JSX.Element => (
-  <div className="w-full h-fit flex justify-between items-center">
-    <div>{props.label}</div>
-    <Button className="text-2xl" icon={icons.outline.pin}></Button>
-  </div>
-);
+const RFMItems = (props: {
+  label?: string;
+  children: ReactNode;
+}): JSX.Element => {
+  return (
+    <Pane height="h-fit" className="space-y-4 overflow-hidden">
+      <div className="w-full h-fit flex justify-between items-center">
+        <h2>{props.label}</h2>
+        <Button className="text-2xl" icon={icons.outline.pin}></Button>
+      </div>
+      {props.children}
+    </Pane>
+  );
+};
 
 interface Props {
   userID: string | null;
@@ -34,9 +43,17 @@ export default function RFMBody(props: Props): JSX.Element {
   }, [props.userID]);
 
   return (
-    <>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by number of transactions" />
+    <div className="grid grid-cols-2 gap-2">
+      <RFMItems label="Grouped by Customer Lifetime Value">
+        <BarChart
+          labels={["CLV"]}
+          datasets={Object.entries(rfmResult.clv).map((v) => ({
+            label: "Group " + v[0],
+            data: [v[1]],
+          }))}
+        />
+      </RFMItems>
+      <RFMItems label="Grouped by number of transactions">
         <ScatterChart
           xLabel={FactDataLabels.total_amount}
           yLabel={FactDataLabels.recency}
@@ -47,23 +64,21 @@ export default function RFMBody(props: Props): JSX.Element {
             rfmResult
           )}
         />
-      </Pane>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by Customer Lifetime Value" />
+      </RFMItems>
+      <RFMItems label="Grouped by Customer Lifetime Value">
         <ScatterChart
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
         />
-      </Pane>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by Customer Lifetime Value" />
+      </RFMItems>
+      <RFMItems label="Grouped by Customer Lifetime Value">
         <ScatterChart
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}
         />
-      </Pane>
-    </>
+      </RFMItems>
+    </div>
   );
 }
