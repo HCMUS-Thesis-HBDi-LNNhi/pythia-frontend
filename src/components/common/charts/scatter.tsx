@@ -5,6 +5,7 @@ interface Props {
   datasets: IScatterDataset[];
   xLabel?: string;
   yLabel?: string;
+  tooltipLabels?: string[];
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
@@ -36,6 +37,19 @@ export default function ScatterChart(props: Props): JSX.Element {
               },
             },
             beginAtZero: true,
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                const tooltipLabels = props.tooltipLabels;
+                return tooltipLabels
+                  ? tooltipItems.map((_value, index) => tooltipLabels[index])
+                  : [];
+              },
+              label: props.tooltipLabels ? () => "" : undefined,
+            },
           },
         },
       }}

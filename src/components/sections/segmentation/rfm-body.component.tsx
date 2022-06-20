@@ -1,6 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { BarChart, Button, Pane, ScatterChart } from "components/common";
-import icons from "const/icons.const";
+import { BarChart, Pane, ScatterChart } from "components/common";
 import { FactDataLabels } from "interfaces/data.interface";
 import {
   initialRFMResponse,
@@ -15,22 +14,23 @@ const RFMItems = (props: {
 }): JSX.Element => {
   return (
     <Pane height="h-fit" className="space-y-4 overflow-hidden">
-      <div className="w-full h-fit flex justify-between items-center">
-        <h2>{props.label}</h2>
-        <Button className="text-2xl" icon={icons.outline.pin}></Button>
-      </div>
-      {props.children}
+      <h2 className="w-full h-fit flex justify-between items-center">
+        {props.label}
+      </h2>
+      <>{props.children}</>
     </Pane>
   );
 };
 
 interface Props {
   userID: string | null;
+  displayGrid: boolean;
   setLoading: (value: boolean) => void;
 }
 
 export default function RFMBody(props: Props): JSX.Element {
   const [rfmResult, setRFMResult] = useState<IRFMResponse>(initialRFMResponse);
+  const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
     if (!props.userID) return;
@@ -40,15 +40,24 @@ export default function RFMBody(props: Props): JSX.Element {
     // eslint-disable-next-line
   }, [props.userID]);
 
+  useEffect(() => {
+    setTooltipLabels(
+      Object.values(rfmResult.rfm.customer_id).map((v) => "Customer ID: " + v)
+    );
+  }, [rfmResult]);
+
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
       <RFMItems label="Grouped by Customer Lifetime Value">
         <BarChart
           labels={["CLV"]}
-          datasets={Object.entries(rfmResult.clv).map((v) => ({
-            label: "Group " + v[0],
-            data: [v[1]],
-          }))}
+          datasets={Object.entries(rfmResult.clv).map((value, index) => {
+            const groupIndex = index + 1;
+            return {
+              label: "Group " + groupIndex,
+              data: [value[1]],
+            };
+          })}
         />
       </RFMItems>
       <RFMItems label="Grouped by number of transactions">
@@ -61,6 +70,7 @@ export default function RFMBody(props: Props): JSX.Element {
             "num_trans",
             rfmResult
           )}
+          tooltipLabels={tooltipLabels}
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
@@ -68,6 +78,7 @@ export default function RFMBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
+          tooltipLabels={tooltipLabels}
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
@@ -75,6 +86,7 @@ export default function RFMBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}
+          tooltipLabels={tooltipLabels}
         />
       </RFMItems>
     </div>

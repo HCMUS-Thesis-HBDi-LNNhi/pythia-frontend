@@ -11,6 +11,7 @@ export default function Segmentation(): JSX.Element {
   const [selectedModel, setSelectedModel] = useState<RetainModel>(
     RetainModel.rfm
   );
+  const [displayGrid, setDisplayGrid] = useState(true);
 
   return (
     <Layout
@@ -22,11 +23,21 @@ export default function Segmentation(): JSX.Element {
         selectedModel={selectedModel}
         setSelectedModel={setSelectedModel}
         setLoading={setLoading}
+        displayGrid={displayGrid}
+        setDisplayGrid={setDisplayGrid}
       />
       {selectedModel === RetainModel.bg_nbd ? (
-        <BGNBDBody userID={userID} setLoading={setLoading} />
+        <BGNBDBody
+          userID={userID}
+          setLoading={setLoading}
+          displayGrid={displayGrid}
+        />
       ) : (
-        <RFMBody userID={userID} setLoading={setLoading} />
+        <RFMBody
+          userID={userID}
+          setLoading={setLoading}
+          displayGrid={displayGrid}
+        />
       )}
     </Layout>
   );
