@@ -21,7 +21,12 @@ const getColor = (color: TagColor): string => {
 
 export default function Tag(props: Props): JSX.Element {
   return (
-    <span className={[getColor(props.color), "px-2 py-1 rounded"].join(" ")}>
+    <span
+      className={[
+        getColor(props.color),
+        "px-4 py-1 rounded text-lg font-medium",
+      ].join(" ")}
+    >
       {props.children}
     </span>
   );
