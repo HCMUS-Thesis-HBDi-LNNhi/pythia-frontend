@@ -4,10 +4,13 @@ import {
   ChartHeader,
   ChartOptions,
   Dialog,
+  toast,
 } from "components/common";
 import { initialChartOptions } from "const/chart.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { PageLabels } from "interfaces/common.interface";
 import { IData } from "interfaces/data.interface";
+import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { handleCreateChart } from "./fetcher";
 
@@ -20,6 +23,7 @@ interface Props {
 }
 
 export default function ChartDialog(props: Props): JSX.Element {
+  const router = useRouter();
   const { userID, setLoading, reload, clear } = props;
 
   const [chartType, setChartType] = useState<ChartType>(ChartType.bar);
@@ -44,15 +48,19 @@ export default function ChartDialog(props: Props): JSX.Element {
             <Button
               style="highlight"
               onClick={() => {
-                if (!userID) return;
-                handleCreateChart(
-                  userID,
-                  chartOptions,
-                  chartType,
-                  setLoading,
-                  reload,
-                  clear
-                );
+                if (!userID) {
+                  toast("Something went wrong, please login again!", "failure");
+                  router.push(`/${PageLabels.LOGIN}`);
+                } else {
+                  handleCreateChart(
+                    userID,
+                    chartOptions,
+                    chartType,
+                    setLoading,
+                    reload,
+                    clear
+                  );
+                }
               }}
             >
               Accept

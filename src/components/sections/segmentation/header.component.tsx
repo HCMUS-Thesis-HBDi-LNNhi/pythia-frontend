@@ -22,7 +22,6 @@ export default function Header(props: Props): JSX.Element {
     if (!userID) {
       toast("Something went wrong, please login again!", "failure");
       router.push(`/${PageLabels.LOGIN}`);
-      return;
     }
   }, [props.setLoading, router, userID]);
 

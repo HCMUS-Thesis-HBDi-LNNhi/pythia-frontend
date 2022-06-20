@@ -4,15 +4,19 @@ import {
   ChartHeader,
   ChartBody,
   ChartOptions,
+  toast,
 } from "components/common";
 import { initialChartOptions } from "const/chart.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { PageLabels } from "interfaces/common.interface";
 import { IData } from "interfaces/data.interface";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { handleFetchData } from "utils/handleData";
 
 export default function Charts(): JSX.Element {
+  const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<IData>();
@@ -21,8 +25,12 @@ export default function Charts(): JSX.Element {
     useState<IChartOptions>(initialChartOptions);
 
   useEffect(() => {
-    if (!userID) return;
-    handleFetchData(userID, setLoading).then((res) => res && setData(res));
+    if (!userID) {
+      toast("Something went wrong, please login again!", "failure");
+      router.push(`/${PageLabels.LOGIN}`);
+    } else {
+      handleFetchData(userID, setLoading).then((res) => res && setData(res));
+    }
   }, [userID]);
 
   return (

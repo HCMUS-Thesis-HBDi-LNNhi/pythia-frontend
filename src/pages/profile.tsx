@@ -1,11 +1,14 @@
 import { Layout, toast } from "components/common";
+import { PageLabels } from "interfaces/common.interface";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { fetcher } from "utils/fetcher";
 import { formatDate } from "utils/formatter";
 
 export default function Profile(): JSX.Element {
+  const router = useRouter();
   const userId = useReadLocalStorage<string>("user-id");
   const [history, setHistory] = useState<IHistory[]>();
   const [isLoading, setLoading] = useState(false);
@@ -34,8 +37,12 @@ export default function Profile(): JSX.Element {
   }
 
   useEffect(() => {
-    if (!userId) return;
-    fetchHistory(userId);
+    if (!userId) {
+      toast("Something went wrong, please login again!", "failure");
+      router.push(`/${PageLabels.LOGIN}`);
+    } else {
+      fetchHistory(userId);
+    }
   }, [userId]);
 
   return (

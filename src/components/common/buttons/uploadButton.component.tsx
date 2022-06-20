@@ -22,14 +22,12 @@ export default function UploadButton(props: Props) {
   useEffect(() => {
     if (!file) {
       return;
-    }
-    if (!userID) {
+    } else if (!userID) {
       toast("Something went wrong, please login again!", "failure");
       router.push(`/${PageLabels.LOGIN}`);
-      return;
+    } else {
+      handleUpload(file, userID, props.fileType, props.setLoading);
     }
-
-    handleUpload(file, userID, props.fileType, props.setLoading);
   }, [file, props, router, userID]);
 
   return (

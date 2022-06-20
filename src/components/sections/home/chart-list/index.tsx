@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
-import { Button, ChartBody } from "components/common";
+import { Button, ChartBody, toast } from "components/common";
 import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
 import { IChartData } from "interfaces/chart.interface";
@@ -11,6 +11,8 @@ import {
   IData,
 } from "interfaces/data.interface";
 import { handleDelete, handleFetchChart } from "./fetcher";
+import { useRouter } from "next/router";
+import { PageLabels } from "interfaces/common.interface";
 
 interface Props {
   data: IData;
@@ -18,13 +20,20 @@ interface Props {
 }
 
 export default function ChartList(props: Props): JSX.Element {
+  const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
   const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
   const fetchData = () => {
-    if (!userID) return;
-    handleFetchChart(userID, props.setLoading).then((res) => setChartData(res));
+    if (!userID) {
+      toast("Something went wrong, please login again!", "failure");
+      router.push(`/${PageLabels.LOGIN}`);
+    } else {
+      handleFetchChart(userID, props.setLoading).then((res) =>
+        setChartData(res)
+      );
+    }
   };
 
   const clear = () => {
