@@ -1,6 +1,6 @@
 import { Chart, getElementAtEvent } from "react-chartjs-2";
 import { topojson } from "chartjs-chart-geo";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IDataset, IFeature } from "interfaces/chart.interface";
 import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
 import Button from "../buttons/button.component";
@@ -33,25 +33,30 @@ export default function GeoChart(props: Props) {
     }
   };
 
-  const updateChart = (features: IFeature[]) => {
-    if (!chartRef.current) return;
-    const chart = chartRef.current;
-    chart.data = {
-      labels: features.map((v) => v.properties[MAP_JSON[chosen].propertiesKey]),
-      datasets: [
-        {
-          outline: features,
-          label: "Countries",
-          // TODO: Use real data
-          data: features.map((d: any) => ({
-            feature: d,
-            value: Math.random() * 10,
-          })),
-        },
-      ],
-    };
-    chart.update();
-  };
+  const updateChart = useCallback(
+    (features: IFeature[]) => {
+      if (!chartRef.current) return;
+      const chart = chartRef.current;
+      chart.data = {
+        labels: features.map(
+          (v) => v.properties[MAP_JSON[chosen].propertiesKey]
+        ),
+        datasets: [
+          {
+            outline: features,
+            label: "Countries",
+            // TODO: Use real data
+            data: features.map((d: any) => ({
+              feature: d,
+              value: Math.random() * 10,
+            })),
+          },
+        ],
+      };
+      chart.update();
+    },
+    [chosen]
+  );
 
   useEffect(() => {
     fetch(MAP_JSON[chosen].url)
@@ -66,7 +71,7 @@ export default function GeoChart(props: Props) {
         updateChart(features);
       })
       .catch(() => handleErrors(Errors.geError, router));
-  }, [chosen]);
+  }, [chosen, router, updateChart]);
 
   return (
     <>

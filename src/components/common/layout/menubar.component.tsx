@@ -1,17 +1,13 @@
-import Errors from "const/error.const";
 import icons from "const/icons.const";
 import { menuItems } from "const/pages.const";
 import { IMenuItem, PageLabels, ViewMode } from "interfaces/common.interface";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import handleErrors from "utils/errors.utils";
 
 const Link = dynamic(() => import("next/link"), { ssr: false });
 
 export default function MenuBar(): JSX.Element {
-  const router = useRouter();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const viewMode: ViewMode | null = useReadLocalStorage("view-mode");
   const [isHover, setIsHover] = useState(false);
@@ -23,13 +19,11 @@ export default function MenuBar(): JSX.Element {
       case "user":
         return [...menuItems, { label: "log out", icon: icons.outline.logout }];
       case "guest":
+      default:
         return [
           ...menuItems,
           { label: PageLabels.LOGIN, icon: icons.outline.login },
         ];
-      default:
-        handleErrors(Errors[401], router);
-        return [];
     }
   }
 

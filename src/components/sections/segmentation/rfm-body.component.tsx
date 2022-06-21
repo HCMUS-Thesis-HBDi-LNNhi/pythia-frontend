@@ -8,6 +8,8 @@ import {
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
 import { useRouter } from "next/router";
+import handleErrors from "utils/errors.utils";
+import Errors from "const/error.const";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -41,7 +43,10 @@ export default function RFMBody(props: Props): JSX.Element {
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!props.userID) return;
+    if (!props.userID) {
+      handleErrors(Errors[401], router);
+      return;
+    }
     fetchRFMResult(props.userID, props.setLoading, router).then(
       (value) => value && setRFMResult(value)
     );

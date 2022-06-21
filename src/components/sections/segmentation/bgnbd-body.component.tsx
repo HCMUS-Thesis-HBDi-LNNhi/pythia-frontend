@@ -1,5 +1,6 @@
 import { Pane } from "components/common";
 import ScatterChart from "components/common/charts/scatter";
+import Errors from "const/error.const";
 import {
   IBGNBDResponse,
   IBGNBDResult,
@@ -7,6 +8,7 @@ import {
 } from "interfaces/segmentation.interface";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
+import handleErrors from "utils/errors.utils";
 import { fetchBGNBDResult } from "./fetcher";
 
 const getMiddleValue = (
@@ -103,7 +105,10 @@ export default function BGNBDBody(props: Props): JSX.Element {
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!props.userID) return;
+    if (!props.userID) {
+      handleErrors(Errors[401], router);
+      return;
+    }
     fetchBGNBDResult(props.userID, props.setLoading, router).then(
       (value) => value && setBGNBDResult(value)
     );

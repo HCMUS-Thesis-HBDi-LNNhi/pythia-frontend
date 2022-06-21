@@ -2,7 +2,7 @@ import { Layout } from "components/common";
 import Errors from "const/error.const";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
@@ -14,26 +14,29 @@ export default function Profile(): JSX.Element {
   const [history, setHistory] = useState<IHistory[]>();
   const [isLoading, setLoading] = useState(false);
 
-  async function fetchHistory(userId: string) {
-    try {
-      setLoading(true);
-      const response = await fetcher.get(`/users/${userId}/files`);
-      const responseData: IHistoryResponse = response.data;
-      setHistory(
-        responseData.files.map((value) => {
-          return {
-            ...value,
-            created_at: new Date(value.created_at),
-            updated_at: new Date(value.updated_at),
-          };
-        })
-      );
-    } catch (error) {
-      handleErrors(error, router);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const fetchHistory = useCallback(
+    async (userId: string) => {
+      try {
+        setLoading(true);
+        const response = await fetcher.get(`/users/${userId}/files`);
+        const responseData: IHistoryResponse = response.data;
+        setHistory(
+          responseData.files.map((value) => {
+            return {
+              ...value,
+              created_at: new Date(value.created_at),
+              updated_at: new Date(value.updated_at),
+            };
+          })
+        );
+      } catch (error) {
+        handleErrors(error, router);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
 
   useEffect(() => {
     if (!userId) {
@@ -41,7 +44,7 @@ export default function Profile(): JSX.Element {
     } else {
       fetchHistory(userId);
     }
-  }, [userId]);
+  }, [userId, router, fetchHistory]);
 
   return (
     <Layout

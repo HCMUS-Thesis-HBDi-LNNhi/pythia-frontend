@@ -22,7 +22,7 @@ export default function Home(): JSX.Element {
       : handleFetchData(userID, setLoading, router).then(
           (res) => res && setData(res)
         );
-  }, [userID]);
+  }, [userID, router]);
 
   return (
     <>

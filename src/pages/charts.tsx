@@ -10,7 +10,7 @@ import Errors from "const/error.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
 import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { handleCreateChart } from "utils/charts.utils";
 import handleErrors from "utils/errors.utils";
@@ -25,7 +25,7 @@ export default function Charts(): JSX.Element {
   const [chartOptions, setChartOptions] =
     useState<IChartOptions>(initialChartOptions);
 
-  const normalizedQuery = () => {
+  const normalizedQuery = useCallback(() => {
     const params = router.query;
     if (!params) return;
     if (params.type) setChartType(params.type as ChartType);
@@ -45,7 +45,7 @@ export default function Charts(): JSX.Element {
         years: { from: from[1], to: to[1] },
       });
     }
-  };
+  }, [router.query]);
 
   useEffect(() => {
     !userID
@@ -53,11 +53,11 @@ export default function Charts(): JSX.Element {
       : handleFetchData(userID, setLoading, router).then(
           (res) => res && setData(res)
         );
-  }, [userID]);
+  }, [userID, router]);
 
   useEffect(() => {
     normalizedQuery();
-  }, [data]);
+  }, [normalizedQuery]);
 
   return (
     <Layout title="Charts" isLoading={isLoading}>
