@@ -15,12 +15,20 @@ export default function Router(): void {
     undefined
   );
   useEffect(() => {
-    const { token, user_id } = router.query;
-    if (token && user_id) {
-      setUserID(user_id.toString());
-      setToken(token.toString());
+    switch (viewMode) {
+      case "user":
+        const { token, user_id } = router.query;
+        if (token && user_id) {
+          setUserID(user_id.toString());
+          setToken(token.toString());
+        }
+        router.push(`/${PageLabels.HOME}`);
+        return;
+      // TODO: handle guest mode
+      case "guest":
+      default:
+        router.push(`/${PageLabels.LOGIN}`);
+        return;
     }
-    if (!viewMode) router.push(`/${PageLabels.LOGIN}`);
-    else router.push(`/${PageLabels.HOME}`);
   }, [router, viewMode, setUserID, setToken]);
 }
