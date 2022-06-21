@@ -1,10 +1,12 @@
-import { Button, Input, Tag, toast, UploadButton } from "components/common";
+import { Button, Input, Tag, UploadButton } from "components/common";
 import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { PageLabels, TagColor } from "interfaces/common.interface";
+import { TagColor } from "interfaces/common.interface";
 import icons from "const/icons.const";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
+import handleErrors from "utils/errors.utils";
+import Errors from "const/error.const";
 
 interface Props {
   selectedModel: RetainModel;
@@ -19,10 +21,7 @@ export default function Header(props: Props): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
 
   useEffect(() => {
-    if (!userID) {
-      toast("Something went wrong, please login again!", "failure");
-      router.push(`/${PageLabels.LOGIN}`);
-    }
+    if (!userID) handleErrors(Errors[401], router);
   }, [props.setLoading, router, userID]);
 
   return (

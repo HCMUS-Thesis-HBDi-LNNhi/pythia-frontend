@@ -4,16 +4,16 @@ import {
   ChartHeader,
   ChartBody,
   ChartOptions,
-  toast,
 } from "components/common";
-import { handleCreateChart } from "components/sections/home/chart-list/fetcher";
 import { initialChartOptions } from "const/chart.const";
+import Errors from "const/error.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
-import { PageLabels } from "interfaces/common.interface";
 import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+import { handleCreateChart } from "utils/charts.utils";
+import handleErrors from "utils/errors.utils";
 import { handleFetchData } from "utils/handleData";
 
 export default function Charts(): JSX.Element {
@@ -25,16 +25,7 @@ export default function Charts(): JSX.Element {
   const [chartOptions, setChartOptions] =
     useState<IChartOptions>(initialChartOptions);
 
-  useEffect(() => {
-    if (!userID) {
-      toast("Something went wrong, please login again!", "failure");
-      router.push(`/${PageLabels.LOGIN}`);
-    } else {
-      handleFetchData(userID, setLoading).then((res) => res && setData(res));
-    }
-  }, [userID]);
-
-  useEffect(() => {
+  const normalizedQuery = () => {
     const params = router.query;
     if (!params) return;
     if (params.type) setChartType(params.type as ChartType);
@@ -54,6 +45,18 @@ export default function Charts(): JSX.Element {
         years: { from: from[1], to: to[1] },
       });
     }
+  };
+
+  useEffect(() => {
+    !userID
+      ? handleErrors(Errors[401], router)
+      : handleFetchData(userID, setLoading, router).then(
+          (res) => res && setData(res)
+        );
+  }, [userID]);
+
+  useEffect(() => {
+    normalizedQuery();
   }, [data]);
 
   return (
@@ -64,22 +67,17 @@ export default function Charts(): JSX.Element {
             chosenChart={chartType}
             setChosenChart={setChartType}
             allowPin
-            createChart={() => {
-              if (!userID) {
-                toast("Something went wrong, please login again!", "failure");
-                router.push(`/${PageLabels.LOGIN}`);
-              } else {
-                handleCreateChart(
-                  userID,
-                  chartOptions,
-                  chartType,
-                  setLoading,
-                  () => {
-                    toast("Chart is pinned successful", "success");
-                  }
-                );
-              }
-            }}
+            createChart={() =>
+              !userID
+                ? handleErrors(Errors[401], router)
+                : handleCreateChart(
+                    userID,
+                    chartOptions,
+                    chartType,
+                    setLoading,
+                    router
+                  )
+            }
           />
           {data && (
             <div className="grid place-content-center h-[90%]">

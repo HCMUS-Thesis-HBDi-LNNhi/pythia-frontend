@@ -1,17 +1,21 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
-import { Button, ChartBody, toast } from "components/common";
+import { Button, ChartBody } from "components/common";
 import ChartContainer from "./chart-container.component";
-import { IChartData } from "interfaces/chart.interface";
+import { IChartData, IChartResponse } from "interfaces/chart.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
   IData,
 } from "interfaces/data.interface";
-import { handleDelete, handleFetchChart } from "./fetcher";
 import { useRouter } from "next/router";
 import { PageLabels } from "interfaces/common.interface";
+import Errors from "const/error.const";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "utils/fetcher.utils";
+import API from "const/api.const";
+import { handleDelete, normalizedData } from "utils/charts.utils";
 
 interface Props {
   data: IData;
@@ -23,14 +27,22 @@ export default function ChartList(props: Props): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     if (!userID) {
-      toast("Something went wrong, please login again!", "failure");
-      router.push(`/${PageLabels.LOGIN}`);
-    } else {
-      handleFetchChart(userID, props.setLoading).then((res) =>
-        setChartData(res)
+      handleErrors(Errors[401], router);
+      return;
+    }
+    try {
+      props.setLoading(true);
+      const response = await fetcher.get(API.GET.getPinnedCharts(userID));
+      if (response.status !== 200) throw Errors[response.status] ?? response;
+      setChartData(
+        response.data.charts.map((item: IChartResponse) => normalizedData(item))
       );
+    } catch (error) {
+      handleErrors(error, router);
+    } finally {
+      props.setLoading(false);
     }
   };
 
@@ -44,7 +56,9 @@ export default function ChartList(props: Props): JSX.Element {
         label={`${FactDataLabels[chartData.y]} of ${
           CategoryDataLabels[chartData.x]
         }`}
-        delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
+        delete={() =>
+          handleDelete(chartData.id, props.setLoading, fetchData, router)
+        }
         onClick={() => router.push(`/${PageLabels.CHARTS}?${query}`)}
       >
         <ChartBody

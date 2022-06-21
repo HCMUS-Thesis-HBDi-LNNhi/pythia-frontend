@@ -7,6 +7,13 @@ import {
 } from "interfaces/segmentation.interface";
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
+import { useRouter } from "next/router";
+
+const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
+  return Object.values(rfmResult.rfm.cluster_id).filter(
+    (value) => value === clv
+  ).length;
+};
 
 const RFMItems = (props: {
   label?: string;
@@ -29,12 +36,13 @@ interface Props {
 }
 
 export default function RFMBody(props: Props): JSX.Element {
+  const router = useRouter();
   const [rfmResult, setRFMResult] = useState<IRFMResponse>(initialRFMResponse);
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
     if (!props.userID) return;
-    fetchRFMResult(props.userID, props.setLoading).then(
+    fetchRFMResult(props.userID, props.setLoading, router).then(
       (value) => value && setRFMResult(value)
     );
     // eslint-disable-next-line
@@ -50,14 +58,30 @@ export default function RFMBody(props: Props): JSX.Element {
     <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
       <RFMItems label="Grouped by Customer Lifetime Value">
         <BarChart
-          labels={["CLV"]}
-          datasets={Object.entries(rfmResult.clv).map((value, index) => {
-            const groupIndex = index + 1;
-            return {
-              label: "Group " + groupIndex,
-              data: [value[1]],
-            };
-          })}
+          labels={Object.keys(rfmResult.clv).map((_, i) => "Group " + (i + 1))}
+          datasets={[
+            {
+              label: "CLV",
+              data: Object.values(rfmResult.clv),
+            },
+          ]}
+          options={{
+            plugins: {
+              legend: false,
+              tooltip: {
+                callbacks: {
+                  title: (items: any) => {
+                    return [
+                      "CLV Points: " + items[0].formattedValue,
+                      "Number of customers: " +
+                        getNoCustomerPerCLV(rfmResult, items[0].dataIndex),
+                    ].join("\n");
+                  },
+                  label: () => "",
+                },
+              },
+            },
+          }}
         />
       </RFMItems>
       <RFMItems label="Grouped by number of transactions">

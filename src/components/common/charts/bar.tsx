@@ -7,6 +7,7 @@ interface Props {
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
+  options?: any;
 }
 
 export default function BarChart(props: Props): JSX.Element {
@@ -21,6 +22,7 @@ export default function BarChart(props: Props): JSX.Element {
         })),
       }}
       options={{
+        ...props.options,
         scales: {
           x: {
             title: {

@@ -1,8 +1,10 @@
-import { toast } from "components/common";
 import API from "const/api.const";
+import Errors from "const/error.const";
 import { IChartOptions, IChartYear } from "interfaces/chart.interface";
 import { Age, IData } from "interfaces/data.interface";
-import { fetcher } from "../fetcher";
+import { NextRouter } from "next/router";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "../fetcher.utils";
 
 import handle2DData from "./handle2DData";
 
@@ -14,15 +16,16 @@ export const AgeKeys = [Age.teen, Age.young_adult, Age.adult, Age.elder];
 
 export async function handleFetchData(
   id: string,
-  setLoading: (value: boolean) => void
+  setLoading: (value: boolean) => void,
+  router: NextRouter
 ): Promise<IData | undefined> {
   try {
     setLoading(true);
     const response = await fetcher.get(API.GET.getData(id));
-    if (response.status === 200) return response.data;
+    if (response.status !== 200) throw Errors[response.status] ?? response;
+    else return response.data;
   } catch (error) {
-    toast("Something went wrong, please try again!", "failure");
-    console.error(error);
+    handleErrors(error, router);
   } finally {
     setLoading(false);
   }

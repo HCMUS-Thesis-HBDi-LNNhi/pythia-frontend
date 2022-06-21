@@ -1,4 +1,4 @@
-import { Button, Loading, toast } from "components/common";
+import { Button, Loading } from "components/common";
 import API from "const/api.const";
 import icons from "const/icons.const";
 import {
@@ -9,7 +9,8 @@ import {
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { fetcher } from "utils/fetcher";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "utils/fetcher.utils";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
@@ -33,10 +34,7 @@ export default function Login(): JSX.Element {
             router.push(`/redirect/${response.data.login_path}`);
           }
         } catch (error) {
-          console.error(error);
-          toast("Can't login with google. Please try again", "failure");
-          window.localStorage.clear();
-          router.push(`/${PageLabels.LOGIN}`);
+          handleErrors(error, router);
         } finally {
           setLoading(false);
         }

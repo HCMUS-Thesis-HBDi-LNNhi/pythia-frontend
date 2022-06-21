@@ -4,7 +4,7 @@ import { Field, Form, Formik } from "formik";
 import { IChartOptions } from "interfaces/chart.interface";
 import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
 import React from "react";
-import { ChartOptionsValidate } from "utils/validate";
+import { ChartOptionsValidate } from "utils/validate.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
   <label className="w-full font-medium text-primary-500 text-lg">
