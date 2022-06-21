@@ -61,6 +61,7 @@ import {
   ColorScale,
   GeoFeature,
 } from "chartjs-chart-geo";
+import AnnotationPlugin from "chartjs-plugin-annotation";
 
 ChartJS.register(
   Title,
@@ -75,5 +76,6 @@ ChartJS.register(
   ChoroplethController,
   ProjectionScale,
   ColorScale,
-  GeoFeature
+  GeoFeature,
+  AnnotationPlugin
 );

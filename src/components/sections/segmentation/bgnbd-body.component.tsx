@@ -5,8 +5,76 @@ import {
   IBGNBDResult,
   initialBGNBDResponse,
 } from "interfaces/segmentation.interface";
+import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import { fetchBGNBDResult } from "./fetcher";
+
+const getMiddleValue = (
+  value: { min: number; max: number },
+  startMin: boolean
+) => {
+  const mid = Math.ceil(((value.max - value.min) / 2) * 100) / 100;
+  return startMin ? value.min + mid : value.max - mid;
+};
+
+const annotations = {
+  box1: {
+    type: "box",
+    xMin: (ctx: any) => ctx.chart.scales.x.min,
+    xMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    yMin: (ctx: any) => ctx.chart.scales.y.min,
+    yMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    backgroundColor: "rgba(150, 0, 0, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "New customer",
+      enabled: true,
+      position: { x: "start", y: "end" },
+    },
+  },
+  box2: {
+    type: "box",
+    xMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    xMax: (ctx: any) => ctx.chart.scales.x.max,
+    yMin: (ctx: any) => ctx.chart.scales.y.min,
+    yMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    backgroundColor: "rgba(0, 150, 0, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "Potential loyalist",
+      enabled: true,
+      position: { x: "end", y: "end" },
+    },
+  },
+  box3: {
+    type: "box",
+    xMin: (ctx: any) => ctx.chart.scales.x.min,
+    xMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    yMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    yMax: (ctx: any) => ctx.chart.scales.y.max,
+    backgroundColor: "rgba(0, 0, 150, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "About to sleep",
+      enabled: true,
+      position: { x: "start", y: "start" },
+    },
+  },
+  box4: {
+    type: "box",
+    xMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    xMax: (ctx: any) => ctx.chart.scales.x.max,
+    yMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    yMax: (ctx: any) => ctx.chart.scales.y.max,
+    backgroundColor: "rgba(150, 150, 150, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "Loyal customer",
+      enabled: true,
+      position: { x: "end", y: "start" },
+    },
+  },
+};
 
 const BGNBDItems = (props: {
   label?: string;
@@ -29,13 +97,14 @@ interface Props {
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
+  const router = useRouter();
   const [bgnbdResult, setBGNBDResult] =
     useState<IBGNBDResponse>(initialBGNBDResponse);
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
     if (!props.userID) return;
-    fetchBGNBDResult(props.userID, props.setLoading).then(
+    fetchBGNBDResult(props.userID, props.setLoading, router).then(
       (value) => value && setBGNBDResult(value)
     );
     // eslint-disable-next-line
@@ -71,6 +140,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
               return { label: value[0], data: value[1] };
             })}
           tooltipLabels={tooltipLabels}
+          annotations={annotations}
         />
       </BGNBDItems>
       <BGNBDItems label="Grouped by number of transactions">
@@ -83,6 +153,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
               return { label: value[0], data: value[1] };
             })}
           tooltipLabels={tooltipLabels}
+          annotations={annotations}
         />
       </BGNBDItems>
     </div>
