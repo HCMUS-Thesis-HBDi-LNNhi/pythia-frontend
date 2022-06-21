@@ -1,14 +1,18 @@
 import { toast } from "components/common";
 import API from "const/api.const";
+import Errors from "const/error.const";
 import { FileType } from "interfaces/utils.interface";
+import { NextRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
-import { fetcher } from "./fetcher";
+import handleErrors from "./errors.utils";
+import { fetcher } from "./fetcher.utils";
 
 export const handleUpload = async (
   file: File,
   userID: string,
   type: FileType,
-  setLoading: Dispatch<SetStateAction<boolean>>
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  router: NextRouter
 ) => {
   try {
     setLoading(true);
@@ -18,16 +22,14 @@ export const handleUpload = async (
       const rows = e.target?.result as string;
       const header = rows.split("\r\n")[0];
       if (type === "transaction" && header !== "user_id,amount,date") {
-        toast("Wrong file format. Please try again!", "failure");
-        throw "Wrong file format";
+        throw Errors.formatError;
       }
       if (
         type === "demographic" &&
         header !==
           "ID,Day of birth,Gender,Country,City,Job title,Job industry,Wealth segment"
       ) {
-        toast("Wrong file format. Please try again!", "failure");
-        throw "Wrong file format";
+        throw Errors.formatError;
       }
 
       const formData = new FormData();
@@ -40,12 +42,12 @@ export const handleUpload = async (
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (response.status === 204) toast("Upload success", "success");
+      if (response.status !== 204) throw Errors[response.status] ?? response;
+      else toast("Upload successful", "success");
     };
     reader.readAsText(file);
   } catch (error) {
-    console.error(error);
-    toast("Something went wrong", "failure");
+    handleErrors(error, router);
   } finally {
     setLoading(false);
   }
