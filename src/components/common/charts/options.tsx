@@ -1,11 +1,10 @@
 import { Button, Radio } from "components/common";
-import { initialChartOptions } from "const/chart.const";
 import icons from "const/icons.const";
 import { Field, Form, Formik } from "formik";
 import { IChartOptions } from "interfaces/chart.interface";
 import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
 import React from "react";
-import { ChartOptionsValidate } from "utils/validate";
+import { ChartOptionsValidate } from "utils/validate.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
   <label className="w-full font-medium text-primary-500 text-lg">
@@ -104,17 +103,19 @@ const IconsCustomer = [
 const IconsTransaction = [icons.outline.money, icons.outline.transactions];
 
 interface Props {
+  initialValues: IChartOptions;
   setChartOptions: (values: IChartOptions) => void;
 }
 
 export default function ChartOptions(props: Props): JSX.Element {
   return (
     <Formik<IChartOptions>
-      initialValues={initialChartOptions}
+      initialValues={props.initialValues}
       onSubmit={(values) => {
         props.setChartOptions(values);
       }}
       validate={(values) => ChartOptionsValidate(values)}
+      enableReinitialize
     >
       {({ handleSubmit }) => (
         <Form

@@ -39,6 +39,8 @@ const outline = {
   calendar: <Icon icon="akar-icons:calendar" />,
   zoomIn: <Icon icon="akar-icons:zoom-in" />,
   zoomOut: <Icon icon="akar-icons:zoom-out" />,
+  grid: <Icon icon="gg:display-grid" />,
+  list: <Icon icon="fluent:text-bullet-list-square-20-regular" />,
 };
 
 const solid = {

@@ -64,6 +64,10 @@ export interface IChartPayload {
   z?: string;
 }
 
+export interface IChartResponse extends IChartPayload {
+  id: string;
+}
+
 export interface IDataset {
   label: string;
   data: number[];

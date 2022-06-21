@@ -2,15 +2,20 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
 import { Button, ChartBody } from "components/common";
-import ChartDialog from "./chart-dialog.component";
 import ChartContainer from "./chart-container.component";
-import { IChartData } from "interfaces/chart.interface";
+import { IChartData, IChartResponse } from "interfaces/chart.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
   IData,
 } from "interfaces/data.interface";
-import { handleDelete, handleFetchChart } from "./fetcher";
+import { useRouter } from "next/router";
+import { PageLabels } from "interfaces/common.interface";
+import Errors from "const/error.const";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "utils/fetcher.utils";
+import API from "const/api.const";
+import { handleDelete, normalizedData } from "utils/charts.utils";
 
 interface Props {
   data: IData;
@@ -18,34 +23,52 @@ interface Props {
 }
 
 export default function ChartList(props: Props): JSX.Element {
+  const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
-  const [isShow, setIsShow] = useState(false);
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
-  const fetchData = () => {
-    if (!userID) return;
-    handleFetchChart(userID, props.setLoading).then((res) => setChartData(res));
+  const fetchData = async () => {
+    if (!userID) {
+      handleErrors(Errors[401], router);
+      return;
+    }
+    try {
+      props.setLoading(true);
+      const response = await fetcher.get(API.GET.getPinnedCharts(userID));
+      if (response.status !== 200) throw Errors[response.status] ?? response;
+      setChartData(
+        response.data.charts.map((item: IChartResponse) => normalizedData(item))
+      );
+    } catch (error) {
+      handleErrors(error, router);
+    } finally {
+      props.setLoading(false);
+    }
   };
 
-  const clear = () => {
-    setIsShow(false);
+  const renderChart = (chartData: IChartData) => {
+    const from = chartData.quarters.from + "_" + chartData.years.from;
+    const to = chartData.quarters.to + "_" + chartData.years.to;
+    const query = `type=${chartData.chartType}&from=${from}&to=${to}&x=${chartData.x}&y=${chartData.y}`;
+    return (
+      <ChartContainer
+        key={chartData.id}
+        label={`${FactDataLabels[chartData.y]} of ${
+          CategoryDataLabels[chartData.x]
+        }`}
+        delete={() =>
+          handleDelete(chartData.id, props.setLoading, fetchData, router)
+        }
+        onClick={() => router.push(`/${PageLabels.CHARTS}?${query}`)}
+      >
+        <ChartBody
+          data={props.data}
+          chartType={chartData.chartType}
+          chartOptions={chartData}
+        />
+      </ChartContainer>
+    );
   };
-
-  const renderChart = (chartData: IChartData) => (
-    <ChartContainer
-      key={chartData.id}
-      label={`${FactDataLabels[chartData.y]} of ${
-        CategoryDataLabels[chartData.x]
-      }`}
-      delete={() => handleDelete(chartData.id, props.setLoading, fetchData)}
-    >
-      <ChartBody
-        data={props.data}
-        chartType={chartData.chartType}
-        chartOptions={chartData}
-      />
-    </ChartContainer>
-  );
 
   useEffect(() => {
     fetchData();
@@ -65,18 +88,9 @@ export default function ChartList(props: Props): JSX.Element {
           className="text-5xl w-full h-full place-content-center"
           style="outline"
           icon={icons.outline.plus}
-          onClick={() => setIsShow(true)}
+          onClick={() => router.push(`/${PageLabels.CHARTS}`)}
         />
       </div>
-      {isShow && userID && (
-        <ChartDialog
-          userID={userID}
-          data={props.data}
-          setLoading={props.setLoading}
-          reload={fetchData}
-          clear={clear}
-        />
-      )}
     </main>
   );
 }

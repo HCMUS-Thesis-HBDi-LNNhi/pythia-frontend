@@ -1,42 +1,50 @@
-import { Layout, toast } from "components/common";
+import { Layout } from "components/common";
+import Errors from "const/error.const";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { fetcher } from "utils/fetcher";
-import { formatDate } from "utils/formatter";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "utils/fetcher.utils";
+import { formatDate } from "utils/formatter.utils";
 
 export default function Profile(): JSX.Element {
+  const router = useRouter();
   const userId = useReadLocalStorage<string>("user-id");
   const [history, setHistory] = useState<IHistory[]>();
   const [isLoading, setLoading] = useState(false);
 
-  async function fetchHistory(userId: string) {
-    try {
-      setLoading(true);
-      const response = await fetcher.get(`/users/${userId}/files`);
-      const responseData: IHistoryResponse = response.data;
-      setHistory(
-        responseData.files.map((value) => {
-          return {
-            ...value,
-            created_at: new Date(value.created_at),
-            updated_at: new Date(value.updated_at),
-          };
-        })
-      );
-    } catch (error) {
-      console.error(error);
-      toast("Something went wrong. Please try again!", "failure");
-      setHistory(undefined);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const fetchHistory = useCallback(
+    async (userId: string) => {
+      try {
+        setLoading(true);
+        const response = await fetcher.get(`/users/${userId}/files`);
+        const responseData: IHistoryResponse = response.data;
+        setHistory(
+          responseData.files.map((value) => {
+            return {
+              ...value,
+              created_at: new Date(value.created_at),
+              updated_at: new Date(value.updated_at),
+            };
+          })
+        );
+      } catch (error) {
+        handleErrors(error, router);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
 
   useEffect(() => {
-    if (!userId) return;
-    fetchHistory(userId);
-  }, [userId]);
+    if (!userId) {
+      handleErrors(Errors[401], router);
+    } else {
+      fetchHistory(userId);
+    }
+  }, [userId, router, fetchHistory]);
 
   return (
     <Layout

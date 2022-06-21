@@ -1,18 +1,21 @@
 import { Chart, getElementAtEvent } from "react-chartjs-2";
 import { topojson } from "chartjs-chart-geo";
-import { useEffect, useRef, useState } from "react";
-import MAP_JSON from "const/map.const";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IDataset, IFeature } from "interfaces/chart.interface";
 import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
-import toast from "../toast.component";
 import Button from "../buttons/button.component";
 import icons from "const/icons.const";
+import MAP_JSON from "const/map.const";
+import handleErrors from "utils/errors.utils";
+import { useRouter } from "next/router";
+import Errors from "const/error.const";
 
 interface Props {
   datasets: IDataset[];
 }
 
-export default function WorldMap(props: Props) {
+export default function GeoChart(props: Props) {
+  const router = useRouter();
   const chartRef = useRef<ChartJSOrUndefined<any>>(undefined);
   const [initialData, setInitialData] = useState<IFeature[]>([]);
   const [previous, setPrevious] = useState<(keyof typeof MAP_JSON)[]>([]);
@@ -30,50 +33,45 @@ export default function WorldMap(props: Props) {
     }
   };
 
-  const fetchFeatures = () => {
-    try {
-      fetch(MAP_JSON[chosen].url)
-        .then((response) => response.json())
-        .then((value) => {
-          const features = topojson.feature(
-            value,
-            value.objects[MAP_JSON[chosen].objectsKey]
-            // @ts-ignore
-          ).features;
-          setInitialData(features);
-          updateChart(features);
-        });
-    } catch (error) {
-      console.error(error);
-      toast("Something went wrong!", "failure");
-    }
-  };
-
-  const updateChart = (features: IFeature[]) => {
-    if (!chartRef.current) return;
-    const chart = chartRef.current;
-    chart.data = {
-      labels: features.map((v) => v.properties[MAP_JSON[chosen].propertiesKey]),
-      datasets: [
-        {
-          outline: features,
-          label: "Countries",
-          // TODO: Use real data
-          data: features.map((d: any) => ({
-            feature: d,
-            value: Math.random() * 10,
-          })),
-        },
-      ],
-    };
-    chart.update();
-  };
+  const updateChart = useCallback(
+    (features: IFeature[]) => {
+      if (!chartRef.current) return;
+      const chart = chartRef.current;
+      chart.data = {
+        labels: features.map(
+          (v) => v.properties[MAP_JSON[chosen].propertiesKey]
+        ),
+        datasets: [
+          {
+            outline: features,
+            label: "Countries",
+            // TODO: Use real data
+            data: features.map((d: any) => ({
+              feature: d,
+              value: Math.random() * 10,
+            })),
+          },
+        ],
+      };
+      chart.update();
+    },
+    [chosen]
+  );
 
   useEffect(() => {
-    console.log("geo", props.datasets);
-
-    fetchFeatures();
-  }, [chosen]);
+    fetch(MAP_JSON[chosen].url)
+      .then((response) => response.json())
+      .then((value) => {
+        const features = topojson.feature(
+          value,
+          value.objects[MAP_JSON[chosen].objectsKey]
+          // @ts-ignore
+        ).features;
+        setInitialData(features);
+        updateChart(features);
+      })
+      .catch(() => handleErrors(Errors.geError, router));
+  }, [chosen, router, updateChart]);
 
   return (
     <>

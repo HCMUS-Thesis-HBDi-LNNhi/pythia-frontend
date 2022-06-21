@@ -1,37 +1,125 @@
-import { Button, Pane } from "components/common";
+import { Pane } from "components/common";
 import ScatterChart from "components/common/charts/scatter";
-import icons from "const/icons.const";
+import Errors from "const/error.const";
 import {
   IBGNBDResponse,
   IBGNBDResult,
   initialBGNBDResponse,
 } from "interfaces/segmentation.interface";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ReactNode, useEffect, useState } from "react";
+import handleErrors from "utils/errors.utils";
 import { fetchBGNBDResult } from "./fetcher";
 
-const Header = (props: { label: string }): JSX.Element => (
-  <div className="w-full h-fit flex justify-between items-center">
-    <div>{props.label}</div>
-    <Button className="text-2xl" icon={icons.outline.pin}></Button>
-  </div>
-);
+const getMiddleValue = (
+  value: { min: number; max: number },
+  startMin: boolean
+) => {
+  const mid = Math.ceil(((value.max - value.min) / 2) * 100) / 100;
+  return startMin ? value.min + mid : value.max - mid;
+};
+
+const annotations = {
+  box1: {
+    type: "box",
+    xMin: (ctx: any) => ctx.chart.scales.x.min,
+    xMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    yMin: (ctx: any) => ctx.chart.scales.y.min,
+    yMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    backgroundColor: "rgba(150, 0, 0, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "New customer",
+      enabled: true,
+      position: { x: "start", y: "end" },
+    },
+  },
+  box2: {
+    type: "box",
+    xMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    xMax: (ctx: any) => ctx.chart.scales.x.max,
+    yMin: (ctx: any) => ctx.chart.scales.y.min,
+    yMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    backgroundColor: "rgba(0, 150, 0, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "Potential loyalist",
+      enabled: true,
+      position: { x: "end", y: "end" },
+    },
+  },
+  box3: {
+    type: "box",
+    xMin: (ctx: any) => ctx.chart.scales.x.min,
+    xMax: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    yMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    yMax: (ctx: any) => ctx.chart.scales.y.max,
+    backgroundColor: "rgba(0, 0, 150, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "About to sleep",
+      enabled: true,
+      position: { x: "start", y: "start" },
+    },
+  },
+  box4: {
+    type: "box",
+    xMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.x }, true),
+    xMax: (ctx: any) => ctx.chart.scales.x.max,
+    yMin: (ctx: any) => getMiddleValue({ ...ctx.chart.scales.y }, true),
+    yMax: (ctx: any) => ctx.chart.scales.y.max,
+    backgroundColor: "rgba(150, 150, 150, 0.1)",
+    borderWidth: 0,
+    label: {
+      content: "Loyal customer",
+      enabled: true,
+      position: { x: "end", y: "start" },
+    },
+  },
+};
+
+const BGNBDItems = (props: {
+  label?: string;
+  children: ReactNode;
+}): JSX.Element => {
+  return (
+    <Pane height="h-fit" className="space-y-4 overflow-hidden">
+      <h2 className="w-full h-fit flex justify-between items-center">
+        {props.label}
+      </h2>
+      <>{props.children}</>
+    </Pane>
+  );
+};
 
 interface Props {
   userID: string | null;
+  displayGrid: boolean;
   setLoading: (value: boolean) => void;
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
+  const router = useRouter();
   const [bgnbdResult, setBGNBDResult] =
     useState<IBGNBDResponse>(initialBGNBDResponse);
+  const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!props.userID) return;
-    fetchBGNBDResult(props.userID, props.setLoading).then(
+    if (!props.userID) {
+      handleErrors(Errors[401], router);
+      return;
+    }
+    fetchBGNBDResult(props.userID, props.setLoading, router).then(
       (value) => value && setBGNBDResult(value)
     );
     // eslint-disable-next-line
   }, [props.userID]);
+
+  useEffect(() => {
+    setTooltipLabels(
+      Object.values(bgnbdResult.bgnbd).map((v) => "Customer ID: " + v.id)
+    );
+  }, [bgnbdResult]);
 
   const getMap = (key: keyof IBGNBDResult) => {
     const map = new Map();
@@ -46,9 +134,8 @@ export default function BGNBDBody(props: Props): JSX.Element {
   };
 
   return (
-    <>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by number of transactions" />
+    <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
+      <BGNBDItems label="Grouped by number of transactions">
         <ScatterChart
           xLabel="Prediction"
           yLabel="Total observation time"
@@ -57,10 +144,11 @@ export default function BGNBDBody(props: Props): JSX.Element {
             .map((value) => {
               return { label: value[0], data: value[1] };
             })}
+          tooltipLabels={tooltipLabels}
+          annotations={annotations}
         />
-      </Pane>
-      <Pane height="h-fit" className="space-y-4 overflow-hidden">
-        <Header label="Grouped by number of transactions" />
+      </BGNBDItems>
+      <BGNBDItems label="Grouped by number of transactions">
         <ScatterChart
           xLabel="Prediction"
           yLabel="Time of last transaction"
@@ -69,8 +157,10 @@ export default function BGNBDBody(props: Props): JSX.Element {
             .map((value) => {
               return { label: value[0], data: value[1] };
             })}
+          tooltipLabels={tooltipLabels}
+          annotations={annotations}
         />
-      </Pane>
-    </>
+      </BGNBDItems>
+    </div>
   );
 }

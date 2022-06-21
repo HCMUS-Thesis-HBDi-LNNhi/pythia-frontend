@@ -16,15 +16,14 @@ export default function MenuBar(): JSX.Element {
 
   function getMenuItem(): IMenuItem[] {
     switch (viewMode) {
+      case "user":
+        return [...menuItems, { label: "log out", icon: icons.outline.logout }];
       case "guest":
+      default:
         return [
           ...menuItems,
           { label: PageLabels.LOGIN, icon: icons.outline.login },
         ];
-      case "user":
-        return [...menuItems, { label: "log out", icon: icons.outline.logout }];
-      default:
-        return menuItems;
     }
   }
 

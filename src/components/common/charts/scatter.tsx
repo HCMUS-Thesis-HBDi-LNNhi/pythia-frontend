@@ -1,10 +1,13 @@
 import colors from "const/colors.const";
 import { IScatterDataset } from "interfaces/chart.interface";
 import { Scatter } from "react-chartjs-2";
+
 interface Props {
   datasets: IScatterDataset[];
   xLabel?: string;
   yLabel?: string;
+  tooltipLabels?: string[];
+  annotations?: any;
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
@@ -36,6 +39,22 @@ export default function ScatterChart(props: Props): JSX.Element {
               },
             },
             beginAtZero: true,
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                const tooltipLabels = props.tooltipLabels;
+                return tooltipLabels
+                  ? tooltipItems.map((_value, index) => tooltipLabels[index])
+                  : [];
+              },
+              label: props.tooltipLabels ? () => "" : undefined,
+            },
+          },
+          annotation: {
+            annotations: props.annotations,
           },
         },
       }}

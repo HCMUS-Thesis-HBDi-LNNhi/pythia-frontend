@@ -1,10 +1,10 @@
-import { PageLabels } from "interfaces/common.interface";
+import Errors from "const/error.const";
 import { FileType } from "interfaces/utils.interface";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { handleUpload } from "utils/uploadFile";
-import toast from "../toast.component";
+import handleErrors from "utils/errors.utils";
+import { handleUpload } from "utils/uploadFile.utils";
 import Button from "./button.component";
 
 interface Props {
@@ -20,16 +20,13 @@ export default function UploadButton(props: Props) {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (!file) {
-      return;
-    }
     if (!userID) {
-      toast("Something went wrong, please login again!", "failure");
-      router.push(`/${PageLabels.LOGIN}`);
+      handleErrors(Errors[401], router);
       return;
     }
-
-    handleUpload(file, userID, props.fileType, props.setLoading);
+    if (file) {
+      handleUpload(file, userID, props.fileType, props.setLoading, router);
+    }
   }, [file, props, router, userID]);
 
   return (

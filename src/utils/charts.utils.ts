@@ -1,19 +1,19 @@
 import { toast } from "components/common";
 import API from "const/api.const";
+import Errors from "const/error.const";
 import {
   ChartType,
   IChartData,
   IChartPayload,
   IChartOptions,
+  IChartResponse,
 } from "interfaces/chart.interface";
 import { IDimCustomer, IFactData } from "interfaces/data.interface";
-import { fetcher } from "utils/fetcher";
+import { NextRouter } from "next/router";
+import handleErrors from "utils/errors.utils";
+import { fetcher } from "utils/fetcher.utils";
 
-interface IResponse extends IChartPayload {
-  id: string;
-}
-
-function normalizedData(data: IResponse): IChartData {
+export function normalizedData(data: IChartResponse): IChartData {
   const x = data.x as keyof IDimCustomer | "date_key";
   const y = data.y as keyof IFactData;
   const z = data.z as keyof IDimCustomer;
@@ -40,31 +40,12 @@ function normalizedData(data: IResponse): IChartData {
   };
 }
 
-export async function handleFetchChart(
-  userID: string,
-  setLoading: (value: boolean) => void
-): Promise<IChartData[]> {
-  try {
-    setLoading(true);
-    const response = await fetcher.get(API.GET.getPinnedCharts(userID));
-    if (response.status !== 200) throw response;
-    return response.data.charts.map((item: IResponse) => normalizedData(item));
-  } catch (error) {
-    toast("Something went wrong, please try again!", "failure");
-    console.error(error);
-    return [];
-  } finally {
-    setLoading(false);
-  }
-}
-
 export async function handleCreateChart(
   userID: string,
   chartOptions: IChartOptions,
   chartType: ChartType,
   setLoading: (value: boolean) => void,
-  reload: () => void,
-  clear: () => void
+  router: NextRouter
 ): Promise<void> {
   try {
     setLoading(true);
@@ -82,13 +63,11 @@ export async function handleCreateChart(
       z: chartOptions.z,
     };
     const response = await fetcher.post(API.POST.createPinnedChart, payload);
-    if (response.status === 204) reload();
-    else throw response;
+    if (response.status !== 204) throw Errors[response.status] ?? response;
+    else toast("Chart is pinned successfully", "success");
   } catch (error) {
-    toast("Something went wrong, please try again!", "failure");
-    console.error(error);
+    handleErrors(error, router);
   } finally {
-    clear();
     setLoading(false);
   }
 }
@@ -96,21 +75,18 @@ export async function handleCreateChart(
 export async function handleDelete(
   chartID: string,
   setLoading: (value: boolean) => void,
-  reload: () => void
+  reload: () => void,
+  router: NextRouter
 ): Promise<void> {
   try {
     setLoading(true);
     const response = await fetcher.handleDelete(
       API.DELETE.deletePinnedChart(chartID)
     );
-    if (response.status == 204) {
-      reload();
-    } else {
-      throw response;
-    }
+    if (response.status !== 204) throw Errors[response.status] ?? response;
+    else reload();
   } catch (error) {
-    toast("Something went wrong, please try again!", "failure");
-    console.error(error);
+    handleErrors(error, router);
   } finally {
     setLoading(false);
   }

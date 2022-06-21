@@ -18,8 +18,22 @@ export { Input, Radio, Select };
 import ChartHeader from "./charts/header";
 import ChartBody from "./charts/body";
 import ChartOptions from "./charts/options";
+import BarChart from "./charts/bar";
+import GeoChart from "./charts/geo";
+import LineChart from "./charts/line";
+import PieChart from "./charts/pie";
+import ScatterChart from "./charts/scatter";
 
-export { ChartHeader, ChartBody, ChartOptions };
+export {
+  ChartHeader,
+  ChartBody,
+  ChartOptions,
+  BarChart,
+  GeoChart,
+  LineChart,
+  PieChart,
+  ScatterChart,
+};
 
 import Dialog from "./dialog.component";
 import Tag from "./tag.component";
@@ -28,3 +42,40 @@ import Pane from "./pane.component";
 import Tooltip from "./tooltip.component";
 
 export { Dialog, Tag, Textarea, Pane, Tooltip };
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip as ChartTooltip,
+  Legend,
+  PointElement,
+  LineElement,
+  ArcElement,
+} from "chart.js";
+import {
+  ChoroplethController,
+  ProjectionScale,
+  ColorScale,
+  GeoFeature,
+} from "chartjs-chart-geo";
+import AnnotationPlugin from "chartjs-plugin-annotation";
+
+ChartJS.register(
+  Title,
+  ChartTooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  ChoroplethController,
+  ProjectionScale,
+  ColorScale,
+  GeoFeature,
+  AnnotationPlugin
+);
