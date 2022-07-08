@@ -9,6 +9,11 @@ import MAP_JSON from "const/map.const";
 import handleErrors from "utils/errors.utils";
 import { useRouter } from "next/router";
 import Errors from "const/error.const";
+import {
+  getContinentCode,
+  removeDuplicateObjects,
+} from "utils/formatter.utils";
+import { CONTINENTS } from "const/country-code.const";
 
 interface Props {
   datasets: IDataset[];
@@ -19,7 +24,8 @@ export default function GeoChart(props: Props) {
   const chartRef = useRef<ChartJSOrUndefined<any>>(undefined);
   const [initialData, setInitialData] = useState<IFeature[]>([]);
   const [previous, setPrevious] = useState<(keyof typeof MAP_JSON)[]>([]);
-  const [chosen, setChosen] = useState<keyof typeof MAP_JSON>("world");
+  const [chosen, setChosen] =
+    useState<keyof typeof MAP_JSON>("world_continents");
 
   const zoomIn = (chosenFeature: IFeature) => {
     const newChosen = chosenFeature?.properties[MAP_JSON[chosen].propertiesKey]
@@ -30,6 +36,22 @@ export default function GeoChart(props: Props) {
       newPrevious.push(chosen);
       setPrevious(newPrevious);
       setChosen(newChosen as any);
+    }
+  };
+
+  const fillData = (feature: IFeature) => {
+    const target = feature.properties[MAP_JSON[chosen].propertiesKey];
+
+    if (chosen === "world_continents") {
+      const continentData = props.datasets.find((data) => {
+        const continentCode = getContinentCode(data.label);
+        if (!continentCode) return false;
+        else return target === CONTINENTS[continentCode];
+      });
+      return continentData ? continentData.data[0] : 0;
+    } else {
+      const countryData = props.datasets.find((data) => target === data.label);
+      return countryData ? countryData.data[0] : 0;
     }
   };
 
@@ -44,11 +66,10 @@ export default function GeoChart(props: Props) {
         datasets: [
           {
             outline: features,
-            label: "Countries",
-            // TODO: Use real data
-            data: features.map((d: any) => ({
+            label: "",
+            data: features.map((d: IFeature) => ({
               feature: d,
-              value: Math.random() * 10,
+              value: fillData(d),
             })),
           },
         ],
@@ -67,8 +88,9 @@ export default function GeoChart(props: Props) {
           value.objects[MAP_JSON[chosen].objectsKey]
           // @ts-ignore
         ).features;
-        setInitialData(features);
-        updateChart(features);
+        const uniqueFeatures = removeDuplicateObjects<IFeature>(features);
+        setInitialData(uniqueFeatures);
+        updateChart(uniqueFeatures);
       })
       .catch(() => handleErrors(Errors.geError, router));
   }, [chosen, router, updateChart]);
@@ -107,11 +129,10 @@ export default function GeoChart(props: Props) {
           datasets: [
             {
               outline: initialData,
-              label: "Countries",
-              // TODO: Use real data
-              data: initialData.map((d: any) => ({
+              label: "",
+              data: initialData.map((d: IFeature) => ({
                 feature: d,
-                value: Math.random() * 10,
+                value: fillData(d),
               })),
             },
           ],
@@ -128,12 +149,18 @@ export default function GeoChart(props: Props) {
             xy: {
               projection: "naturalEarth1",
             },
+            color: {
+              beginAtZero: true,
+              interpolate: "ylGn",
+            },
           },
         }}
         onClick={(event: any) => {
           const { current: chart } = chartRef;
           if (!chart) return;
           const chosenElement = getElementAtEvent(chart, event)[0]?.element;
+          console.log("debug", event);
+
           // @ts-ignore
           zoomIn(chosenElement.feature);
         }}

@@ -1,9 +1,14 @@
 import { Button, Radio } from "components/common";
 import icons from "const/icons.const";
 import { Field, Form, Formik } from "formik";
-import { IChartOptions } from "interfaces/chart.interface";
+import {
+  ChartType,
+  IChartOptions,
+  XAxisType,
+  YAxisType,
+} from "interfaces/chart.interface";
 import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
-import React from "react";
+import React, { ReactNode } from "react";
 import { ChartOptionsValidate } from "utils/validate.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
@@ -90,20 +95,24 @@ const InputCustomers = (props: {
   </div>
 );
 
-const IconsCustomer = [
-  icons.outline.age,
-  icons.outline.gender,
-  icons.outline.country,
-  icons.outline.city,
-  icons.outline.job_title,
-  icons.outline.job_industry,
-  icons.outline.calendar,
-];
+const IconsCustomer: { [key: string]: ReactNode } = {
+  dob: icons.outline.age,
+  gender: icons.outline.gender,
+  country: icons.outline.country,
+  city: icons.outline.city,
+  job_title: icons.outline.job_title,
+  job_industry: icons.outline.job_industry,
+  date_key: icons.outline.calendar,
+};
 
-const IconsTransaction = [icons.outline.money, icons.outline.transactions];
+const IconsTransaction: { [key: string]: ReactNode } = {
+  num_trans: icons.outline.transactions,
+  total_amount: icons.outline.money,
+};
 
 interface Props {
   initialValues: IChartOptions;
+  chartType: ChartType;
   setChartOptions: (values: IChartOptions) => void;
 }
 
@@ -121,9 +130,9 @@ export default function ChartOptions(props: Props): JSX.Element {
         <Form
           onSubmit={handleSubmit}
           className={[
-            "h-full w-full overflow-y-auto overflow-x-clip",
+            "h-full w-full",
             "grid grid-cols-[40%,20%,40%] gap-y-2",
-            "lg:flex lg:flex-col lg:items-center lg:gap-y-0",
+            "lg:flex lg:flex-col lg:gap-y-0",
           ].join(" ")}
         >
           <InputDate
@@ -135,43 +144,27 @@ export default function ChartOptions(props: Props): JSX.Element {
             label="To quarter"
             fieldNames={["quarters.to", "years.to"]}
           />
-          <InputCustomers
-            label="X Axis"
-            className="col-span-3"
-            groupName="x"
-            fieldValue={[
-              "dob",
-              "gender",
-              "country",
-              "city",
-              "job_title",
-              "job_industry",
-              "date_key",
-            ]}
-            icons={IconsCustomer}
-          />
-          <InputTransactions
-            label="Y Axis"
-            className="col-span-3"
-            groupName="y"
-            fieldValue={["total_amount", "num_trans"]}
-            icons={IconsTransaction}
-          />
+          {props.chartType !== ChartType.geo && (
+            <InputCustomers
+              label={
+                props.chartType === ChartType.scatter ? "Value" : "X Value"
+              }
+              className="col-span-3"
+              groupName="x"
+              fieldValue={Object.keys(IconsCustomer) as XAxisType[]}
+              icons={Object.values(IconsCustomer)}
+            />
+          )}
+          {props.chartType !== ChartType.scatter && (
+            <InputTransactions
+              label={props.chartType === ChartType.geo ? "Value" : "Y Value"}
+              className="col-span-3"
+              groupName="y"
+              fieldValue={Object.keys(IconsTransaction) as YAxisType[]}
+              icons={Object.values(IconsTransaction)}
+            />
+          )}
           {/*TODO: Implement 3D charts */}
-          {/* <InputCustomers
-            label="Z Axis"
-            className="col-span-3"
-            groupName="z"
-            fieldValue={[
-              "dob",
-              "gender",
-              "country",
-              "city",
-              "job_title",
-              "job_industry",
-            ]}
-            icons={IconsCustomer}
-          /> */}
           <div className="mt-auto pt-4 col-span-3 grid place-items-center">
             <Button style="solid" type="submit">
               Draw chart

@@ -80,6 +80,7 @@ export default function ChartBody(props: Props): JSX.Element {
           datasets={datasets}
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
+          category={chartOptions.x}
         />
       );
     case ChartType.geo:
