@@ -41,10 +41,14 @@ export interface IChartYear {
   to: number;
 }
 
+export type XAxisType = keyof IDimCustomer | "date_key";
+export type YAxisType = keyof IFactData;
+export type ZAxisType = keyof IDimCustomer;
+
 export interface IChartOptions {
-  x: keyof IDimCustomer | "date_key";
-  y: keyof IFactData;
-  z?: keyof IDimCustomer;
+  x: XAxisType;
+  y: YAxisType;
+  z?: ZAxisType;
   years: IChartYear;
   quarters: IChartYear;
 }

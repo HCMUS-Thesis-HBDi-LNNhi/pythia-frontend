@@ -21,7 +21,7 @@ export enum Transaction {
 }
 
 export enum FactDataLabels {
-  num_trans = "Number of transactions",
+  num_trans = "Total transactions",
   total_amount = "Total amount",
   recency = "Recency",
   cluster_id = "Cluster",
