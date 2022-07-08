@@ -93,6 +93,7 @@ export default function Charts(): JSX.Element {
           <ChartOptions
             initialValues={chartOptions}
             setChartOptions={setChartOptions}
+            chartType={chartType}
           />
         </Pane>
       </main>

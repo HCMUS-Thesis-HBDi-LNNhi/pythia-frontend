@@ -40,14 +40,15 @@ export default function Login(): JSX.Element {
         }
       },
     },
-    {
-      label: "Continue as guest",
-      icon: icons.solid.guest,
-      action: () => {
-        setViewMode("guest");
-        router.push(`/${PageLabels.HOME}`);
-      },
-    },
+    // TODO: Handle Guest mode
+    // {
+    //   label: "Continue as guest",
+    //   icon: icons.solid.guest,
+    //   action: () => {
+    //     setViewMode("guest");
+    //     router.push(`/${PageLabels.HOME}`);
+    //   },
+    // },
   ];
 
   useEffect(() => {
