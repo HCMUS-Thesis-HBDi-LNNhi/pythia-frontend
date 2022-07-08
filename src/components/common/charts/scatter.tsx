@@ -9,7 +9,7 @@ interface Props {
   yLabel?: string;
   tooltipLabels?: string[];
   annotations?: any;
-  category: XAxisType;
+  category?: XAxisType;
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
@@ -18,7 +18,7 @@ export default function ScatterChart(props: Props): JSX.Element {
       data={{
         datasets: props.datasets.map((value, index) => ({
           ...value,
-          label: getCategoryLabels(props.category, value.label),
+          label: getCategoryLabels(value.label),
           backgroundColor: colors[index % colors.length],
         })),
       }}

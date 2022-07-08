@@ -1,7 +1,7 @@
 import { XAxisType } from "interfaces/chart.interface";
 import { Age, Gender } from "interfaces/data.interface";
 
-export const getCategoryLabels = (category: XAxisType, key: string) => {
+export const getCategoryLabels = (key: string, category?: XAxisType) => {
   if (key === "" || key === "n/a") return "Others";
   switch (category) {
     case "gender":
