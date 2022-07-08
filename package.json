@@ -16,7 +16,6 @@
     "chartjs-chart-treemap": "^2.0.2",
     "chartjs-plugin-annotation": "^1.4.0",
     "formik": "^2.2.9",
-    "i18n-iso-countries": "^7.4.0",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-chartjs-2": "^4.1.0",

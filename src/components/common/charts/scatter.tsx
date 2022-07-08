@@ -1,6 +1,7 @@
 import colors from "const/colors.const";
-import { IScatterDataset } from "interfaces/chart.interface";
+import { IScatterDataset, XAxisType } from "interfaces/chart.interface";
 import { Scatter } from "react-chartjs-2";
+import { getCategoryLabels } from "utils/category.utils";
 
 interface Props {
   datasets: IScatterDataset[];
@@ -8,6 +9,7 @@ interface Props {
   yLabel?: string;
   tooltipLabels?: string[];
   annotations?: any;
+  category?: XAxisType;
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
@@ -16,6 +18,7 @@ export default function ScatterChart(props: Props): JSX.Element {
       data={{
         datasets: props.datasets.map((value, index) => ({
           ...value,
+          label: getCategoryLabels(value.label),
           backgroundColor: colors[index % colors.length],
         })),
       }}
@@ -55,6 +58,9 @@ export default function ScatterChart(props: Props): JSX.Element {
           },
           annotation: {
             annotations: props.annotations,
+          },
+          legend: {
+            display: props.category !== "job_title",
           },
         },
       }}

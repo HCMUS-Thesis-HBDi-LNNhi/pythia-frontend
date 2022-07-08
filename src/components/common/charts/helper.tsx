@@ -12,7 +12,7 @@ export const getLabels = (xKeys: string[], chartOptions: IChartOptions) => {
     case "date_key":
       return xKeys.map((value) => `Q${value.replace("_", "/")}`);
     case "dob":
-      return ["Teen", "Young adult", "Adult", "Elder"];
+      return ["Under 18", "18 to 25", "26 to 65", "Over 65"];
     case "gender":
       return ["Female", "Male", "Others"];
     default:

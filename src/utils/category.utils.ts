@@ -1,9 +1,8 @@
-import { Age, Gender, IDimCustomer } from "interfaces/data.interface";
+import { XAxisType } from "interfaces/chart.interface";
+import { Age, Gender } from "interfaces/data.interface";
 
-export const getCategoryLabels = (
-  category: keyof IDimCustomer,
-  key: string
-) => {
+export const getCategoryLabels = (key: string, category?: XAxisType) => {
+  if (key === "" || key === "n/a") return "Others";
   switch (category) {
     case "gender":
       switch (key) {
