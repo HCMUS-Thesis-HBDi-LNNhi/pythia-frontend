@@ -1,28 +1,25 @@
-import colors from "const/colors.const";
+import { getSingleChartColor } from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 interface Props {
   labels: string[];
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
-  options?: any;
 }
 
-export default function BarChart(props: Props): JSX.Element {
+export default function SingleLineChart(props: Props): JSX.Element {
   return (
-    <Bar
+    <Line
       data={{
         labels: props.labels,
-        datasets: props.datasets.map((value, index) => ({
+        datasets: props.datasets.map((value) => ({
           ...value,
-          backgroundColor: index < colors.length ? colors[index] : "#5880A2",
-          borderColor: index < colors.length ? colors[index] : "#5880A2",
+          ...getSingleChartColor(),
         })),
       }}
       options={{
-        ...props.options,
         scales: {
           x: {
             title: {

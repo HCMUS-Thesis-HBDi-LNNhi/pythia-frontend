@@ -11,12 +11,12 @@ import {
 } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
 import { getXKeys } from "utils/handleData";
-import { get2DDatasets, get3DDatasets, getLabels } from "./helper";
-import BarChart from "./bar";
-import GeoChart from "./geo";
-import LineChart from "./line";
-import PieChart from "./pie";
-import ScatterChart from "./scatter";
+import { get2DDatasets, get3DDatasets, getLabels } from "./helper.utils";
+import { SingleBarChart } from "./bar.component";
+import { SingleScatterChart } from "./scatter.component";
+import { SingleLineChart } from "./line.component";
+import { SinglePieChart } from "./pie.component";
+import GeoChart from "./geo.component";
 
 interface Props {
   data: IData;
@@ -41,7 +41,7 @@ export default function ChartBody(props: Props): JSX.Element {
   switch (chartType) {
     case ChartType.bar:
       return (
-        <BarChart
+        <SingleBarChart
           labels={labels}
           //@ts-ignore
           datasets={datasets}
@@ -52,7 +52,7 @@ export default function ChartBody(props: Props): JSX.Element {
 
     case ChartType.line:
       return (
-        <LineChart
+        <SingleLineChart
           labels={labels}
           //@ts-ignore
           datasets={datasets}
@@ -64,7 +64,7 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <>
           {datasets.map((dataset) => (
-            <PieChart
+            <SinglePieChart
               labels={labels}
               //@ts-ignore
               datasets={dataset}
@@ -75,7 +75,7 @@ export default function ChartBody(props: Props): JSX.Element {
       );
     case ChartType.scatter:
       return (
-        <ScatterChart
+        <SingleScatterChart
           //@ts-ignore
           datasets={datasets}
           xLabel={FactDataLabels.num_trans}

@@ -15,24 +15,24 @@ import Select from "./inputs/select.component";
 
 export { Input, Radio, Select };
 
-import ChartHeader from "./charts/header";
-import ChartBody from "./charts/body";
-import ChartOptions from "./charts/options";
-import BarChart from "./charts/bar";
-import GeoChart from "./charts/geo";
-import LineChart from "./charts/line";
-import PieChart from "./charts/pie";
-import ScatterChart from "./charts/scatter";
+import ChartHeader from "./charts/header.component";
+import ChartBody from "./charts/body.component";
+import ChartOptions from "./charts/options.component";
+import { SingleBarChart } from "./charts/bar.component";
+import { SinglePieChart } from "./charts/pie.component";
+import { SingleLineChart } from "./charts/line.component";
+import { SingleScatterChart } from "./charts/scatter.component";
+import GeoChart from "./charts/geo.component";
 
 export {
   ChartHeader,
   ChartBody,
   ChartOptions,
-  BarChart,
+  SingleBarChart,
   GeoChart,
-  LineChart,
-  PieChart,
-  ScatterChart,
+  SingleLineChart,
+  SinglePieChart,
+  SingleScatterChart,
 };
 
 import Dialog from "./dialog.component";

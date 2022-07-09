@@ -1,4 +1,4 @@
-const colors: string[] = [
+export const defaultColors: string[] = [
   "skyBlue",
   "royalBlue",
   "darkBlue",
@@ -22,4 +22,23 @@ const colors: string[] = [
   "thistle",
 ];
 
-export default colors;
+export function getSingleChartColor(color: string = defaultColors[0]) {
+  return {
+    backgroundColor: color,
+    borderColor: color,
+  };
+}
+
+export function getMultipleChartColors(
+  config: {
+    colors?: string[];
+    index?: number;
+  } = {}
+) {
+  const { index = 0, colors = defaultColors } = config;
+  const result = index < colors.length ? colors[index] : colors[0];
+  return {
+    backgroundColor: result,
+    borderColor: result,
+  };
+}
