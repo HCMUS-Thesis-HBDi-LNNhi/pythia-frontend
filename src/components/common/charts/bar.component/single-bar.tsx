@@ -11,17 +11,23 @@ interface Props {
 }
 
 export default function SingleBarChart(props: Props): JSX.Element {
+  const formatLabels = () => {
+    return props.labels.map((label) => {
+      if (label === "n/a" || label === "") return "Others";
+      if (label.length > 5) return label;
+      return label;
+    });
+  };
   return (
     <Bar
       data={{
-        labels: props.labels,
+        labels: formatLabels(),
         datasets: props.datasets.map((value) => ({
           ...value,
           ...getSingleChartColor(),
         })),
       }}
       options={{
-        ...props.options,
         scales: {
           x: {
             title: {
@@ -42,6 +48,19 @@ export default function SingleBarChart(props: Props): JSX.Element {
             },
           },
         },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                return tooltipItems.map(
+                  (value) => value.label + ": " + value.formattedValue
+                );
+              },
+              label: () => "",
+            },
+          },
+        },
+        ...props.options,
       }}
     />
   );
