@@ -1,4 +1,4 @@
-import { defaultColors } from "const/colors.const";
+import { divergingColors } from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
 import { Pie } from "react-chartjs-2";
 
@@ -26,7 +26,7 @@ export default function SinglePieChart(props: Props): JSX.Element {
         datasets: [
           {
             ...props.datasets,
-            backgroundColor: defaultColors,
+            backgroundColor: divergingColors,
             borderWidth: 1,
           },
         ],
