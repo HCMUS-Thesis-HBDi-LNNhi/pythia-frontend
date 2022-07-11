@@ -25,6 +25,7 @@
     "react-dom": "18.0.0",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
     "usehooks-ts": "^2.5.1"
   },
