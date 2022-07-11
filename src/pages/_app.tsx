@@ -1,14 +1,19 @@
 import "../styles/globals.css";
+
 import type { AppProps } from "next/app";
-import { useInterval, useReadLocalStorage } from "usehooks-ts";
-import { fetcher } from "utils/fetcher.utils";
-import API from "const/api.const";
 import { useRouter } from "next/router";
+import { Provider } from "react-redux";
+import { useInterval, useReadLocalStorage } from "usehooks-ts";
+
+import API from "const/api.const";
+import { fetcher } from "utils/fetcher.utils";
 import handleErrors from "utils/errors.utils";
+import { store, wrapper } from "store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const viewMode = useReadLocalStorage("view-mode");
+
   useInterval(async () => {
     try {
       if (viewMode === "user") await fetcher.get(API.GET.healthCheck);
@@ -17,7 +22,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, 600000);
 
-  return <Component {...pageProps} />;
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
