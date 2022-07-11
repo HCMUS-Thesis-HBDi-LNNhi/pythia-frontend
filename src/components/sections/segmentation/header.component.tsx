@@ -1,12 +1,14 @@
-import { Button, Input, Tag, UploadButton } from "components/common";
-import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { TagColor } from "interfaces/common.interface";
-import icons from "const/icons.const";
-import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import handleErrors from "utils/errors.utils";
+import { useSelector } from "react-redux";
+
+import { Button, Input, Tag, UploadButton } from "components/common";
+import icons from "const/icons.const";
 import Errors from "const/error.const";
+import { RetainModel } from "interfaces/segmentation.interface";
+import { TagColor } from "interfaces/common.interface";
+import { IState } from "interfaces/store.interface";
+import handleErrors from "utils/errors.utils";
 
 interface Props {
   selectedModel: RetainModel;
@@ -18,7 +20,7 @@ interface Props {
 
 export default function Header(props: Props): JSX.Element {
   const router = useRouter();
-  const userID = useReadLocalStorage<string>("user-id");
+  const userID = useSelector((state: IState) => state.config.userID);
 
   useEffect(() => {
     if (!userID) handleErrors(Errors[401], router);

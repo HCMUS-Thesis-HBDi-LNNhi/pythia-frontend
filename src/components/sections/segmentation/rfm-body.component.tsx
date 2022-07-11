@@ -1,15 +1,16 @@
 import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+
 import { BarChart, Pane, ScatterChart } from "components/common";
 import { FactDataLabels } from "interfaces/data.interface";
-import {
-  initialRFMResponse,
-  IRFMResponse,
-} from "interfaces/segmentation.interface";
-import { fetchRFMResult } from "./fetcher";
-import { getDatasets } from "utils/handleData/handleRFMData";
-import { useRouter } from "next/router";
-import handleErrors from "utils/errors.utils";
+import { IRFMResponse } from "interfaces/segmentation.interface";
 import Errors from "const/error.const";
+import { IState } from "interfaces/store.interface";
+import handleErrors from "utils/errors.utils";
+import { getDatasets } from "utils/handleData/handleRFMData";
+import { fetchRFMResult } from "./fetcher";
+import { updateRFMResult } from "store/segmentation/actions";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -32,26 +33,30 @@ const RFMItems = (props: {
 };
 
 interface Props {
-  userID: string | null;
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
 }
 
 export default function RFMBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [rfmResult, setRFMResult] = useState<IRFMResponse>(initialRFMResponse);
+  const dispatch = useDispatch();
+  const userID = useSelector((state: IState) => state.config.userID);
+  const rfmResult = useSelector(
+    (state: IState) => state.segmentation.rfmResult
+  );
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!props.userID) {
+    if (!userID) {
       handleErrors(Errors[401], router);
       return;
     }
-    fetchRFMResult(props.userID, props.setLoading, router).then(
-      (value) => value && setRFMResult(value)
+    if (rfmResult) return;
+    fetchRFMResult(userID, props.setLoading, router).then(
+      (value) => value && updateRFMResult(value)(dispatch)
     );
     // eslint-disable-next-line
-  }, [props.userID]);
+  }, [userID]);
 
   useEffect(() => {
     setTooltipLabels(

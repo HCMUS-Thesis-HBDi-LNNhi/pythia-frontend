@@ -1,21 +1,29 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useReadLocalStorage } from "usehooks-ts";
-import icons from "const/icons.const";
-import { Button, ChartBody } from "components/common";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+
 import ChartContainer from "./chart-container.component";
+import { Button, ChartBody } from "components/common";
+import icons from "const/icons.const";
+import Errors from "const/error.const";
+import API from "const/api.const";
 import { IChartData, IChartResponse } from "interfaces/chart.interface";
+import { PageLabels } from "interfaces/common.interface";
+import { IState } from "interfaces/store.interface";
 import {
   CategoryDataLabels,
   FactDataLabels,
   IData,
 } from "interfaces/data.interface";
-import { useRouter } from "next/router";
-import { PageLabels } from "interfaces/common.interface";
-import Errors from "const/error.const";
+import { handleDelete, normalizedData } from "utils/charts.utils";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
-import API from "const/api.const";
-import { handleDelete, normalizedData } from "utils/charts.utils";
 
 interface Props {
   data: IData;
@@ -24,10 +32,10 @@ interface Props {
 
 export default function ChartList(props: Props): JSX.Element {
   const router = useRouter();
-  const userID = useReadLocalStorage<string>("user-id");
+  const userID = useSelector((state: IState) => state.config.userID);
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!userID) {
       handleErrors(Errors[401], router);
       return;
@@ -44,7 +52,7 @@ export default function ChartList(props: Props): JSX.Element {
     } finally {
       props.setLoading(false);
     }
-  };
+  }, [userID]);
 
   const renderChart = (chartData: IChartData) => {
     const from = chartData.quarters.from + "_" + chartData.years.from;
@@ -72,8 +80,7 @@ export default function ChartList(props: Props): JSX.Element {
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line
-  }, []);
+  }, [userID, fetchData]);
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2">

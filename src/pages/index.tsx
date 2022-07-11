@@ -1,25 +1,23 @@
-import { PageLabels, ViewMode } from "interfaces/common.interface";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
+
+import { PageLabels } from "interfaces/common.interface";
+import { updateUserID } from "store/config/actions";
 
 export default function Router(): void {
   const router = useRouter();
-  const viewMode = useReadLocalStorage<ViewMode | undefined>("view-mode");
-  const [_userID, setUserID] = useLocalStorage<string | undefined>(
-    "user-id",
-    undefined
-  );
-  const [_token, setToken] = useLocalStorage<string | undefined>(
-    "token",
-    undefined
-  );
+  const dispatch = useDispatch();
+  const viewMode = useReadLocalStorage("view-mode");
+  const [_, setToken] = useLocalStorage("token", "");
+
   useEffect(() => {
     switch (viewMode) {
       case "user":
         const { token, user_id } = router.query;
         if (token && user_id) {
-          setUserID(user_id.toString());
+          updateUserID(user_id.toString())(dispatch);
           setToken(token.toString());
         }
         router.push(`/${PageLabels.HOME}`);
@@ -30,5 +28,5 @@ export default function Router(): void {
         router.push(`/${PageLabels.LOGIN}`);
         return;
     }
-  }, [router, viewMode, setUserID, setToken]);
+  }, [router, viewMode]);
 }

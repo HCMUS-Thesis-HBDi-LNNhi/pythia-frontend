@@ -8,7 +8,8 @@ export default function handleErrors(error: any, router: NextRouter) {
   switch (error) {
     case Errors[401]:
       toast("Your session has expired, please login again!", "failure");
-      localStorage.clear();
+      // TODO: clear store
+      window.localStorage.clear();
       router.push(`/${PageLabels.LOGIN}`);
       break;
     case Errors.geoError:

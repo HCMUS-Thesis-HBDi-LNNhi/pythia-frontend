@@ -1,24 +1,26 @@
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+
 import { Layout } from "components/common";
 import Errors from "const/error.const";
 import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
-import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
-import { useReadLocalStorage } from "usehooks-ts";
+import { IState } from "interfaces/store.interface";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
 import { formatDate } from "utils/formatter.utils";
 
 export default function Profile(): JSX.Element {
   const router = useRouter();
-  const userId = useReadLocalStorage<string>("user-id");
+  const userID = useSelector((state: IState) => state.config.userID);
   const [history, setHistory] = useState<IHistory[]>();
   const [isLoading, setLoading] = useState(false);
 
   const fetchHistory = useCallback(
-    async (userId: string) => {
+    async (userID: string) => {
       try {
         setLoading(true);
-        const response = await fetcher.get(`/users/${userId}/files`);
+        const response = await fetcher.get(`/users/${userID}/files`);
         const responseData: IHistoryResponse = response.data;
         setHistory(
           responseData.files.map((value) => {
@@ -39,12 +41,12 @@ export default function Profile(): JSX.Element {
   );
 
   useEffect(() => {
-    if (!userId) {
+    if (!userID) {
       handleErrors(Errors[401], router);
     } else {
-      fetchHistory(userId);
+      fetchHistory(userID);
     }
-  }, [userId, router, fetchHistory]);
+  }, [userID, router, fetchHistory]);
 
   return (
     <Layout

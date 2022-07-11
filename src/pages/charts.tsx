@@ -1,3 +1,7 @@
+import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+
 import {
   Layout,
   Pane,
@@ -8,19 +12,19 @@ import {
 import { initialChartOptions } from "const/chart.const";
 import Errors from "const/error.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
-import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
-import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
-import { useReadLocalStorage } from "usehooks-ts";
+import { IDimCustomer, IFactData } from "interfaces/data.interface";
+import { IState } from "interfaces/store.interface";
 import { handleCreateChart } from "utils/charts.utils";
 import handleErrors from "utils/errors.utils";
 import { handleFetchData } from "utils/handleData";
+import { updateWarehouse } from "store/warehouse/actions";
 
 export default function Charts(): JSX.Element {
   const router = useRouter();
-  const userID = useReadLocalStorage<string>("user-id");
+  const dispatch = useDispatch();
+  const userID = useSelector((state: IState) => state.config.userID);
+  const data = useSelector((state: IState) => state.warehouse);
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState<IData>();
   const [chartType, setChartType] = useState<ChartType>(ChartType.bar);
   const [chartOptions, setChartOptions] =
     useState<IChartOptions>(initialChartOptions);
@@ -51,7 +55,7 @@ export default function Charts(): JSX.Element {
     !userID
       ? handleErrors(Errors[401], router)
       : handleFetchData(userID, setLoading, router).then(
-          (res) => res && setData(res)
+          (res) => res && updateWarehouse(res)(dispatch)
         );
   }, [userID, router]);
 

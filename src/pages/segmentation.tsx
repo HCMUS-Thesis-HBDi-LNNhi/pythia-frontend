@@ -2,11 +2,9 @@ import { Header, RFMBody } from "components/sections/segmentation";
 import { Layout } from "components/common";
 import { useState } from "react";
 import { RetainModel } from "interfaces/segmentation.interface";
-import { useReadLocalStorage } from "usehooks-ts";
-import BGNBDBody from "components/sections/segmentation/bgnbd-body.component";
+import { BGNBDBody } from "components/sections/segmentation";
 
 export default function Segmentation(): JSX.Element {
-  const userID = useReadLocalStorage<string>("user-id");
   const [isLoading, setLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState<RetainModel>(
     RetainModel.rfm
@@ -27,17 +25,9 @@ export default function Segmentation(): JSX.Element {
         setDisplayGrid={setDisplayGrid}
       />
       {selectedModel === RetainModel.bg_nbd ? (
-        <BGNBDBody
-          userID={userID}
-          setLoading={setLoading}
-          displayGrid={displayGrid}
-        />
+        <BGNBDBody setLoading={setLoading} displayGrid={displayGrid} />
       ) : (
-        <RFMBody
-          userID={userID}
-          setLoading={setLoading}
-          displayGrid={displayGrid}
-        />
+        <RFMBody setLoading={setLoading} displayGrid={displayGrid} />
       )}
     </Layout>
   );

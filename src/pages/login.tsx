@@ -1,23 +1,17 @@
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useLocalStorage } from "usehooks-ts";
+
 import { Button, Loading } from "components/common";
 import API from "const/api.const";
 import icons from "const/icons.const";
-import {
-  ILoginMethod,
-  PageLabels,
-  ViewMode,
-} from "interfaces/common.interface";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import { ILoginMethod } from "interfaces/common.interface";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
-  const [_viewMode, setViewMode] = useLocalStorage<ViewMode | undefined>(
-    "view-mode",
-    undefined
-  );
+  const [_, setViewMode] = useLocalStorage("view-mode", "");
   const [isLoading, setLoading] = useState(false);
 
   const loginMethods: ILoginMethod[] = [
@@ -53,6 +47,7 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     window.localStorage.clear();
+    // TODO: clear store
   }, []);
 
   return (

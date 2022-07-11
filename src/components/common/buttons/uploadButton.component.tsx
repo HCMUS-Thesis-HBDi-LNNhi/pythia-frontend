@@ -1,11 +1,13 @@
-import Errors from "const/error.const";
-import { FileType } from "interfaces/utils.interface";
-import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+
+import Button from "./button.component";
+import Errors from "const/error.const";
+import { IState } from "interfaces/store.interface";
+import { FileType } from "interfaces/utils.interface";
 import handleErrors from "utils/errors.utils";
 import { handleUpload } from "utils/uploadFile.utils";
-import Button from "./button.component";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -15,7 +17,7 @@ interface Props {
 
 export default function UploadButton(props: Props) {
   const router = useRouter();
-  const userID = useReadLocalStorage<string>("user-id");
+  const userID = useSelector((state: IState) => state.config.userID);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
 

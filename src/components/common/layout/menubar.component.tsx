@@ -1,17 +1,17 @@
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useReadLocalStorage } from "usehooks-ts";
+
 import icons from "const/icons.const";
 import { menuItems } from "const/pages.const";
-import { IMenuItem, PageLabels, ViewMode } from "interfaces/common.interface";
-import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
-import { useReadLocalStorage } from "usehooks-ts";
+import { IMenuItem, PageLabels } from "interfaces/common.interface";
 
 const Link = dynamic(() => import("next/link"), { ssr: false });
 
 export default function MenuBar(): JSX.Element {
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const viewMode: ViewMode | null = useReadLocalStorage("view-mode");
+  const viewMode = useReadLocalStorage("view-mode");
   const [isHover, setIsHover] = useState(false);
-
   const [items] = useState<IMenuItem[]>(getMenuItem());
 
   function getMenuItem(): IMenuItem[] {

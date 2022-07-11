@@ -1,15 +1,15 @@
-import { Pane } from "components/common";
-import ScatterChart from "components/common/charts/scatter";
-import Errors from "const/error.const";
-import {
-  IBGNBDResponse,
-  IBGNBDResult,
-  initialBGNBDResponse,
-} from "interfaces/segmentation.interface";
-import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
+
+import ScatterChart from "components/common/charts/scatter";
+import { Pane } from "components/common";
+import Errors from "const/error.const";
+import { IBGNBDResult } from "interfaces/segmentation.interface";
+import { IState } from "interfaces/store.interface";
 import handleErrors from "utils/errors.utils";
 import { fetchBGNBDResult } from "./fetcher";
+import { updateBGNBDResult } from "store/segmentation/actions";
 
 const getMiddleValue = (
   value: { min: number; max: number },
@@ -93,27 +93,30 @@ const BGNBDItems = (props: {
 };
 
 interface Props {
-  userID: string | null;
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [bgnbdResult, setBGNBDResult] =
-    useState<IBGNBDResponse>(initialBGNBDResponse);
+  const dispatch = useDispatch();
+  const userID = useSelector((state: IState) => state.config.userID);
+  const bgnbdResult = useSelector(
+    (state: IState) => state.segmentation.bgnbdResult
+  );
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!props.userID) {
+    if (!userID) {
       handleErrors(Errors[401], router);
       return;
     }
-    fetchBGNBDResult(props.userID, props.setLoading, router).then(
-      (value) => value && setBGNBDResult(value)
+    if (bgnbdResult) return;
+    fetchBGNBDResult(userID, props.setLoading, router).then(
+      (value) => value && updateBGNBDResult(value)(dispatch)
     );
     // eslint-disable-next-line
-  }, [props.userID]);
+  }, [userID]);
 
   useEffect(() => {
     setTooltipLabels(
