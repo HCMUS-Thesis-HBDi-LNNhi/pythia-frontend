@@ -77,11 +77,6 @@ export interface IDataset {
   data: number[];
 }
 
-export interface IScatterDataset {
-  label: string;
-  data: { x: number; y: number }[];
-}
-
 export interface ICustomerDemographic {
   customerID: string;
   // dob: Date; => receive dob from DB & calculate age ???

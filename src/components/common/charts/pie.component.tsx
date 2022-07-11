@@ -1,4 +1,4 @@
-import { divergingColors } from "const/colors.const";
+import { qualitativeColors } from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
 import { Pie } from "react-chartjs-2";
 
@@ -10,7 +10,7 @@ interface Props {
   displayLegend?: boolean;
 }
 
-export default function SinglePieChart(props: Props): JSX.Element {
+export default function PieChart(props: Props): JSX.Element {
   return (
     <Pie
       options={{
@@ -26,7 +26,7 @@ export default function SinglePieChart(props: Props): JSX.Element {
         datasets: [
           {
             ...props.datasets,
-            backgroundColor: divergingColors,
+            backgroundColor: qualitativeColors,
             borderWidth: 1,
           },
         ],

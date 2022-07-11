@@ -1,24 +1,29 @@
 import { getSingleChartColor } from "const/colors.const";
-import { IScatterDataset, XAxisType } from "interfaces/chart.interface";
+import { IDataset, XAxisType } from "interfaces/chart.interface";
 import { Scatter } from "react-chartjs-2";
 import { getCategoryLabels } from "utils/category.utils";
 
 interface Props {
-  datasets: IScatterDataset[];
+  datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
   tooltipLabels?: string[];
   category?: XAxisType;
 }
 
-export default function SingleScatterChart(props: Props): JSX.Element {
+export default function ScatterChart(props: Props): JSX.Element {
   return (
     <Scatter
       data={{
         datasets: props.datasets.map((value) => ({
-          ...value,
           ...getSingleChartColor(),
           label: getCategoryLabels(value.label),
+          data: [
+            {
+              x: value.data[0],
+              y: value.data[1],
+            },
+          ],
         })),
       }}
       options={{
@@ -40,7 +45,6 @@ export default function SingleScatterChart(props: Props): JSX.Element {
                 weight: "bold",
               },
             },
-            beginAtZero: true,
           },
         },
         plugins: {

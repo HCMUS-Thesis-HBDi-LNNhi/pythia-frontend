@@ -16,8 +16,9 @@ export enum Age {
 }
 
 export enum Transaction {
-  under6 = "Under 6 transactions",
-  over6 = "Over 6 transactions",
+  under = "Under",
+  mid = "Middle",
+  upper = "Upper",
 }
 
 export enum FactDataLabels {

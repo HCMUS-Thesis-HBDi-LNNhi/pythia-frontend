@@ -1,4 +1,4 @@
-import { Pane, SingleScatterChart } from "components/common";
+import { Pane, ScatterChart } from "components/common";
 import Errors from "const/error.const";
 import {
   IBGNBDResponse,
@@ -69,7 +69,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
   return (
     <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
       <BGNBDItems label="Grouped by number of transactions">
-        <SingleScatterChart
+        <ScatterChart
           xLabel="Prediction"
           yLabel="Total observation time"
           datasets={Array.from(getMap("T"))
@@ -81,7 +81,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
         />
       </BGNBDItems>
       <BGNBDItems label="Grouped by number of transactions">
-        <SingleScatterChart
+        <ScatterChart
           xLabel="Prediction"
           yLabel="Time of last transaction"
           datasets={Array.from(getMap("t_x"))

@@ -1,9 +1,4 @@
-import {
-  ChartType,
-  IChartOptions,
-  IDataset,
-  IScatterDataset,
-} from "interfaces/chart.interface";
+import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
 import { CategoryDataLabels, IData } from "interfaces/data.interface";
 import { handle2DData } from "utils/handleData";
 
@@ -25,29 +20,16 @@ export const get2DDatasets = (
   data: IData,
   chartType: ChartType,
   chartOptions: IChartOptions
-): IDataset[] | IScatterDataset[] => {
+): IDataset[] => {
   const input = handle2DData(data, chartType, chartOptions, xKeys);
-  //FIXME: Better scatter chart
-  if (chartType === ChartType.scatter) {
-    const newDatasets: IScatterDataset[] = [];
-    input.forEach((value, key) => {
-      newDatasets.push({
-        label: key,
-        data: [{ x: value[0], y: value[1] }],
-      });
-    });
-    return newDatasets;
-  } else if (chartType === ChartType.geo) {
-    return Array.from(input.entries()).map((value) => ({
-      label: value[0],
-      data: value[1],
-    }));
+  const entries = Array.from(input.entries());
+  if (chartType === ChartType.scatter || chartType === ChartType.geo) {
+    return entries.map(([label, data]) => ({ label, data }));
   } else {
-    const inputValues = Array.from(input.values());
     return [
       {
         label: CategoryDataLabels[chartOptions.x],
-        data: inputValues.map((value) => value[0]),
+        data: entries.map(([_, data]) => data[0]),
       },
     ];
   }

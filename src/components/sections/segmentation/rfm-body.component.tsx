@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { BarChart, Pane, ScatterChart } from "components/common";
+import { SingleBarChart, Pane, ScatterChart } from "components/common";
 import { FactDataLabels } from "interfaces/data.interface";
 import {
   initialRFMResponse,
@@ -60,9 +60,14 @@ export default function RFMBody(props: Props): JSX.Element {
   }, [rfmResult]);
 
   return (
-    <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
+    <div
+      className={[
+        "grid gap-2",
+        props.displayGrid ? "grid-cols-2 " : "grid-cols-1",
+      ].join(" ")}
+    >
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <BarChart
+        <SingleBarChart
           labels={Object.keys(rfmResult.clv).map((_, i) => "Group " + (i + 1))}
           datasets={[
             {

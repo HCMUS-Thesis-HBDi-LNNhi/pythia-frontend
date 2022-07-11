@@ -1,9 +1,4 @@
-import {
-  ChartType,
-  IChartOptions,
-  IDataset,
-  IScatterDataset,
-} from "interfaces/chart.interface";
+import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
 import {
   IData,
   CategoryDataLabels,
@@ -13,9 +8,9 @@ import { useEffect, useState } from "react";
 import { getXKeys } from "utils/handleData";
 import { get2DDatasets, get3DDatasets, getLabels } from "./helper.utils";
 import { SingleBarChart } from "./bar.component";
-import { SingleScatterChart } from "./scatter.component";
 import { SingleLineChart } from "./line.component";
-import { SinglePieChart } from "./pie.component";
+import PieChart from "./pie.component";
+import ScatterChart from "./scatter.component";
 import GeoChart from "./geo.component";
 
 interface Props {
@@ -27,7 +22,7 @@ interface Props {
 export default function ChartBody(props: Props): JSX.Element {
   const { data, chartType, chartOptions } = props;
   const [labels, setLabels] = useState<string[]>([]);
-  const [datasets, setDatasets] = useState<IDataset[] | IScatterDataset[]>([]);
+  const [datasets, setDatasets] = useState<IDataset[]>([]);
 
   useEffect(() => {
     const xKeys = getXKeys(data, chartOptions);
@@ -43,7 +38,6 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <SingleBarChart
           labels={labels}
-          //@ts-ignore
           datasets={datasets}
           xLabel={CategoryDataLabels[chartOptions.x]}
           yLabel={FactDataLabels[chartOptions.y]}
@@ -54,7 +48,6 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <SingleLineChart
           labels={labels}
-          //@ts-ignore
           datasets={datasets}
           xLabel={CategoryDataLabels[chartOptions.x]}
           yLabel={FactDataLabels[chartOptions.y]}
@@ -64,19 +57,13 @@ export default function ChartBody(props: Props): JSX.Element {
       return (
         <>
           {datasets.map((dataset) => (
-            <SinglePieChart
-              labels={labels}
-              //@ts-ignore
-              datasets={dataset}
-              key={dataset.label}
-            />
+            <PieChart labels={labels} datasets={dataset} key={dataset.label} />
           ))}
         </>
       );
     case ChartType.scatter:
       return (
-        <SingleScatterChart
-          //@ts-ignore
+        <ScatterChart
           datasets={datasets}
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
@@ -84,7 +71,6 @@ export default function ChartBody(props: Props): JSX.Element {
         />
       );
     case ChartType.geo:
-      //@ts-ignore
       return <GeoChart datasets={datasets} />;
     default:
       return <div>Wrong chart type</div>;
