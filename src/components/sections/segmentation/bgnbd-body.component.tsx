@@ -1,4 +1,4 @@
-import { Pane, ScatterChart } from "components/common";
+import { Pane } from "components/common";
 import Errors from "const/error.const";
 import {
   IBGNBDResponse,
@@ -8,6 +8,7 @@ import {
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import handleErrors from "utils/errors.utils";
+import { ScatterChart } from "../charts";
 import { fetchBGNBDResult } from "./fetcher";
 
 const BGNBDItems = (props: {

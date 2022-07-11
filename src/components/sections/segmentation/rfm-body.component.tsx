@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import { SingleBarChart, Pane, ScatterChart } from "components/common";
+import { Pane } from "components/common";
 import { FactDataLabels } from "interfaces/data.interface";
 import {
   initialRFMResponse,
@@ -10,6 +10,7 @@ import { getDatasets } from "utils/handleData/handleRFMData";
 import { useRouter } from "next/router";
 import handleErrors from "utils/errors.utils";
 import Errors from "const/error.const";
+import { ScatterChart, SingleBarChart } from "../charts";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(

@@ -1,10 +1,9 @@
+import { Layout, Pane } from "components/common";
 import {
-  Layout,
-  Pane,
-  ChartHeader,
   ChartBody,
+  ChartHeader,
   ChartOptions,
-} from "components/common";
+} from "components/sections/charts";
 import { initialChartOptions } from "const/chart.const";
 import Errors from "const/error.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";

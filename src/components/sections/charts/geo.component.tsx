@@ -3,7 +3,7 @@ import { topojson } from "chartjs-chart-geo";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IDataset, IFeature } from "interfaces/chart.interface";
 import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
-import Button from "../buttons/button.component";
+import Button from "../../common/buttons/button.component";
 import icons from "const/icons.const";
 import MAP_JSON from "const/map.const";
 import handleErrors from "utils/errors.utils";

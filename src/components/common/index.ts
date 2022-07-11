@@ -15,26 +15,6 @@ import Select from "./inputs/select.component";
 
 export { Input, Radio, Select };
 
-import ChartHeader from "./charts/header.component";
-import ChartBody from "./charts/body.component";
-import ChartOptions from "./charts/options.component";
-import { SingleBarChart } from "./charts/bar.component";
-import { SingleLineChart } from "./charts/line.component";
-import PieChart from "./charts/pie.component";
-import ScatterChart from "./charts/scatter.component";
-import GeoChart from "./charts/geo.component";
-
-export {
-  ChartHeader,
-  ChartBody,
-  ChartOptions,
-  SingleBarChart,
-  GeoChart,
-  SingleLineChart,
-  PieChart,
-  ScatterChart,
-};
-
 import Dialog from "./dialog.component";
 import Tag from "./tag.component";
 import Textarea from "./textarea.component";
