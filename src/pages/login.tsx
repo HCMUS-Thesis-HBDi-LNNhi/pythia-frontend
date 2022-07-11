@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import { useLocalStorage } from "usehooks-ts";
 
 import { Button, Loading } from "components/common";
@@ -8,9 +9,11 @@ import icons from "const/icons.const";
 import { ILoginMethod } from "interfaces/common.interface";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
+import { reset } from "store/root/actions";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [_, setViewMode] = useLocalStorage("view-mode", "");
   const [isLoading, setLoading] = useState(false);
 
@@ -47,7 +50,7 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     window.localStorage.clear();
-    // TODO: clear store
+    reset()(dispatch);
   }, []);
 
   return (

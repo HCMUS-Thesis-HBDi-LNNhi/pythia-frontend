@@ -2,16 +2,17 @@ import {
   initialBGNBDResponse,
   initialRFMResponse,
 } from "interfaces/segmentation.interface";
+import { ISegmentation } from "interfaces/store.interface";
 import { AnyAction } from "redux";
 import * as actions from "./actions";
 
-const initialState = {
+export const segmentationInitialState: ISegmentation = {
   rfmResult: initialRFMResponse,
   bgnbdResult: initialBGNBDResponse,
 };
 
 export const segmentationReducers = (
-  state = initialState,
+  state = segmentationInitialState,
   action: AnyAction
 ) => {
   switch (action.type) {

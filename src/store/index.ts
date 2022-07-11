@@ -15,6 +15,7 @@ import {
 import { configReducers } from "./config/reducers";
 import { segmentationReducers } from "./segmentation/reducers";
 import { warehouseReducers } from "./warehouse/reducers";
+import { rootReducers } from "./root/reducers";
 
 const persistConfig = {
   key: "store",
@@ -22,15 +23,14 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
+  root: rootReducers,
   warehouse: warehouseReducers,
   segmentation: segmentationReducers,
   config: configReducers,
 });
 
-const persistedReducer = persistReducer(persistConfig, reducers);
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: persistReducer(persistConfig, reducers),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       immutableCheck: false,

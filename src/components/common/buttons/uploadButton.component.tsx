@@ -8,6 +8,9 @@ import { IState } from "interfaces/store.interface";
 import { FileType } from "interfaces/utils.interface";
 import handleErrors from "utils/errors.utils";
 import { handleUpload } from "utils/uploadFile.utils";
+import { useDispatch } from "react-redux";
+import { handleFetchData } from "utils/handleData";
+import { updateWarehouse } from "store/warehouse/actions";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -17,6 +20,7 @@ interface Props {
 
 export default function UploadButton(props: Props) {
   const router = useRouter();
+  const dispatch = useDispatch();
   const userID = useSelector((state: IState) => state.config.userID);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -28,6 +32,9 @@ export default function UploadButton(props: Props) {
     }
     if (file) {
       handleUpload(file, userID, props.fileType, props.setLoading, router);
+      handleFetchData(userID, props.setLoading, router).then(
+        (res) => res && updateWarehouse(res)(dispatch)
+      );
     }
   }, [file, props, router, userID]);
 
