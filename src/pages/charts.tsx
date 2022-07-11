@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
   Layout,
@@ -16,12 +16,9 @@ import { IDimCustomer, IFactData } from "interfaces/data.interface";
 import { IState } from "interfaces/store.interface";
 import { handleCreateChart } from "utils/charts.utils";
 import handleErrors from "utils/errors.utils";
-import { handleFetchData } from "utils/handleData";
-import { updateWarehouse } from "store/warehouse/actions";
 
 export default function Charts(): JSX.Element {
   const router = useRouter();
-  const dispatch = useDispatch();
   const userID = useSelector((state: IState) => state.config.userID);
   const data = useSelector((state: IState) => state.warehouse);
   const [isLoading, setLoading] = useState(false);
@@ -50,14 +47,6 @@ export default function Charts(): JSX.Element {
       });
     }
   }, [router.query]);
-
-  useEffect(() => {
-    !userID
-      ? handleErrors(Errors[401], router)
-      : handleFetchData(userID, setLoading, router).then(
-          (res) => res && updateWarehouse(res)(dispatch)
-        );
-  }, [userID, router]);
 
   useEffect(() => {
     normalizedQuery();

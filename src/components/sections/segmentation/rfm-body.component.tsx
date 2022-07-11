@@ -1,16 +1,11 @@
 import { ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { BarChart, Pane, ScatterChart } from "components/common";
 import { FactDataLabels } from "interfaces/data.interface";
 import { IRFMResponse } from "interfaces/segmentation.interface";
-import Errors from "const/error.const";
 import { IState } from "interfaces/store.interface";
-import handleErrors from "utils/errors.utils";
 import { getDatasets } from "utils/handleData/handleRFMData";
-import { fetchRFMResult } from "./fetcher";
-import { updateRFMResult } from "store/segmentation/actions";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -38,31 +33,12 @@ interface Props {
 }
 
 export default function RFMBody(props: Props): JSX.Element {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const userID = useSelector((state: IState) => state.config.userID);
   const rfmResult = useSelector(
     (state: IState) => state.segmentation.rfmResult
   );
-  const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!userID) {
-      handleErrors(Errors[401], router);
-      return;
-    }
-    if (rfmResult) return;
-    fetchRFMResult(userID, props.setLoading, router).then(
-      (value) => value && updateRFMResult(value)(dispatch)
-    );
-    // eslint-disable-next-line
-  }, [userID]);
-
-  useEffect(() => {
-    setTooltipLabels(
-      Object.values(rfmResult.rfm.customer_id).map((v) => "Customer ID: " + v)
-    );
-  }, [rfmResult]);
+  const [tooltipLabels] = useState<string[]>(
+    Object.values(rfmResult.rfm.customer_id).map((v) => "Customer ID: " + v)
+  );
 
   return (
     <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>

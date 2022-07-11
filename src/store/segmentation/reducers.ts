@@ -17,9 +17,9 @@ export const segmentationReducers = (
 ) => {
   switch (action.type) {
     case actions.UPDATE_RFM_RESULT:
-      return Object.assign({}, state, { rfmResult: action.rfmResult });
+      return { ...state, rfmResult: action.rfmResult };
     case actions.UPDATE_BGNBD_RESULT:
-      return Object.assign({}, state, { bgnbdResult: action.bgnbdResult });
+      return { ...state, bgnbdResult: action.bgnbdResult };
     default:
       return state;
   }

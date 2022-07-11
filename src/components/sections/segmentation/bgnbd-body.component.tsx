@@ -1,15 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import ScatterChart from "components/common/charts/scatter";
 import { Pane } from "components/common";
-import Errors from "const/error.const";
 import { IBGNBDResult } from "interfaces/segmentation.interface";
 import { IState } from "interfaces/store.interface";
-import handleErrors from "utils/errors.utils";
-import { fetchBGNBDResult } from "./fetcher";
-import { updateBGNBDResult } from "store/segmentation/actions";
 
 const getMiddleValue = (
   value: { min: number; max: number },
@@ -98,31 +93,12 @@ interface Props {
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const userID = useSelector((state: IState) => state.config.userID);
   const bgnbdResult = useSelector(
     (state: IState) => state.segmentation.bgnbdResult
   );
-  const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!userID) {
-      handleErrors(Errors[401], router);
-      return;
-    }
-    if (bgnbdResult) return;
-    fetchBGNBDResult(userID, props.setLoading, router).then(
-      (value) => value && updateBGNBDResult(value)(dispatch)
-    );
-    // eslint-disable-next-line
-  }, [userID]);
-
-  useEffect(() => {
-    setTooltipLabels(
-      Object.values(bgnbdResult.bgnbd).map((v) => "Customer ID: " + v.id)
-    );
-  }, [bgnbdResult]);
+  const [tooltipLabels] = useState<string[]>(
+    Object.values(bgnbdResult.bgnbd).map((v) => "Customer ID: " + v.id)
+  );
 
   const getMap = (key: keyof IBGNBDResult) => {
     const map = new Map();
