@@ -27,19 +27,16 @@ export default function Charts(): JSX.Element {
   useEffect(() => {
     !userID
       ? handleErrors(Errors[401], router)
-      : handleFetchData(userID, setLoading, router).then(
-          (res) => res && setData(res)
-        );
+      : handleFetchData(userID, setLoading, router).then((res) => {
+          if (!res) return;
+          setData(res);
+          const sortedYears = res.dim_dates.sort((a, b) => a.year - b.year);
+          setChartOptions({
+            ...chartOptions,
+            years: { from: sortedYears[0].year, to: sortedYears[1].year },
+          });
+        });
   }, [userID, router]);
-
-  useEffect(() => {
-    if (!data) return;
-    const sortedYears = data.dim_dates.sort((a, b) => a.year - b.year);
-    setChartOptions({
-      ...chartOptions,
-      years: { from: sortedYears[0].year, to: sortedYears[1].year },
-    });
-  }, [data]);
 
   return (
     <Layout title="Charts" isLoading={isLoading}>
