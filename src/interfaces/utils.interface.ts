@@ -1,1 +1,1 @@
-export type FileType = "demographic" | "transaction";
+export type FileType = "demographic" | "transaction" | "classification";

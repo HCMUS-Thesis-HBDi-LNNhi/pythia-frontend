@@ -34,7 +34,7 @@ export default function Header(props: Props): JSX.Element {
             Templates
           </a>
         </Button>
-        <UploadButton setLoading={props.setLoading} fileType="demographic" />
+        <UploadButton setLoading={props.setLoading} fileType="classification" />
         <div className="flex items-center justify-end ml-2">
           <button
             className={[
