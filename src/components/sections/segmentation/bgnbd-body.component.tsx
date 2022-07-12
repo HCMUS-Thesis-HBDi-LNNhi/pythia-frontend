@@ -134,7 +134,12 @@ export default function BGNBDBody(props: Props): JSX.Element {
   };
 
   return (
-    <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
+    <div
+      className={[
+        "grid gap-2",
+        props.displayGrid ? " grid-cols-2" : "grid-cols-1",
+      ].join(" ")}
+    >
       <BGNBDItems label="Grouped by number of transactions">
         <ScatterChart
           xLabel="Prediction"

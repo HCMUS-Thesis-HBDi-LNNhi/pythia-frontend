@@ -6,7 +6,7 @@ interface Props {
   labels: string[];
   /** Datasets length must be under 4 */
   /** Data must be from 0 to 1 */
-  datasets: IDataset;
+  datasets: IDataset[];
   displayLegend?: boolean;
 }
 
@@ -25,7 +25,7 @@ export default function PieChart(props: Props): JSX.Element {
         labels: props.labels,
         datasets: [
           {
-            ...props.datasets,
+            ...props.datasets[0],
             backgroundColor: colors,
             borderWidth: 1,
           },

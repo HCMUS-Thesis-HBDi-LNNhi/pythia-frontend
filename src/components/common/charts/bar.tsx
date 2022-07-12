@@ -35,7 +35,7 @@ export default function BarChart(props: Props): JSX.Element {
           },
           y: {
             title: {
-              display: !!props.xLabel,
+              display: !!props.yLabel,
               text: props.yLabel,
               font: {
                 weight: "bold",

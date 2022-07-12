@@ -1,9 +1,5 @@
 import { IDimCustomer, IFactData } from "./data.interface";
 
-export type MetricType =
-  | keyof ICustomerDemographic
-  | keyof ICustomerTransaction;
-
 export enum ChartType {
   bar = "bar",
   pie = "pie",
@@ -80,29 +76,6 @@ export interface IDataset {
 export interface IScatterDataset {
   label: string;
   data: { x: number; y: number }[];
-}
-
-export interface ICustomerDemographic {
-  customerID: string;
-  // dob: Date; => receive dob from DB & calculate age ???
-  age: number;
-  gender: number;
-  country: string;
-  city: string;
-  jobTitle: string;
-  jobIndustry: string;
-  wealthSegment: string;
-}
-
-export interface ICustomerTransaction {
-  customerID: string;
-  transactionDate: Date;
-  transactionAmount: number;
-}
-
-export interface IReport {
-  segmentation: ICustomerDemographic | ICustomerTransaction;
-  potentiality: ICustomerDemographic;
 }
 
 export enum ReportLabel {

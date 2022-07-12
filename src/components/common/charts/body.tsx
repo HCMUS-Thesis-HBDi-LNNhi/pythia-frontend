@@ -29,6 +29,50 @@ export default function ChartBody(props: Props): JSX.Element {
   const [labels, setLabels] = useState<string[]>([]);
   const [datasets, setDatasets] = useState<IDataset[] | IScatterDataset[]>([]);
 
+  function renderChart(): JSX.Element {
+    const props = { labels, datasets };
+
+    switch (chartType) {
+      case ChartType.bar:
+        return (
+          // @ts-ignore
+          <BarChart
+            {...props}
+            xLabel={CategoryDataLabels[chartOptions.x]}
+            yLabel={FactDataLabels[chartOptions.y]}
+          />
+        );
+
+      case ChartType.line:
+        return (
+          // @ts-ignore
+          <LineChart
+            {...props}
+            xLabel={CategoryDataLabels[chartOptions.x]}
+            yLabel={FactDataLabels[chartOptions.y]}
+          />
+        );
+      case ChartType.pie:
+        // @ts-ignore
+        return <PieChart {...props} />;
+      case ChartType.scatter:
+        return (
+          //@ts-ignore
+          <ScatterChart
+            {...props}
+            xLabel={FactDataLabels.num_trans}
+            yLabel={FactDataLabels.total_amount}
+            category={chartOptions.x}
+          />
+        );
+      case ChartType.geo:
+        //@ts-ignore
+        return <GeoChart {...props} />;
+      default:
+        return <div>Wrong chart type</div>;
+    }
+  }
+
   useEffect(() => {
     const xKeys = getXKeys(data, chartOptions);
     setLabels(getLabels(xKeys, chartOptions));
@@ -38,55 +82,5 @@ export default function ChartBody(props: Props): JSX.Element {
     setDatasets(newDatasets);
   }, [data, chartOptions, chartType]);
 
-  switch (chartType) {
-    case ChartType.bar:
-      return (
-        <BarChart
-          labels={labels}
-          //@ts-ignore
-          datasets={datasets}
-          xLabel={CategoryDataLabels[chartOptions.x]}
-          yLabel={FactDataLabels[chartOptions.y]}
-        />
-      );
-
-    case ChartType.line:
-      return (
-        <LineChart
-          labels={labels}
-          //@ts-ignore
-          datasets={datasets}
-          xLabel={CategoryDataLabels[chartOptions.x]}
-          yLabel={FactDataLabels[chartOptions.y]}
-        />
-      );
-    case ChartType.pie:
-      return (
-        <>
-          {datasets.map((dataset) => (
-            <PieChart
-              labels={labels}
-              //@ts-ignore
-              datasets={dataset}
-              key={dataset.label}
-            />
-          ))}
-        </>
-      );
-    case ChartType.scatter:
-      return (
-        <ScatterChart
-          //@ts-ignore
-          datasets={datasets}
-          xLabel={FactDataLabels.num_trans}
-          yLabel={FactDataLabels.total_amount}
-          category={chartOptions.x}
-        />
-      );
-    case ChartType.geo:
-      //@ts-ignore
-      return <GeoChart datasets={datasets} />;
-    default:
-      return <div>Wrong chart type</div>;
-  }
+  return renderChart();
 }
