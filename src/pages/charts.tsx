@@ -32,6 +32,15 @@ export default function Charts(): JSX.Element {
         );
   }, [userID, router]);
 
+  useEffect(() => {
+    if (!data) return;
+    const sortedYears = data.dim_dates.sort((a, b) => a.year - b.year);
+    setChartOptions({
+      ...chartOptions,
+      years: { from: sortedYears[0].year, to: sortedYears[1].year },
+    });
+  }, [data]);
+
   return (
     <Layout title="Charts" isLoading={isLoading}>
       <main className="w-full lg:h-[90%] mt-4 flex flex-col-reverse lg:flex-row">
