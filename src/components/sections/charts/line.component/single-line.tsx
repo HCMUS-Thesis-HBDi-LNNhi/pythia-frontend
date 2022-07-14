@@ -7,6 +7,7 @@ interface Props {
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
+  tooltip?: (tooltipItems: Array<any>) => string | string[];
 }
 
 export default function SingleLineChart(props: Props): JSX.Element {
@@ -38,6 +39,22 @@ export default function SingleLineChart(props: Props): JSX.Element {
                 weight: "bold",
               },
             },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                if (props.tooltip) return props.tooltip(tooltipItems);
+                return tooltipItems.map(
+                  (value) => value.label + ": " + value.formattedValue
+                );
+              },
+              label: () => "",
+            },
+          },
+          legend: {
+            display: false,
           },
         },
       }}

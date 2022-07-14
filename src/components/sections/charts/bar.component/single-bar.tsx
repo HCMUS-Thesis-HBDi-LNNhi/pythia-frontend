@@ -1,5 +1,7 @@
+import { toast } from "components/common";
 import { getSingleChartColor } from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
+import { useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 
 interface Props {
@@ -7,21 +9,23 @@ interface Props {
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
-  options?: any;
+  tooltip?: (tooltipItems: Array<any>) => string | string[];
 }
 
 export default function SingleBarChart(props: Props): JSX.Element {
-  const formatLabels = () => {
-    return props.labels.map((label) => {
-      if (label === "n/a" || label === "") return "Others";
-      if (label.length > 5) return label;
-      return label;
-    });
-  };
+  useEffect(() => {
+    if (props.labels.length > 10) {
+      toast(
+        "For charts with more than 10 values, we recommend using SCATTER chart.",
+        "general"
+      );
+    }
+  }, [props.labels]);
+
   return (
     <Bar
       data={{
-        labels: formatLabels(),
+        labels: props.labels,
         datasets: props.datasets.map((value) => ({
           ...value,
           ...getSingleChartColor(),
@@ -37,10 +41,16 @@ export default function SingleBarChart(props: Props): JSX.Element {
                 weight: "bold",
               },
             },
+            ticks: {
+              display: props.labels.length <= 10,
+            },
+            grid: {
+              display: props.labels.length <= 10,
+            },
           },
           y: {
             title: {
-              display: !!props.xLabel,
+              display: !!props.yLabel,
               text: props.yLabel,
               font: {
                 weight: "bold",
@@ -52,6 +62,7 @@ export default function SingleBarChart(props: Props): JSX.Element {
           tooltip: {
             callbacks: {
               title: (tooltipItems) => {
+                if (props.tooltip) return props.tooltip(tooltipItems);
                 return tooltipItems.map(
                   (value) => value.label + ": " + value.formattedValue
                 );
@@ -59,8 +70,10 @@ export default function SingleBarChart(props: Props): JSX.Element {
               label: () => "",
             },
           },
+          legend: {
+            display: false,
+          },
         },
-        ...props.options,
       }}
     />
   );
