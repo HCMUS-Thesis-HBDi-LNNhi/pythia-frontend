@@ -159,8 +159,6 @@ export default function GeoChart(props: Props) {
           const { current: chart } = chartRef;
           if (!chart) return;
           const chosenElement = getElementAtEvent(chart, event)[0]?.element;
-          console.log("debug", event);
-
           // @ts-ignore
           zoomIn(chosenElement.feature);
         }}

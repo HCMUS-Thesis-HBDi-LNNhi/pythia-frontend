@@ -1,23 +1,34 @@
-import { getSingleChartColor } from "const/colors.const";
+import { toast } from "components/common";
+import { getMultipleChartColors } from "const/colors.const";
 import { IDataset, XAxisType } from "interfaces/chart.interface";
+import { useEffect } from "react";
 import { Scatter } from "react-chartjs-2";
-import { getCategoryLabels } from "utils/category.utils";
 
 interface Props {
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
-  tooltipLabels?: string[];
   category?: XAxisType;
+  tooltip?: (tooltipItems: Array<any>) => string | string[];
+  hideLegend?: boolean;
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
+  useEffect(() => {
+    if (props.datasets.length <= 10) {
+      toast(
+        "For charts with less than 10 values, we recommend using BAR chart or PIE chart.",
+        "general"
+      );
+    }
+  }, [props.datasets]);
+
   return (
     <Scatter
       data={{
-        datasets: props.datasets.map((value) => ({
-          ...getSingleChartColor(),
-          label: getCategoryLabels(value.label),
+        datasets: props.datasets.map((value, index) => ({
+          ...getMultipleChartColors({ index }),
+          label: value.label,
           data: [
             {
               x: value.data[0],
@@ -51,16 +62,23 @@ export default function ScatterChart(props: Props): JSX.Element {
           tooltip: {
             callbacks: {
               title: (tooltipItems) => {
-                const tooltipLabels = props.tooltipLabels;
-                return tooltipLabels
-                  ? tooltipItems.map((_value, index) => tooltipLabels[index])
-                  : [];
+                if (props.tooltip) return props.tooltip(tooltipItems);
+                const items = tooltipItems.map((value) => [
+                  value.dataset.label,
+                  `${props.xLabel ?? ""}: ${value.label}`,
+                  `${props.yLabel ?? ""}: ${value.formattedValue}`,
+                ]);
+                const result: string[] = [];
+                items.forEach((lines) => {
+                  lines.forEach((line) => line && result.push(line));
+                });
+                return result;
               },
-              label: props.tooltipLabels ? () => "" : undefined,
+              label: () => "",
             },
           },
           legend: {
-            display: props.category !== "job_title",
+            display: props.hideLegend ?? true,
           },
         },
       }}

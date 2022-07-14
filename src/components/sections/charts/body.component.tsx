@@ -5,13 +5,12 @@ import {
   FactDataLabels,
 } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
-import { getXKeys } from "utils/handleData";
-import { get2DDatasets, get3DDatasets, getLabels } from "./helper.utils";
 import { SingleBarChart } from "./bar.component";
 import { SingleLineChart } from "./line.component";
 import PieChart from "./pie.component";
 import ScatterChart from "./scatter.component";
 import GeoChart from "./geo.component";
+import { getLabels, handle2DData } from "utils/handleData";
 
 interface Props {
   data: IData;
@@ -25,12 +24,10 @@ export default function ChartBody(props: Props): JSX.Element {
   const [datasets, setDatasets] = useState<IDataset[]>([]);
 
   useEffect(() => {
-    const xKeys = getXKeys(data, chartOptions);
-    setLabels(getLabels(xKeys, chartOptions));
-    const newDatasets = chartOptions.z
-      ? get3DDatasets()
-      : get2DDatasets(xKeys, data, chartType, chartOptions);
-    setDatasets(newDatasets);
+    const keys = getLabels(data, chartOptions);
+    setLabels(keys);
+    const formattedDatasets = handle2DData(data, chartType, chartOptions, keys);
+    setDatasets(formattedDatasets);
   }, [data, chartOptions, chartType]);
 
   switch (chartType) {
@@ -68,6 +65,7 @@ export default function ChartBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           category={chartOptions.x}
+          hideLegend
         />
       );
     case ChartType.geo:
