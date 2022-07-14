@@ -5,11 +5,13 @@ const GET = {
   getData: (id: string) => `/users/${id}/data_warehouse`,
   getRFMResult: (id: string) => `/users/${id}/rfm_result`,
   getBGNBDResult: (id: string) => `/users/${id}/bg_nbd_result`,
+  getPotentialityResult: (id: string) => `/users/${id}/classification_result`,
 };
 
 const POST = {
-  uploadFile: "/files",
   createPinnedChart: "/pinned_charts",
+  uploadFile: "/files",
+  uploadClassifyData: (id: string) => `/users/${id}/classify_customers`,
 };
 
 const DELETE = {
