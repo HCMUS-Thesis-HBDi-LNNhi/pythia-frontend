@@ -8,8 +8,10 @@ import {
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import handleErrors from "utils/errors.utils";
-import { ScatterChart } from "../charts";
 import { fetchBGNBDResult } from "./fetcher";
+import Scatter from "./scatter.component";
+
+const DIVIDER = 4;
 
 const BGNBDItems = (props: {
   label?: string;
@@ -55,39 +57,51 @@ export default function BGNBDBody(props: Props): JSX.Element {
   }, [bgnbdResult]);
 
   const getMap = (key: keyof IBGNBD) => {
-    const map = new Map();
+    const map = new Map<number, [number, number][]>();
     bgnbdResult.bgnbd
       .filter((value) => value[key] !== 0)
       .forEach((value) => {
-        const mapKey = value.x + 1;
+        if (key === "id") return;
+        let mapKey = Math.floor((value.x + 1) / DIVIDER);
         const mapValue = map.get(mapKey) ?? [];
-        map.set(mapKey, [...mapValue, { x: value.predict, y: value[key] }]);
+        map.set(mapKey, [...mapValue, [value.predict, value[key]]]);
       });
     return map;
   };
 
   return (
-    <div className={props.displayGrid ? "grid grid-cols-2 gap-2" : ""}>
+    <div
+      className={[
+        "grid gap-2",
+        props.displayGrid ? "grid-cols-2 " : "grid-cols-1",
+      ].join(" ")}
+    >
       <BGNBDItems label="Grouped by number of transactions">
-        <ScatterChart
+        <Scatter
           xLabel="Prediction"
           yLabel="Total observation time"
           datasets={Array.from(getMap("T"))
             .sort((a, b) => a[0] - b[0])
             .map((value) => {
-              return { label: value[0], data: value[1] };
+              return {
+                label: `Over ${value[0] * DIVIDER} transactions`,
+                data: value[1],
+              };
             })}
           tooltip={() => tooltipLabels}
         />
       </BGNBDItems>
       <BGNBDItems label="Grouped by number of transactions">
-        <ScatterChart
+        <Scatter
           xLabel="Prediction"
           yLabel="Time of last transaction"
           datasets={Array.from(getMap("t_x"))
             .sort((a, b) => a[0] - b[0])
             .map((value) => {
-              return { label: value[0], data: value[1] };
+              return {
+                label: `Over ${value[0] * DIVIDER} transactions`,
+                data: value[1],
+              };
             })}
           tooltip={() => tooltipLabels}
         />

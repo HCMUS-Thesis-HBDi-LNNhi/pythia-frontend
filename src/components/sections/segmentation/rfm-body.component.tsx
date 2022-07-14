@@ -3,12 +3,13 @@ import { useRouter } from "next/router";
 
 import Errors from "const/error.const";
 import { Pane } from "components/common";
-import { ScatterChart, SingleBarChart } from "../charts";
+import { SingleBarChart } from "../charts";
 import { initRFMResult, IRFMResults } from "interfaces/segmentation.interface";
 import { FactDataLabels } from "interfaces/data.interface";
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
 import handleErrors from "utils/errors.utils";
+import Scatter from "./scatter.component";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -84,7 +85,7 @@ export default function RFMBody(props: Props): JSX.Element {
         />
       </RFMItems>
       <RFMItems label="Grouped by number of transactions">
-        <ScatterChart
+        <Scatter
           xLabel={FactDataLabels.total_amount}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets(
@@ -97,7 +98,7 @@ export default function RFMBody(props: Props): JSX.Element {
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <ScatterChart
+        <Scatter
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
@@ -105,7 +106,7 @@ export default function RFMBody(props: Props): JSX.Element {
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <ScatterChart
+        <Scatter
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}

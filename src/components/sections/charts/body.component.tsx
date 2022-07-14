@@ -65,7 +65,6 @@ export default function ChartBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           category={chartOptions.x}
-          hideLegend
         />
       );
     case ChartType.geo:

@@ -1,4 +1,3 @@
-import { IDataset } from "interfaces/chart.interface";
 import { IRFM, IRFMResults } from "interfaces/segmentation.interface";
 
 const getNumTransDatasets = (
@@ -6,8 +5,8 @@ const getNumTransDatasets = (
   customerIndexes: string[],
   x: { [key: number]: number },
   y: { [key: number]: number }
-): IDataset[] => {
-  const result = new Map();
+) => {
+  const result = new Map<string, [number, number][]>();
 
   const num_trans = Object.values(rfmResult.rfm.num_trans).sort(
     (a, b) => a - b
@@ -42,9 +41,9 @@ const getCLVDatasets = (
   xKey: keyof IRFM,
   x: { [key: number]: number },
   y: { [key: number]: number }
-): IDataset[] => {
+) => {
   const uniqueKeys = Object.keys(rfmResult.clv).map((value) => parseInt(value));
-  const result = new Map();
+  const result = new Map<number, [number, number][]>();
   customerIndexes
     .map((value) => parseInt(value))
     .forEach((customerIndex) => {
@@ -67,7 +66,7 @@ export const getDatasets = (
   yKey: keyof IRFM,
   scatterType: "clv" | "num_trans",
   rfmResult: IRFMResults
-): IDataset[] => {
+) => {
   const x = rfmResult.rfm[xKey];
   const y = rfmResult.rfm[yKey];
   const customerIndexes = Object.keys(rfmResult.rfm.cluster_id);
