@@ -1,23 +1,21 @@
 export enum Gender {
-  female = "0",
-  male = "1",
-  others = "",
+  female = "Female",
+  male = "Male",
+  others = "Others",
 }
 
 export enum Age {
-  /** Under 18 */
-  teen = "0",
-  /** 18 to 25 */
-  young_adult = "1",
-  /** 26 to 65 */
-  adult = "2",
-  /** Over 65 */
-  elder = "3",
+  teen = "Under 18",
+  young_adult = "18 to 25",
+  adult = "26 to 45",
+  middle_age = "46 to 65",
+  elder = "Over 65",
 }
 
 export enum Transaction {
-  under6 = "Under 6 transactions",
-  over6 = "Over 6 transactions",
+  under = "Under",
+  mid = "Middle",
+  upper = "Upper",
 }
 
 export enum FactDataLabels {

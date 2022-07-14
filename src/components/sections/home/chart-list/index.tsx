@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import icons from "const/icons.const";
-import { Button, ChartBody } from "components/common";
+import { Button } from "components/common";
 import ChartContainer from "./chart-container.component";
 import { IChartData, IChartResponse } from "interfaces/chart.interface";
 import {
@@ -16,6 +16,7 @@ import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
 import API from "const/api.const";
 import { handleDelete, normalizedData } from "utils/charts.utils";
+import { ChartBody } from "components/sections/charts";
 
 interface Props {
   data: IData;

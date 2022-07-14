@@ -227,6 +227,6 @@ const COUNTRIES_JSON = {
   },
 };
 
-const MAP_JSON = { ...WORLD_JSON, ...CONTINENTS_JSON, ...COUNTRIES_JSON };
+const MAP_JSON = { ...WORLD_JSON, ...CONTINENTS_JSON };
 
 export default MAP_JSON;

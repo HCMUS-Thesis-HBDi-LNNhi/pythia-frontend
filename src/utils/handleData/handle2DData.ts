@@ -1,6 +1,11 @@
-import { ChartType, IChartOptions } from "interfaces/chart.interface";
-import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
-import { getAgeKeyFromDOB, getDateKeys } from ".";
+import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
+import {
+  CategoryDataLabels,
+  IData,
+  IDimCustomer,
+  IFactData,
+} from "interfaces/data.interface";
+import { getDate, getLabel } from ".";
 
 function render_geo(
   data: IData,
@@ -33,7 +38,7 @@ function render_geo(
 function render_dateKey_scatter(data: IData, dateKeys: string[]) {
   const result = new Map<string, number[]>();
   dateKeys.forEach((dateKey) => {
-    const mapKey = dateKey;
+    const mapKey = getLabel(dateKey, "date_key");
     const mapValue = result.get(mapKey) ?? [0, 0];
     let sum_trans = 0;
     let sum_amount = 0;
@@ -53,14 +58,14 @@ function render_dateKey_scatter(data: IData, dateKeys: string[]) {
 /** result: {x, [total_amount, num_trans]} */
 function render_default_scatter(
   data: IData,
-  xKeys: string[],
+  keys: string[],
   dateKeys: string[],
   x: keyof IDimCustomer
 ) {
   const result = new Map<string, number[]>();
-  xKeys.forEach((value) => result.set(value, [0, 0]));
+  keys.forEach((value) => result.set(value, [0, 0]));
   data.dim_customers.forEach((customer) => {
-    const mapKey = x === "dob" ? getAgeKeyFromDOB(customer.dob) : customer[x];
+    const mapKey = getLabel(customer[x], x);
     const mapValue = result.get(mapKey) ?? [0, 0];
     let sum_trans = 0;
     let sum_amount = 0;
@@ -103,15 +108,15 @@ function render_dateKey_default(
 /** result: {x, sum of y} */
 function render_default(
   data: IData,
-  xKeys: string[],
+  keys: string[],
   dateKeys: string[],
   x: keyof IDimCustomer,
   y: keyof IFactData
 ): Map<string, number[]> {
   const result = new Map<string, number[]>();
-  xKeys.forEach((value) => result.set(value, [0]));
+  keys.forEach((value) => result.set(value, [0]));
   data.dim_customers.forEach((customer) => {
-    const mapKey = x === "dob" ? getAgeKeyFromDOB(customer.dob) : customer[x];
+    const mapKey = getLabel(customer[x], x);
     const mapValue = result.get(mapKey) ?? [0];
     let sum = 0;
     dateKeys.forEach((dateKey) => {
@@ -126,24 +131,38 @@ function render_default(
   return result;
 }
 
-export default function render2DCharts(
+export default function handle2DData(
   data: IData,
   chartType: ChartType,
   chartOptions: IChartOptions,
-  xKeys: string[]
-): Map<string, number[]> {
+  keys: string[]
+): IDataset[] {
   const { x, y, quarters, years } = chartOptions;
-  const dateKeys = getDateKeys(quarters, years);
+  const dateKeys = getDate(quarters, years);
 
-  switch (chartType) {
-    case ChartType.geo:
-      if (x === "city") return render_geo(data, dateKeys, x, y);
-      else return render_geo(data, dateKeys, "country", y);
-    case ChartType.scatter:
-      if (x === "date_key") return render_dateKey_scatter(data, dateKeys);
-      else return render_default_scatter(data, xKeys, dateKeys, x);
-    default:
-      if (x === "date_key") return render_dateKey_default(data, dateKeys, y);
-      else return render_default(data, xKeys, dateKeys, x, y);
+  const input = () => {
+    switch (chartType) {
+      case ChartType.geo:
+        if (x === "city") return render_geo(data, dateKeys, x, y);
+        else return render_geo(data, dateKeys, "country", y);
+      case ChartType.scatter:
+        if (x === "date_key") return render_dateKey_scatter(data, dateKeys);
+        else return render_default_scatter(data, keys, dateKeys, x);
+      default:
+        if (x === "date_key") return render_dateKey_default(data, dateKeys, y);
+        else return render_default(data, keys, dateKeys, x, y);
+    }
+  };
+
+  const entries = Array.from(input().entries());
+  if (chartType === ChartType.scatter || chartType === ChartType.geo) {
+    return entries.map(([label, data]) => ({ label, data }));
+  } else {
+    return [
+      {
+        label: CategoryDataLabels[chartOptions.x],
+        data: entries.map(([_, data]) => data[0]),
+      },
+    ];
   }
 }
