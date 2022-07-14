@@ -8,7 +8,7 @@ import { ChartHeader, PieChart, SingleBarChart } from "../charts";
 const disabledTypes = [ChartType.scatter, ChartType.geo, ChartType.line];
 
 interface Props {
-  displayGrid: boolean;
+  // displayGrid: boolean;
   result: IResult;
 }
 
