@@ -33,10 +33,22 @@ export default function Charts(): JSX.Element {
           const sortedYears = res.dim_dates.sort((a, b) => a.year - b.year);
           setChartOptions({
             ...chartOptions,
-            years: { from: sortedYears[0].year, to: sortedYears[1].year },
+            years: {
+              from: sortedYears[0].year,
+              to: sortedYears[sortedYears.length - 1].year,
+            },
           });
         });
   }, [userID, router]);
+
+  useEffect(() => {
+    if (chartType === ChartType.line) {
+      setChartOptions({
+        ...chartOptions,
+        x: "date_key",
+      });
+    }
+  }, [chartType]);
 
   return (
     <Layout title="Charts" isLoading={isLoading}>
