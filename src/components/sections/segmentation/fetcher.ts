@@ -17,7 +17,7 @@ export async function fetchRFMResult(
     setLoading(true);
     const response = await fetcher.get(API.GET.getRFMResult(id));
     if (response.status !== 200) throw Errors[response.status] ?? response;
-    else return response.data.rfm_result;
+    else return response.data;
   } catch (error) {
     handleErrors(error, router);
   } finally {
@@ -33,7 +33,7 @@ export async function fetchBGNBDResult(
   try {
     setLoading(true);
     const response = await fetcher.get(API.GET.getBGNBDResult(id));
-    if (response.status === 200) return response.data.bg_nbd_result;
+    if (response.status === 200) return response.data;
     else throw response;
   } catch (error) {
     handleErrors(error, router);

@@ -1,18 +1,16 @@
 import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+import Errors from "const/error.const";
 import { Pane } from "components/common";
+import { ScatterChart, SingleBarChart } from "../charts";
+import { initRFMResult, IRFMResults } from "interfaces/segmentation.interface";
 import { FactDataLabels } from "interfaces/data.interface";
-import {
-  initialRFMResponse,
-  IRFMResponse,
-} from "interfaces/segmentation.interface";
 import { fetchRFMResult } from "./fetcher";
 import { getDatasets } from "utils/handleData/handleRFMData";
-import { useRouter } from "next/router";
 import handleErrors from "utils/errors.utils";
-import Errors from "const/error.const";
-import { ScatterChart, SingleBarChart } from "../charts";
 
-const getNoCustomerPerCLV = (rfmResult: IRFMResponse, clv: number) => {
+const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
     (value) => value === clv
   ).length;
@@ -40,7 +38,7 @@ interface Props {
 
 export default function RFMBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [rfmResult, setRFMResult] = useState<IRFMResponse>(initialRFMResponse);
+  const [rfmResult, setRFMResult] = useState<IRFMResults>(initRFMResult);
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
@@ -48,17 +46,17 @@ export default function RFMBody(props: Props): JSX.Element {
       handleErrors(Errors[401], router);
       return;
     }
-    fetchRFMResult(props.userID, props.setLoading, router).then(
-      (value) => value && setRFMResult(value)
-    );
+    fetchRFMResult(props.userID, props.setLoading, router).then((value) => {
+      if (!value) return;
+      setRFMResult(value.rfm_result);
+      setTooltipLabels(
+        Object.values(value.rfm_result.rfm.customer_id).map(
+          (v) => "Customer ID: " + v
+        )
+      );
+    });
     // eslint-disable-next-line
   }, [props.userID]);
-
-  useEffect(() => {
-    setTooltipLabels(
-      Object.values(rfmResult.rfm.customer_id).map((v) => "Customer ID: " + v)
-    );
-  }, [rfmResult]);
 
   return (
     <div
@@ -76,22 +74,12 @@ export default function RFMBody(props: Props): JSX.Element {
               data: Object.values(rfmResult.clv),
             },
           ]}
-          options={{
-            plugins: {
-              legend: false,
-              tooltip: {
-                callbacks: {
-                  title: (items: any) => {
-                    return [
-                      "CLV Points: " + items[0].formattedValue,
-                      "Number of customers: " +
-                        getNoCustomerPerCLV(rfmResult, items[0].dataIndex),
-                    ].join("\n");
-                  },
-                  label: () => "",
-                },
-              },
-            },
+          tooltip={(items) => {
+            return [
+              "CLV Points: " + items[0].formattedValue,
+              "Number of customers: " +
+                getNoCustomerPerCLV(rfmResult, items[0].dataIndex),
+            ].join("\n");
           }}
         />
       </RFMItems>
@@ -105,7 +93,7 @@ export default function RFMBody(props: Props): JSX.Element {
             "num_trans",
             rfmResult
           )}
-          tooltipLabels={tooltipLabels}
+          tooltip={() => tooltipLabels}
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
@@ -113,7 +101,7 @@ export default function RFMBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.recency}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
-          tooltipLabels={tooltipLabels}
+          tooltip={() => tooltipLabels}
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
@@ -121,7 +109,7 @@ export default function RFMBody(props: Props): JSX.Element {
           xLabel={FactDataLabels.num_trans}
           yLabel={FactDataLabels.total_amount}
           datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}
-          tooltipLabels={tooltipLabels}
+          tooltip={() => tooltipLabels}
         />
       </RFMItems>
     </div>

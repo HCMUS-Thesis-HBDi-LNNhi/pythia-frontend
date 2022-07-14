@@ -1,9 +1,9 @@
 import { Pane } from "components/common";
 import Errors from "const/error.const";
 import {
-  IBGNBDResponse,
+  IBGNBD,
+  initBGNBDResult,
   IBGNBDResult,
-  initialBGNBDResponse,
 } from "interfaces/segmentation.interface";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
@@ -33,8 +33,7 @@ interface Props {
 
 export default function BGNBDBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [bgnbdResult, setBGNBDResult] =
-    useState<IBGNBDResponse>(initialBGNBDResponse);
+  const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>(initBGNBDResult);
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
@@ -43,7 +42,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
       return;
     }
     fetchBGNBDResult(props.userID, props.setLoading, router).then(
-      (value) => value && setBGNBDResult(value)
+      (value) => value && setBGNBDResult(value.bg_nbd_result)
     );
     // eslint-disable-next-line
   }, [props.userID]);
@@ -55,7 +54,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
     setTooltipLabels([...labels]);
   }, [bgnbdResult]);
 
-  const getMap = (key: keyof IBGNBDResult) => {
+  const getMap = (key: keyof IBGNBD) => {
     const map = new Map();
     bgnbdResult.bgnbd
       .filter((value) => value[key] !== 0)
@@ -78,7 +77,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
             .map((value) => {
               return { label: value[0], data: value[1] };
             })}
-          tooltipLabels={tooltipLabels}
+          tooltip={() => tooltipLabels}
         />
       </BGNBDItems>
       <BGNBDItems label="Grouped by number of transactions">
@@ -90,7 +89,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
             .map((value) => {
               return { label: value[0], data: value[1] };
             })}
-          tooltipLabels={tooltipLabels}
+          tooltip={() => tooltipLabels}
         />
       </BGNBDItems>
     </div>
