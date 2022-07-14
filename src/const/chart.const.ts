@@ -2,15 +2,14 @@ import {
   ChartType,
   IChart,
   IChartOptions,
-  ReportLabel,
+  IIconsList,
 } from "interfaces/chart.interface";
-import { ISelectItem } from "interfaces/common.interface";
 import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
 export const initialChartOptions: IChartOptions = {
-  y: "total_amount",
+  y: "num_trans",
   x: "dob",
   years: { from: CURRENT_YEAR, to: CURRENT_YEAR },
   quarters: { from: 1, to: 4 },
@@ -22,12 +21,6 @@ export const ChartTypes: IChart[] = [
     type: ChartType.bar,
     icon: icons.outline.bar_chart,
     focusIcon: icons.solid.bar_chart,
-  },
-  {
-    label: "Line chart",
-    type: ChartType.line,
-    icon: icons.outline.line_chart,
-    focusIcon: icons.solid.line_chart,
   },
   {
     label: "Pie chart",
@@ -42,6 +35,12 @@ export const ChartTypes: IChart[] = [
     focusIcon: icons.outline.scatter_chart,
   },
   {
+    label: "Line chart",
+    type: ChartType.line,
+    icon: icons.outline.line_chart,
+    focusIcon: icons.solid.line_chart,
+  },
+  {
     label: "Geo chart",
     type: ChartType.geo,
     icon: icons.outline.geo_chart,
@@ -49,72 +48,17 @@ export const ChartTypes: IChart[] = [
   },
 ];
 
-export const ChartSelectOptions: ISelectItem[] = [
-  {
-    label: "Bar chart",
-    id: ChartType.bar,
-    value: ChartType.bar,
-  },
-  {
-    label: "Line chart",
-    id: ChartType.line,
-    value: ChartType.line,
-  },
-  {
-    label: "Pie chart",
-    id: ChartType.pie,
-    value: ChartType.pie,
-  },
-  {
-    label: "Scatter chart",
-    id: ChartType.scatter,
-    value: ChartType.scatter,
-  },
-  {
-    label: "Geo chart",
-    id: ChartType.geo,
-    value: ChartType.geo,
-  },
-];
+export const initCustomerIcons: IIconsList = {
+  dob: icons.outline.age,
+  gender: icons.outline.gender,
+  country: icons.outline.country,
+  city: icons.outline.city,
+  job_title: icons.outline.job_title,
+  job_industry: icons.outline.job_industry,
+  date_key: icons.outline.calendar,
+};
 
-export const ReportOptions: ISelectItem[] = [
-  {
-    label: ReportLabel.segmentation,
-    id: "segmentation",
-    value: "segmentation",
-  },
-  {
-    label: ReportLabel.potentiality,
-    id: "potentiality",
-    value: "potentiality",
-  },
-];
-
-export const PotentialityOptions: ISelectItem[] = [
-  { label: "Age", id: "age", value: "age" },
-  { label: "Gender", id: "gender", value: "gender" },
-  { label: "Country", id: "country", value: "country" },
-
-  { label: "City", id: "city", value: "city" },
-  { label: "Job Title", id: "jobTitle", value: "jobTitle" },
-  { label: "Job Industry", id: "jobIndustry", value: "jobIndustry" },
-  {
-    label: "Wealth Segment",
-    id: "wealthSegment",
-    value: "wealthSegment",
-  },
-];
-
-export const SegmentationOptions: ISelectItem[] = [
-  ...PotentialityOptions,
-  {
-    label: "Transaction Date",
-    id: "transactionDate",
-    value: "transactionDate",
-  },
-  {
-    label: "Transaction Amount",
-    id: "transactionAmount",
-    value: "transactionAmount",
-  },
-];
+export const initTransactionIcons: IIconsList = {
+  num_trans: icons.outline.transactions,
+  total_amount: icons.outline.money,
+};

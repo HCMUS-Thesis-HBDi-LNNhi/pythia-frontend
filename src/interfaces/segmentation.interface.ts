@@ -3,7 +3,7 @@ export enum RetainModel {
   rfm,
 }
 
-export interface IRFMResult {
+export interface IRFM {
   cluster_id: { [key: number]: number };
   customer_id: { [key: number]: number };
   num_trans: { [key: number]: number };
@@ -11,14 +11,19 @@ export interface IRFMResult {
   total_amount: { [key: number]: number };
 }
 
-export interface IRFMResponse {
+export interface IRFMResults {
   account_id: string;
   clv: number[];
   in_progress: boolean;
-  rfm: IRFMResult;
+  rfm: IRFM;
 }
 
-export const initialRFMResponse: IRFMResponse = {
+export interface IRFMResponse {
+  rfm_result: IRFMResults;
+  status: string;
+}
+
+export const initRFMResult: IRFMResults = {
   account_id: "",
   clv: [],
   in_progress: true,
@@ -31,7 +36,7 @@ export const initialRFMResponse: IRFMResponse = {
   },
 };
 
-export interface IBGNBDResult {
+export interface IBGNBD {
   T: number;
   id: string;
   predict: number;
@@ -39,12 +44,17 @@ export interface IBGNBDResult {
   x: number;
 }
 
-export interface IBGNBDResponse {
+export interface IBGNBDResult {
   account_id: string;
-  bgnbd: IBGNBDResult[];
+  bgnbd: IBGNBD[];
 }
 
-export const initialBGNBDResponse: IBGNBDResponse = {
+export interface IBGNBDResponse {
+  bg_nbd_result: IBGNBDResult;
+  status: string;
+}
+
+export const initBGNBDResult: IBGNBDResult = {
   account_id: "",
   bgnbd: [],
 };

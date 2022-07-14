@@ -1,8 +1,8 @@
 import { IDataset } from "interfaces/chart.interface";
-import { IRFMResponse, IRFMResult } from "interfaces/segmentation.interface";
+import { IRFM, IRFMResults } from "interfaces/segmentation.interface";
 
 const getNumTransDatasets = (
-  rfmResult: IRFMResponse,
+  rfmResult: IRFMResults,
   customerIndexes: string[],
   x: { [key: number]: number },
   y: { [key: number]: number }
@@ -37,9 +37,9 @@ const getNumTransDatasets = (
 };
 
 const getCLVDatasets = (
-  rfmResult: IRFMResponse,
+  rfmResult: IRFMResults,
   customerIndexes: string[],
-  xKey: keyof IRFMResult,
+  xKey: keyof IRFM,
   x: { [key: number]: number },
   y: { [key: number]: number }
 ): IDataset[] => {
@@ -63,10 +63,10 @@ const getCLVDatasets = (
 };
 
 export const getDatasets = (
-  xKey: keyof IRFMResult,
-  yKey: keyof IRFMResult,
+  xKey: keyof IRFM,
+  yKey: keyof IRFM,
   scatterType: "clv" | "num_trans",
-  rfmResult: IRFMResponse
+  rfmResult: IRFMResults
 ): IDataset[] => {
   const x = rfmResult.rfm[xKey];
   const y = rfmResult.rfm[yKey];
