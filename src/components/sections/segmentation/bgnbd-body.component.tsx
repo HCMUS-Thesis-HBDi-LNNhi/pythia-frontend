@@ -31,6 +31,7 @@ interface Props {
   userID: string | null;
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
+  setStatus: (value: string) => void;
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
@@ -43,9 +44,11 @@ export default function BGNBDBody(props: Props): JSX.Element {
       handleErrors(Errors[401], router);
       return;
     }
-    fetchBGNBDResult(props.userID, props.setLoading, router).then(
-      (value) => value && setBGNBDResult(value.bg_nbd_result)
-    );
+    fetchBGNBDResult(props.userID, props.setLoading, router).then((value) => {
+      if (!value) return;
+      setBGNBDResult(value.bg_nbd_result);
+      props.setStatus(value.status);
+    });
     // eslint-disable-next-line
   }, [props.userID]);
 

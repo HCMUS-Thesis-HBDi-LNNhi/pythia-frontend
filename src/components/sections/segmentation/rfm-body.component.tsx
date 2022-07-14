@@ -35,6 +35,7 @@ interface Props {
   userID: string | null;
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
+  setStatus: (value: string) => void;
 }
 
 export default function RFMBody(props: Props): JSX.Element {
@@ -55,6 +56,7 @@ export default function RFMBody(props: Props): JSX.Element {
           (v) => "Customer ID: " + v
         )
       );
+      props.setStatus(value.status);
     });
     // eslint-disable-next-line
   }, [props.userID]);

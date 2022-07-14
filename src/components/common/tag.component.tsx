@@ -3,6 +3,7 @@ import { TagColor } from "interfaces/common.interface";
 interface Props {
   children: string;
   color: TagColor;
+  className?: string;
 }
 
 const getColor = (color: TagColor): string => {
@@ -25,6 +26,7 @@ export default function Tag(props: Props): JSX.Element {
       className={[
         getColor(props.color),
         "px-4 py-1 rounded text-lg font-medium",
+        props.className,
       ].join(" ")}
     >
       {props.children}

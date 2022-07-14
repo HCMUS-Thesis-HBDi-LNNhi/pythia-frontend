@@ -14,6 +14,7 @@ interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
   displayGrid: boolean;
   setDisplayGrid: Dispatch<SetStateAction<boolean>>;
+  status: string;
 }
 
 export default function Header(props: Props): JSX.Element {
@@ -45,7 +46,12 @@ export default function Header(props: Props): JSX.Element {
         </div>
         <div className="flex items-center justify-between">
           <strong>Status: </strong>
-          <Tag color={TagColor.blue}>In Progress</Tag>
+          <Tag
+            className="capitalize"
+            color={props.status === "done" ? TagColor.green : TagColor.blue}
+          >
+            {props.status}
+          </Tag>
         </div>
         <div className="flex items-center justify-end">
           <button
