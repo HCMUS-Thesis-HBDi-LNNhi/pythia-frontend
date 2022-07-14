@@ -1,6 +1,10 @@
 import { IDimCustomer } from "./data.interface";
 
+export interface IClassify {
+  customer_id: string;
+  labels: number;
+}
 export interface IResult {
-  result: number[];
+  result: IClassify[];
   customer: IDimCustomer[];
 }

@@ -1,5 +1,5 @@
 import { Body, Header } from "components/sections/potentiality";
-import { Layout, Pane } from "components/common";
+import { Layout } from "components/common";
 import { useEffect, useState } from "react";
 import { fetchPotentialityResult } from "components/sections/potentiality/fetcher";
 import { useReadLocalStorage } from "usehooks-ts";
