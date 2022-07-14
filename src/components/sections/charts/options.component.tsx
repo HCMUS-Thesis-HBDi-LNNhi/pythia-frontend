@@ -1,14 +1,16 @@
 import { Button, Radio } from "components/common";
+import { initCustomerIcons, initTransactionIcons } from "const/chart.const";
 import icons from "const/icons.const";
 import { Field, Form, Formik } from "formik";
 import {
   ChartType,
   IChartOptions,
+  IIconsList,
   XAxisType,
   YAxisType,
 } from "interfaces/chart.interface";
 import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ChartOptionsValidate } from "utils/validate.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
@@ -95,21 +97,6 @@ const InputCustomers = (props: {
   </div>
 );
 
-const IconsCustomer: { [key: string]: ReactNode } = {
-  dob: icons.outline.age,
-  gender: icons.outline.gender,
-  country: icons.outline.country,
-  city: icons.outline.city,
-  job_title: icons.outline.job_title,
-  job_industry: icons.outline.job_industry,
-  date_key: icons.outline.calendar,
-};
-
-const IconsTransaction: { [key: string]: ReactNode } = {
-  num_trans: icons.outline.transactions,
-  total_amount: icons.outline.money,
-};
-
 interface Props {
   initialValues: IChartOptions;
   chartType: ChartType;
@@ -117,6 +104,33 @@ interface Props {
 }
 
 export default function ChartOptions(props: Props): JSX.Element {
+  const [customerIcons, setCustomerIcons] = useState<IIconsList | null>();
+  const [transactionIcons, setTransactionIcons] = useState<IIconsList | null>();
+
+  useEffect(() => {
+    switch (props.chartType) {
+      case ChartType.geo:
+        setCustomerIcons(null);
+        setTransactionIcons(initTransactionIcons);
+        break;
+      case ChartType.scatter:
+        setCustomerIcons(initCustomerIcons);
+        setTransactionIcons(null);
+        break;
+      case ChartType.line:
+        setCustomerIcons({
+          date_key: icons.outline.calendar,
+          dob: icons.outline.age,
+        });
+        setTransactionIcons(initTransactionIcons);
+        break;
+      default:
+        setCustomerIcons(initCustomerIcons);
+        setTransactionIcons(initTransactionIcons);
+        break;
+    }
+  }, [props.chartType]);
+
   return (
     <Formik<IChartOptions>
       initialValues={props.initialValues}
@@ -144,24 +158,24 @@ export default function ChartOptions(props: Props): JSX.Element {
             label="To quarter"
             fieldNames={["quarters.to", "years.to"]}
           />
-          {props.chartType !== ChartType.geo && (
+          {customerIcons && (
             <InputCustomers
               label={
                 props.chartType === ChartType.scatter ? "Value" : "X Value"
               }
               className="col-span-3"
               groupName="x"
-              fieldValue={Object.keys(IconsCustomer) as XAxisType[]}
-              icons={Object.values(IconsCustomer)}
+              fieldValue={Object.keys(customerIcons) as XAxisType[]}
+              icons={Object.values(customerIcons)}
             />
           )}
-          {props.chartType !== ChartType.scatter && (
+          {transactionIcons && (
             <InputTransactions
               label={props.chartType === ChartType.geo ? "Value" : "Y Value"}
               className="col-span-3"
               groupName="y"
-              fieldValue={Object.keys(IconsTransaction) as YAxisType[]}
-              icons={Object.values(IconsTransaction)}
+              fieldValue={Object.keys(transactionIcons) as YAxisType[]}
+              icons={Object.values(transactionIcons)}
             />
           )}
           {/*TODO: Implement 3D charts */}

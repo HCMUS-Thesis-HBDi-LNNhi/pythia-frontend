@@ -8,9 +8,7 @@ import BGNBDBody from "components/sections/segmentation/bgnbd-body.component";
 export default function Segmentation(): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
   const [isLoading, setLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<RetainModel>(
-    RetainModel.rfm
-  );
+  const [selectedModel, setSelectedModel] = useState(RetainModel.rfm);
   const [displayGrid, setDisplayGrid] = useState(true);
 
   return (

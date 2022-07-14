@@ -1,16 +1,15 @@
+import { Layout, Pane } from "components/common";
 import {
-  Layout,
-  Pane,
-  ChartHeader,
   ChartBody,
+  ChartHeader,
   ChartOptions,
-} from "components/common";
+} from "components/sections/charts";
 import { initialChartOptions } from "const/chart.const";
 import Errors from "const/error.const";
 import { ChartType, IChartOptions } from "interfaces/chart.interface";
-import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
+import { IData } from "interfaces/data.interface";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { handleCreateChart } from "utils/charts.utils";
 import handleErrors from "utils/errors.utils";
@@ -25,39 +24,31 @@ export default function Charts(): JSX.Element {
   const [chartOptions, setChartOptions] =
     useState<IChartOptions>(initialChartOptions);
 
-  const normalizedQuery = useCallback(() => {
-    const params = router.query;
-    if (!params) return;
-    if (params.type) setChartType(params.type as ChartType);
-    if (params.from && params.to && params.x && params.y) {
-      const from =
-        typeof params.from === "string"
-          ? params.from?.split("_").map((v) => parseInt(v))
-          : [];
-      const to =
-        typeof params.to === "string"
-          ? params.to?.split("_").map((v) => parseInt(v))
-          : [];
-      setChartOptions({
-        x: params.x as keyof IDimCustomer | "date_key",
-        y: params.y as keyof IFactData,
-        quarters: { from: from[0], to: to[0] },
-        years: { from: from[1], to: to[1] },
-      });
-    }
-  }, [router.query]);
-
   useEffect(() => {
     !userID
       ? handleErrors(Errors[401], router)
-      : handleFetchData(userID, setLoading, router).then(
-          (res) => res && setData(res)
-        );
+      : handleFetchData(userID, setLoading, router).then((res) => {
+          if (!res) return;
+          setData(res);
+          const sortedYears = res.dim_dates.sort((a, b) => a.year - b.year);
+          setChartOptions({
+            ...chartOptions,
+            years: {
+              from: sortedYears[0].year,
+              to: sortedYears[sortedYears.length - 1].year,
+            },
+          });
+        });
   }, [userID, router]);
 
   useEffect(() => {
-    normalizedQuery();
-  }, [normalizedQuery]);
+    if (chartType === ChartType.line) {
+      setChartOptions({
+        ...chartOptions,
+        x: "date_key",
+      });
+    }
+  }, [chartType]);
 
   return (
     <Layout title="Charts" isLoading={isLoading}>

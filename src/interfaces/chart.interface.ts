@@ -1,8 +1,11 @@
+import { ReactNode } from "react";
 import { IDimCustomer, IFactData } from "./data.interface";
 
-export type MetricType =
-  | keyof ICustomerDemographic
-  | keyof ICustomerTransaction;
+export type IIconsList = { [key: string]: ReactNode };
+
+export type XAxisType = keyof IDimCustomer | "date_key";
+export type YAxisType = keyof IFactData;
+export type ZAxisType = keyof IDimCustomer;
 
 export enum ChartType {
   bar = "bar",
@@ -11,8 +14,6 @@ export enum ChartType {
   scatter = "scatter",
   geo = "geo",
 }
-
-export type ScatterDataType = { x: number; y: number };
 
 export interface IMapJson {
   [key: string]: {
@@ -40,10 +41,6 @@ export interface IChartYear {
   from: number;
   to: number;
 }
-
-export type XAxisType = keyof IDimCustomer | "date_key";
-export type YAxisType = keyof IFactData;
-export type ZAxisType = keyof IDimCustomer;
 
 export interface IChartOptions {
   x: XAxisType;
@@ -75,37 +72,4 @@ export interface IChartResponse extends IChartPayload {
 export interface IDataset {
   label: string;
   data: number[];
-}
-
-export interface IScatterDataset {
-  label: string;
-  data: { x: number; y: number }[];
-}
-
-export interface ICustomerDemographic {
-  customerID: string;
-  // dob: Date; => receive dob from DB & calculate age ???
-  age: number;
-  gender: number;
-  country: string;
-  city: string;
-  jobTitle: string;
-  jobIndustry: string;
-  wealthSegment: string;
-}
-
-export interface ICustomerTransaction {
-  customerID: string;
-  transactionDate: Date;
-  transactionAmount: number;
-}
-
-export interface IReport {
-  segmentation: ICustomerDemographic | ICustomerTransaction;
-  potentiality: ICustomerDemographic;
-}
-
-export enum ReportLabel {
-  segmentation = "Segmentation Report",
-  potentiality = "Potentiality Report",
 }

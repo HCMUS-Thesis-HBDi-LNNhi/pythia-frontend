@@ -1,4 +1,4 @@
-import colors from "const/colors.const";
+import { getSingleChartColor } from "const/colors.const";
 import { IDataset } from "interfaces/chart.interface";
 import { Line } from "react-chartjs-2";
 
@@ -7,17 +7,17 @@ interface Props {
   datasets: IDataset[];
   xLabel?: string;
   yLabel?: string;
+  tooltip?: (tooltipItems: Array<any>) => string | string[];
 }
 
-export default function LineChart(props: Props): JSX.Element {
+export default function SingleLineChart(props: Props): JSX.Element {
   return (
     <Line
       data={{
         labels: props.labels,
-        datasets: props.datasets.map((value, index) => ({
+        datasets: props.datasets.map((value) => ({
           ...value,
-          backgroundColor: index < colors.length ? colors[index] : "#5880A2",
-          borderColor: index < colors.length ? colors[index] : "#5880A2",
+          ...getSingleChartColor(),
         })),
       }}
       options={{
@@ -39,6 +39,22 @@ export default function LineChart(props: Props): JSX.Element {
                 weight: "bold",
               },
             },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                if (props.tooltip) return props.tooltip(tooltipItems);
+                return tooltipItems.map(
+                  (value) => value.label + ": " + value.formattedValue
+                );
+              },
+              label: () => "",
+            },
+          },
+          legend: {
+            display: false,
           },
         },
       }}

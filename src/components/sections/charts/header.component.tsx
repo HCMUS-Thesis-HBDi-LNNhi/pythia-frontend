@@ -2,7 +2,7 @@ import { ChartTypes } from "const/chart.const";
 import icons from "const/icons.const";
 import { ChartType } from "interfaces/chart.interface";
 import { Dispatch, SetStateAction } from "react";
-import Button from "../buttons/button.component";
+import Button from "../../common/buttons/button.component";
 
 interface Props {
   chosenChart: ChartType;
