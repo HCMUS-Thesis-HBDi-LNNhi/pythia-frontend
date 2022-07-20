@@ -20,7 +20,10 @@ export function getDate(quarters: IChartYear, years: IChartYear): string[] {
   return result;
 }
 
-export const getLabels = (data: IData, chartOptions: IChartOptions) => {
+export const getLabels = (
+  data: IData,
+  chartOptions: IChartOptions
+): string[] => {
   const { x, quarters, years } = chartOptions;
   switch (x) {
     case "date_key":
@@ -32,11 +35,13 @@ export const getLabels = (data: IData, chartOptions: IChartOptions) => {
     case "gender":
       return Object.values(Gender);
     default:
-      return Array.from(new Set(data.dim_customers.map((value) => value[x])));
+      return Array.from(
+        new Set(data.dim_customers.map((value) => value[x] ?? ""))
+      );
   }
 };
 
-export const getLabel = (key: string, category?: XAxisType) => {
+export const getLabel = (key: string, category?: XAxisType): string => {
   switch (category) {
     case "gender":
       switch (key) {
@@ -64,6 +69,6 @@ export const getLabel = (key: string, category?: XAxisType) => {
     case "date_key":
       return `Q${key.replace("_", "/")}`;
     default:
-      return key;
+      return key ?? "";
   }
 };
