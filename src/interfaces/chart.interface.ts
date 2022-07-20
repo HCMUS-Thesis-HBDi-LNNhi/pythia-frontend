@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { IDimCustomer, IFactData } from "./data.interface";
 
-export type IIconsList = { [key: string]: ReactNode };
+export type IIconsList<T> = { [key in keyof T]: ReactNode };
 
-export type XAxisType = keyof IDimCustomer | "date_key";
+export type XAxisType = keyof IDimCustomer;
 export type YAxisType = keyof IFactData;
 export type ZAxisType = keyof IDimCustomer;
 

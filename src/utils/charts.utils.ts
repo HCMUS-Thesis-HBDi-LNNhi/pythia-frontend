@@ -7,16 +7,18 @@ import {
   IChartPayload,
   IChartOptions,
   IChartResponse,
+  XAxisType,
+  YAxisType,
+  ZAxisType,
 } from "interfaces/chart.interface";
-import { IDimCustomer, IFactData } from "interfaces/data.interface";
 import { NextRouter } from "next/router";
 import handleErrors from "utils/errors.utils";
 import { fetcher } from "utils/fetcher.utils";
 
 export function normalizedData(data: IChartResponse): IChartData {
-  const x = data.x as keyof IDimCustomer | "date_key";
-  const y = data.y as keyof IFactData;
-  const z = data.z as keyof IDimCustomer;
+  const x = data.x as XAxisType;
+  const y = data.y as YAxisType;
+  const z = data.z as ZAxisType;
 
   const id = data.id;
   const chartType = data.chart_type;

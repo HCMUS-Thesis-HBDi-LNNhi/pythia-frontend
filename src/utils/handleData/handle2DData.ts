@@ -65,7 +65,7 @@ function render_default_scatter(
   const result = new Map<string, number[]>();
   keys.forEach((value) => result.set(value, [0, 0]));
   data.dim_customers.forEach((customer) => {
-    const mapKey = getLabel(customer[x], x);
+    const mapKey = getLabel(customer[x] ?? "", x);
     const mapValue = result.get(mapKey) ?? [0, 0];
     let sum_trans = 0;
     let sum_amount = 0;
@@ -116,7 +116,7 @@ function render_default(
   const result = new Map<string, number[]>();
   keys.forEach((value) => result.set(value, [0]));
   data.dim_customers.forEach((customer) => {
-    const mapKey = getLabel(customer[x], x);
+    const mapKey = getLabel(customer[x] ?? "", x);
     const mapValue = result.get(mapKey) ?? [0];
     let sum = 0;
     dateKeys.forEach((dateKey) => {

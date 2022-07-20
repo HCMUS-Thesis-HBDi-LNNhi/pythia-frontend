@@ -35,16 +35,19 @@ export enum CategoryDataLabels {
   job_industry = "Job industry",
   job_title = "Job title",
   date_key = "Quarters",
+  wealth_segment = "Wealth segment",
 }
 
 export interface IDimCustomer {
   city: string;
   country: string;
-  customer_id: string;
+  customer_id?: string;
   dob: string;
   gender: string;
   job_industry: string;
   job_title: string;
+  wealth_segment: string;
+  date_key?: string;
 }
 
 export interface IDimDate {

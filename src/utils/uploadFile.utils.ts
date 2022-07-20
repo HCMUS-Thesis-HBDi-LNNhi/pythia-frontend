@@ -1,15 +1,12 @@
 import { toast } from "components/common";
 import API from "const/api.const";
+import { demographicHeader, transactionHeader } from "const/chart.const";
 import Errors from "const/error.const";
 import { FileType } from "interfaces/utils.interface";
 import { NextRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import handleErrors from "./errors.utils";
 import { fetcher } from "./fetcher.utils";
-
-const transactionHeader = "user_id,amount,date";
-const demographicHeader =
-  "id,dob,gender,country,city,job_title,job_industry,wealth_segment";
 
 export const handleUpload = async (
   file: File,
