@@ -9,7 +9,12 @@ import {
   XAxisType,
   YAxisType,
 } from "interfaces/chart.interface";
-import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
+import {
+  CategoryDataLabels,
+  FactDataLabels,
+  IDimCustomer,
+  IFactData,
+} from "interfaces/data.interface";
 import React, { ReactNode, useEffect, useState } from "react";
 import { ChartOptionsValidate } from "utils/validate.utils";
 
@@ -104,8 +109,11 @@ interface Props {
 }
 
 export default function ChartOptions(props: Props): JSX.Element {
-  const [customerIcons, setCustomerIcons] = useState<IIconsList | null>();
-  const [transactionIcons, setTransactionIcons] = useState<IIconsList | null>();
+  const [customerIcons, setCustomerIcons] = useState<IIconsList<
+    IDimCustomer | { [key: string]: ReactNode }
+  > | null>();
+  const [transactionIcons, setTransactionIcons] =
+    useState<IIconsList<IFactData> | null>();
 
   useEffect(() => {
     switch (props.chartType) {
