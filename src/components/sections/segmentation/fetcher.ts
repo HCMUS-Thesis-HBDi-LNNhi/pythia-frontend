@@ -6,7 +6,7 @@ import {
 } from "interfaces/segmentation.interface";
 import { NextRouter } from "next/router";
 import handleErrors from "utils/errors.utils";
-import { fetcher } from "utils/fetcher.utils";
+import fetcher from "utils/fetcher.utils";
 
 export async function fetchRFMResult(
   id: string,

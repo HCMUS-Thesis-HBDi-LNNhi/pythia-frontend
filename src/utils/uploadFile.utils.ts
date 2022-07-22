@@ -6,7 +6,7 @@ import { FileType } from "interfaces/utils.interface";
 import { NextRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import handleErrors from "./errors.utils";
-import { fetcher } from "./fetcher.utils";
+import fetcher from "./fetcher.utils";
 
 export const handleUpload = async (
   file: File,

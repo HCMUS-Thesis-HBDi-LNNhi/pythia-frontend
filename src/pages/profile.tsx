@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import handleErrors from "utils/errors.utils";
-import { fetcher } from "utils/fetcher.utils";
+import fetcher from "utils/fetcher.utils";
 import { formatDate } from "utils/formatter.utils";
 
 export default function Profile(): JSX.Element {
