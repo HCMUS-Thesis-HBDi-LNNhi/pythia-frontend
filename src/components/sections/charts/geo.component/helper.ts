@@ -105,7 +105,7 @@ export const formatFeatures = (
 ) => {
   const map = MAP_JSON[x];
   return {
-    labels: features.map((v) => v.properties[map.propertiesKey]),
+    labels: features.map((v) => (map ? v.properties[map.propertiesKey] : "")),
     datasets: [
       {
         outline: features,

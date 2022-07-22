@@ -3,6 +3,22 @@ import { CONTINENTS, COUNTRIES } from "const/country-code.const";
 export const RoundNumber = (value: number, digit: number = 0) =>
   Math.round(value * Math.pow(10, digit)) / Math.pow(10, digit);
 
+const formatTimeRange = (time: string) =>
+  time.split("_").map((value) => parseInt(value));
+
+export const formatChartsParams = (params: ParsedUrlQuery) => {
+  const from = formatTimeRange(params.from?.toString() ?? "");
+  const to = formatTimeRange(params.to?.toString() ?? "");
+  let result: { [key: string]: any } = {};
+  if (params.x) result["x"] = params.x.toString();
+  if (params.y) result["y"] = params.y.toString();
+  if (params.from && params.to) {
+    result["years"] = { from: from[1], to: to[1] };
+    result["quarters"] = { from: from[0], to: to[0] };
+  }
+  return result;
+};
+
 export const formatDate = (
   date: Date,
   formatType: string = "en-AU"
@@ -28,6 +44,7 @@ export const getContinentCode = (name: string) => {
 
 import { Age, Gender, IData, IDimCustomer } from "interfaces/data.interface";
 import { IChartOptions, IChartYear } from "interfaces/chart.interface";
+import { ParsedUrlQuery } from "querystring";
 
 const CURRENT_YEAR = new Date().getFullYear();
 

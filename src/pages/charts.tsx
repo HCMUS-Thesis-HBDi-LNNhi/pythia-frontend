@@ -11,11 +11,13 @@ import {
 } from "components/sections/charts";
 
 import { initialChartOptions } from "const/chart.const";
+import MAP_JSON from "const/map.const";
 
 import { ChartType } from "interfaces/chart.interface";
 import { IData } from "interfaces/data.interface";
 
 import { handleCreateChart } from "utils/charts.utils";
+import { formatChartsParams } from "utils/formatter.utils";
 
 export default function Charts(): JSX.Element {
   const router = useRouter();
@@ -28,53 +30,51 @@ export default function Charts(): JSX.Element {
 
   useEffect(() => {
     handleFetchData(userID, setLoading, router).then((res) => {
+      const params = router.query;
       if (!res) return;
       setData(res);
-      const sortedYears = res.dim_dates.sort((a, b) => a.year - b.year);
-      setChartOptions({
-        ...chartOptions,
-        years: {
-          from: sortedYears[0].year,
-          to: sortedYears[sortedYears.length - 1].year,
-        },
-      });
+
+      if (Object.keys(params).length === 0) {
+        const sortedYears = res.dim_dates.sort((a, b) => a.year - b.year);
+        setChartOptions({
+          ...chartOptions,
+          years: {
+            from: sortedYears[0].year,
+            to: sortedYears[sortedYears.length - 1].year,
+          },
+        });
+        return;
+      }
+
+      setChartType(params.type as ChartType);
+      setChartOptions({ ...chartOptions, ...formatChartsParams(params) });
+
+      router.replace(router.pathname, undefined, { shallow: true });
     });
-  }, [userID, router]);
+  }, [userID]);
 
   useEffect(() => {
     switch (chartType) {
       case ChartType.line:
-        setChartOptions({ ...chartOptions, x: "date_key" });
-        break;
+        setChartOptions({
+          ...chartOptions,
+          x:
+            chartOptions.x !== "date_key" && chartOptions.x !== "dob"
+              ? "date_key"
+              : chartOptions.x,
+        });
+        return;
       case ChartType.geo:
-        setChartOptions({ ...chartOptions, x: "world_continents" });
-        break;
+        setChartOptions({
+          ...chartOptions,
+          x: MAP_JSON[chartOptions.x] ? chartOptions.x : "world_continents",
+        });
+        return;
       default:
         setChartOptions({ ...chartOptions, x: "dob" });
-        break;
+        return;
     }
   }, [chartType]);
-
-  useEffect(() => {
-    const params = router.query;
-    if (Object.keys(params).length === 0) return;
-    const from = params.from
-      ?.toString()
-      .split("_")
-      .map((value) => parseInt(value));
-    const to = params.to
-      ?.toString()
-      .split("_")
-      .map((value) => parseInt(value));
-    setChartType(params.type as ChartType);
-    setChartOptions({
-      y: params.y?.toString() ?? chartOptions.x,
-      x: params.x?.toString() ?? chartOptions.y,
-      years: from && to ? { from: from[1], to: to[1] } : chartOptions.years,
-      quarters:
-        from && to ? { from: from[0], to: to[0] } : chartOptions.quarters,
-    });
-  }, []);
 
   return (
     <Layout title="Charts" isLoading={isLoading}>
