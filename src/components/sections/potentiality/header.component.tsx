@@ -21,9 +21,10 @@ export default function Header(props: Props): JSX.Element {
           <strong>Status: </strong>
           <Tag color={TagColor.blue}>In Progress</Tag>
         </div> */}
+        <UploadButton setLoading={props.setLoading} fileType="classification" />
         <Button
           style="outline"
-          className="border border-primary-500 mr-2"
+          className="border border-primary-500 ml-2"
           icon={icons.outline.download}
         >
           <a
@@ -33,7 +34,6 @@ export default function Header(props: Props): JSX.Element {
             Templates
           </a>
         </Button>
-        <UploadButton setLoading={props.setLoading} fileType="classification" />
         {/* <div className="flex items-center justify-end ml-2">
           <button
             className={[

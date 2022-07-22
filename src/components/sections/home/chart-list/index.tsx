@@ -1,22 +1,23 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import icons from "const/icons.const";
-import { Button } from "components/common";
-import ChartContainer from "./chart-container.component";
-import { IChartData, IChartResponse } from "interfaces/chart.interface";
-import {
-  CategoryDataLabels,
-  FactDataLabels,
-  IData,
-} from "interfaces/data.interface";
 import { useRouter } from "next/router";
-import { PageLabels } from "interfaces/common.interface";
-import Errors from "const/error.const";
-import handleErrors from "utils/errors.utils";
-import { fetcher } from "utils/fetcher.utils";
-import API from "const/api.const";
-import { handleDelete, normalizedData } from "utils/charts.utils";
+
+import ChartContainer from "./chart-container.component";
 import { ChartBody } from "components/sections/charts";
+import { Button } from "components/common";
+
+import icons from "const/icons.const";
+import Errors from "const/error.const";
+import API from "const/api.const";
+
+import { IData } from "interfaces/data.interface";
+import { IChartData, IChartResponse } from "interfaces/chart.interface";
+import { PageLabels } from "interfaces/common.interface";
+
+import handleErrors from "utils/errors.utils";
+import fetcher from "utils/fetcher.utils";
+import { handleDelete, normalizedData } from "utils/charts.utils";
+import { getCategoryLabel } from "utils/handleData";
 
 interface Props {
   data: IData;
@@ -26,9 +27,10 @@ interface Props {
 export default function ChartList(props: Props): JSX.Element {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
+
   const [chartData, setChartData] = useState<IChartData[]>([]);
 
-  const fetchData = async () => {
+  const fetchPinnedChart = async () => {
     if (!userID) {
       handleErrors(Errors[401], router);
       return;
@@ -51,14 +53,15 @@ export default function ChartList(props: Props): JSX.Element {
     const from = chartData.quarters.from + "_" + chartData.years.from;
     const to = chartData.quarters.to + "_" + chartData.years.to;
     const query = `type=${chartData.chartType}&from=${from}&to=${to}&x=${chartData.x}&y=${chartData.y}`;
+
     return (
       <ChartContainer
         key={chartData.id}
-        label={`${FactDataLabels[chartData.y]} of ${
-          CategoryDataLabels[chartData.x]
-        }`}
+        label={`${getCategoryLabel(chartData.y)} of ${getCategoryLabel(
+          chartData.x
+        )}`}
         delete={() =>
-          handleDelete(chartData.id, props.setLoading, fetchData, router)
+          handleDelete(chartData.id, props.setLoading, fetchPinnedChart, router)
         }
         onClick={() => router.push(`/${PageLabels.CHARTS}?${query}`)}
       >
@@ -72,7 +75,7 @@ export default function ChartList(props: Props): JSX.Element {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchPinnedChart();
     // eslint-disable-next-line
   }, []);
 

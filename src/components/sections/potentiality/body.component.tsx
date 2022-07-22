@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Pane } from "components/common";
 import { ChartType } from "interfaces/chart.interface";
 import { IClassify, IResult } from "interfaces/potentiality.interface";
-import { ChartHeader, PieChart, SingleBarChart } from "../charts";
+import { ChartHeader } from "../charts";
+import { BarChart, PieChart } from "./charts";
 
 const disabledTypes = [ChartType.scatter, ChartType.geo, ChartType.line];
 
@@ -24,7 +25,7 @@ export default function Body(props: Props): JSX.Element {
     );
     if (chartType === ChartType.bar)
       return (
-        <SingleBarChart
+        <BarChart
           labels={["Non potential customers", "Potential customers"]}
           yLabel="Number of customers"
           datasets={[{ label: "Total", data: [nonPotential, potential] }]}

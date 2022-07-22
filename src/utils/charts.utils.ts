@@ -1,24 +1,21 @@
+import { NextRouter } from "next/router";
+
 import { toast } from "components/common";
+
 import API from "const/api.const";
 import Errors from "const/error.const";
-import {
-  ChartType,
-  IChartData,
-  IChartPayload,
-  IChartOptions,
-  IChartResponse,
-  XAxisType,
-  YAxisType,
-  ZAxisType,
-} from "interfaces/chart.interface";
-import { NextRouter } from "next/router";
-import handleErrors from "utils/errors.utils";
-import { fetcher } from "utils/fetcher.utils";
 
-export function normalizedData(data: IChartResponse): IChartData {
-  const x = data.x as XAxisType;
-  const y = data.y as YAxisType;
-  const z = data.z as ZAxisType;
+import * as ChartInterface from "interfaces/chart.interface";
+
+import handleErrors from "utils/errors.utils";
+import fetcher from "utils/fetcher.utils";
+
+export function normalizedData(
+  data: ChartInterface.IChartResponse
+): ChartInterface.IChartData {
+  const x = data.x;
+  const y = data.y;
+  const z = data.z;
 
   const id = data.id;
   const chartType = data.chart_type;
@@ -43,19 +40,23 @@ export function normalizedData(data: IChartResponse): IChartData {
 }
 
 export async function handleCreateChart(
-  userID: string,
-  chartOptions: IChartOptions,
-  chartType: ChartType,
+  userID: string | null,
+  chartOptions: ChartInterface.IChartOptions,
+  chartType: ChartInterface.ChartType,
   setLoading: (value: boolean) => void,
   router: NextRouter
 ): Promise<void> {
+  if (!userID) {
+    handleErrors(Errors[401], router);
+    return;
+  }
   try {
     setLoading(true);
     const fromDate = [chartOptions.quarters.from, chartOptions.years.from].join(
       "_"
     );
     const toDate = [chartOptions.quarters.to, chartOptions.years.to].join("_");
-    const payload: IChartPayload = {
+    const payload: ChartInterface.IChartPayload = {
       user_id: userID,
       chart_type: chartType,
       from_date: fromDate,

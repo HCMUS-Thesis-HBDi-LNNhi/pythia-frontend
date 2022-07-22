@@ -2,9 +2,8 @@ import {
   ChartType,
   IChart,
   IChartOptions,
-  IIconsList,
+  IIcons,
 } from "interfaces/chart.interface";
-import { IDimCustomer, IFactData } from "interfaces/data.interface";
 import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -49,7 +48,7 @@ export const ChartTypes: IChart[] = [
   },
 ];
 
-export const initCustomerIcons: IIconsList<IDimCustomer> = {
+export const initCustomerIcons: IIcons = {
   dob: icons.outline.age,
   gender: icons.outline.gender,
   country: icons.outline.country,
@@ -60,7 +59,7 @@ export const initCustomerIcons: IIconsList<IDimCustomer> = {
   date_key: icons.outline.calendar,
 };
 
-export const initTransactionIcons: IIconsList<IFactData> = {
+export const initTransactionIcons: IIcons = {
   num_trans: icons.outline.transactions,
   total_amount: icons.outline.money,
 };

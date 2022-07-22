@@ -8,8 +8,8 @@ import {
 import { useRouter } from "next/router";
 import { ReactNode, useEffect, useState } from "react";
 import handleErrors from "utils/errors.utils";
-import { fetchBGNBDResult } from "./fetcher";
-import Scatter from "./scatter.component";
+import { fetchBGNBDResult } from "./helper";
+import { ScatterChart } from "./charts";
 
 const DIVIDER = 4;
 
@@ -80,7 +80,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
       ].join(" ")}
     >
       <BGNBDItems label="Grouped by number of transactions">
-        <Scatter
+        <ScatterChart
           xLabel="Prediction"
           yLabel="Total observation time"
           datasets={Array.from(getMap("T"))
@@ -95,7 +95,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
         />
       </BGNBDItems>
       <BGNBDItems label="Grouped by number of transactions">
-        <Scatter
+        <ScatterChart
           xLabel="Prediction"
           yLabel="Time of last transaction"
           datasets={Array.from(getMap("t_x"))

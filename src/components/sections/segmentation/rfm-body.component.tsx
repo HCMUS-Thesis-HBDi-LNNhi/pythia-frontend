@@ -1,15 +1,17 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import Errors from "const/error.const";
 import { Pane } from "components/common";
-import { SingleBarChart } from "../charts";
+import { ScatterChart, BarChart } from "./charts";
+
+import Errors from "const/error.const";
+
 import { initRFMResult, IRFMResults } from "interfaces/segmentation.interface";
-import { FactDataLabels } from "interfaces/data.interface";
-import { fetchRFMResult } from "./fetcher";
-import { getDatasets } from "utils/handleData/handleRFMData";
+
 import handleErrors from "utils/errors.utils";
-import Scatter from "./scatter.component";
+
+import { fetchRFMResult, getDatasets } from "./helper";
+import { getCategoryLabel } from "utils/handleData";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -69,7 +71,7 @@ export default function RFMBody(props: Props): JSX.Element {
       ].join(" ")}
     >
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <SingleBarChart
+        <BarChart
           labels={Object.keys(rfmResult.clv).map((_, i) => "Group " + (i + 1))}
           datasets={[
             {
@@ -87,9 +89,9 @@ export default function RFMBody(props: Props): JSX.Element {
         />
       </RFMItems>
       <RFMItems label="Grouped by number of transactions">
-        <Scatter
-          xLabel={FactDataLabels.total_amount}
-          yLabel={FactDataLabels.recency}
+        <ScatterChart
+          xLabel={getCategoryLabel("total_amount")}
+          yLabel={getCategoryLabel("recency")}
           datasets={getDatasets(
             "total_amount",
             "recency",
@@ -100,17 +102,17 @@ export default function RFMBody(props: Props): JSX.Element {
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <Scatter
-          xLabel={FactDataLabels.num_trans}
-          yLabel={FactDataLabels.recency}
+        <ScatterChart
+          xLabel={getCategoryLabel("num_trans")}
+          yLabel={getCategoryLabel("recency")}
           datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
           tooltip={() => tooltipLabels}
         />
       </RFMItems>
       <RFMItems label="Grouped by Customer Lifetime Value">
-        <Scatter
-          xLabel={FactDataLabels.num_trans}
-          yLabel={FactDataLabels.total_amount}
+        <ScatterChart
+          xLabel={getCategoryLabel("num_trans")}
+          yLabel={getCategoryLabel("total_amount")}
           datasets={getDatasets("num_trans", "total_amount", "clv", rfmResult)}
           tooltip={() => tooltipLabels}
         />

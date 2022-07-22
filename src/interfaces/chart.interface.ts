@@ -1,11 +1,9 @@
+import MAP_JSON from "const/map.const";
 import { ReactNode } from "react";
-import { IDimCustomer, IFactData } from "./data.interface";
 
-export type IIconsList<T> = { [key in keyof T]: ReactNode };
+export type IIcons = { [key: string]: ReactNode };
 
-export type XAxisType = keyof IDimCustomer;
-export type YAxisType = keyof IFactData;
-export type ZAxisType = keyof IDimCustomer;
+export type MAP_JSON_KEY = keyof typeof MAP_JSON;
 
 export enum ChartType {
   bar = "bar",
@@ -13,14 +11,6 @@ export enum ChartType {
   line = "line",
   scatter = "scatter",
   geo = "geo",
-}
-
-export interface IMapJson {
-  [key: string]: {
-    url: string;
-    objectsKey: string;
-    propertiesKey: string;
-  };
 }
 
 export interface IFeature {
@@ -43,9 +33,9 @@ export interface IChartYear {
 }
 
 export interface IChartOptions {
-  x: XAxisType;
-  y: YAxisType;
-  z?: ZAxisType;
+  x: string;
+  y: string;
+  z?: string;
   years: IChartYear;
   quarters: IChartYear;
 }
@@ -72,4 +62,9 @@ export interface IChartResponse extends IChartPayload {
 export interface IDataset {
   label: string;
   data: number[];
+}
+
+export interface IScatterDataset {
+  label: string;
+  data: { x: number; y: number }[];
 }

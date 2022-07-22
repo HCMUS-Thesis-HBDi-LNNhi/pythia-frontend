@@ -49,7 +49,8 @@ export function getMultipleChartColors(
   } = {}
 ) {
   const { index = 0, colors = qualitativeColors } = config;
-  const result = index < colors.length ? colors[index] : colors[0];
+  const result =
+    index < colors.length ? colors[index] : colors[index % colors.length];
   return {
     backgroundColor: result,
     borderColor: result,

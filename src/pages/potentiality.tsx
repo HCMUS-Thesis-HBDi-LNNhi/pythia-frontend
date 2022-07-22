@@ -1,7 +1,7 @@
 import { Body, Header } from "components/sections/potentiality";
 import { Layout } from "components/common";
 import { useEffect, useState } from "react";
-import { fetchPotentialityResult } from "components/sections/potentiality/fetcher";
+import { fetchPotentialityResult } from "components/sections/potentiality/helper";
 import { useReadLocalStorage } from "usehooks-ts";
 import handleErrors from "utils/errors.utils";
 import Errors from "const/error.const";
@@ -25,10 +25,6 @@ export default function Potentiality(): JSX.Element {
     );
     // eslint-disable-next-line
   }, [userID]);
-
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
 
   return (
     <Layout

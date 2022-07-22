@@ -1,83 +1,43 @@
-import { ChartType, IChartOptions, IDataset } from "interfaces/chart.interface";
-import {
-  IData,
-  CategoryDataLabels,
-  FactDataLabels,
-} from "interfaces/data.interface";
+import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
 import { SingleBarChart } from "./bar.component";
 import { SingleLineChart } from "./line.component";
 import PieChart from "./pie.component";
 import ScatterChart from "./scatter.component";
 import GeoChart from "./geo.component";
-import { getLabels, handle2DData } from "utils/handleData";
 
 interface Props {
   data: IData;
   chartType: ChartType;
   chartOptions: IChartOptions;
+  setChartOptions?: (value: IChartOptions) => void;
 }
 
 export default function ChartBody(props: Props): JSX.Element {
-  const { data, chartType, chartOptions } = props;
-  const [labels, setLabels] = useState<string[]>([]);
-  const [datasets, setDatasets] = useState<IDataset[]>([]);
+  const { data, chartType, chartOptions, setChartOptions } = props;
+  const [chartProps, setChartProps] = useState({ data, chartOptions });
 
   function renderChart(): JSX.Element {
     switch (chartType) {
       case ChartType.bar:
-        return (
-          <SingleBarChart
-            labels={labels}
-            datasets={datasets}
-            xLabel={CategoryDataLabels[chartOptions.x]}
-            yLabel={FactDataLabels[chartOptions.y]}
-          />
-        );
-
+        return <SingleBarChart {...chartProps} />;
       case ChartType.line:
-        return (
-          <SingleLineChart
-            labels={labels}
-            datasets={datasets}
-            xLabel={CategoryDataLabels[chartOptions.x]}
-            yLabel={FactDataLabels[chartOptions.y]}
-          />
-        );
+        return <SingleLineChart {...chartProps} />;
       case ChartType.pie:
-        return (
-          <>
-            {datasets.map((dataset) => (
-              <PieChart
-                labels={labels}
-                datasets={dataset}
-                key={dataset.label}
-              />
-            ))}
-          </>
-        );
+        return <PieChart {...chartProps} />;
       case ChartType.scatter:
-        return (
-          <ScatterChart
-            datasets={datasets}
-            xLabel={FactDataLabels.num_trans}
-            yLabel={FactDataLabels.total_amount}
-            category={chartOptions.x}
-          />
-        );
+        return <ScatterChart {...chartProps} />;
       case ChartType.geo:
-        return <GeoChart datasets={datasets} />;
+        return <GeoChart {...chartProps} setChartOptions={setChartOptions} />;
       default:
         return <div>Wrong chart type</div>;
     }
   }
 
   useEffect(() => {
-    const keys = getLabels(data, chartOptions);
-    setLabels(keys);
-    const formattedDatasets = handle2DData(data, chartType, chartOptions, keys);
-    setDatasets(formattedDatasets);
-  }, [data, chartOptions, chartType]);
+    setChartProps({ data, chartOptions });
+  }, [props]);
 
   return renderChart();
 }
