@@ -6,8 +6,8 @@ import icons from "const/icons.const";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
-  // displayGrid: boolean;
-  // setDisplayGrid: Dispatch<SetStateAction<boolean>>;
+  displayGrid: boolean;
+  setDisplayGrid: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header(props: Props): JSX.Element {
@@ -19,10 +19,6 @@ export default function Header(props: Props): JSX.Element {
       ].join(" ")}
     >
       <div className="flex justify-end items-center w-full">
-        {/* <div className="space-x-2 mr-auto">
-          <strong>Status: </strong>
-          <Tag color={TagColor.blue}>In Progress</Tag>
-        </div> */}
         <UploadButton setLoading={props.setLoading} fileType="classification" />
         <Button
           style="outline"
@@ -36,7 +32,7 @@ export default function Header(props: Props): JSX.Element {
             Templates
           </a>
         </Button>
-        {/* <div className="flex items-center justify-end ml-2">
+        <div className="flex items-center justify-end ml-2">
           <button
             className={[
               "border-l border-t border-b border-primary-500 rounded-l-xl py-1 px-4 text-3xl",
@@ -55,7 +51,7 @@ export default function Header(props: Props): JSX.Element {
           >
             {icons.outline.grid}
           </button>
-        </div> */}
+        </div>
       </div>
     </main>
   );

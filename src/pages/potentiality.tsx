@@ -20,7 +20,7 @@ export default function Potentiality(): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
   const [isLoading, setLoading] = useState(false);
   const [result, setResult] = useState<IResult>();
-  // const [displayGrid, setDisplayGrid] = useState(true);
+  const [displayGrid, setDisplayGrid] = useState(true);
 
   useEffect(() => {
     if (!userID) {
@@ -41,10 +41,10 @@ export default function Potentiality(): JSX.Element {
     >
       <Header
         setLoading={setLoading}
-        // displayGrid={displayGrid}
-        // setDisplayGrid={setDisplayGrid}
+        displayGrid={displayGrid}
+        setDisplayGrid={setDisplayGrid}
       />
-      {result && <Body result={result} />}
+      {result && <Body result={result} displayGrid={displayGrid} />}
     </Layout>
   );
 }
