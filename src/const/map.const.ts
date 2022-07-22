@@ -44,7 +44,7 @@ const CONTINENTS_JSON = {
   },
 };
 
-const COUNTRIES_JSON = {
+/* const COUNTRIES_JSON = {
   algeria: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/algeria/algeria-provinces.json",
     objectsKey: "DZA_adm1",
@@ -225,7 +225,7 @@ const COUNTRIES_JSON = {
     objectsKey: "VEN_adm1",
     propertiesKey: "NAME_1",
   },
-};
+}; */
 
 const MAP_JSON = { ...WORLD_JSON, ...CONTINENTS_JSON };
 
