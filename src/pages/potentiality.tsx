@@ -1,12 +1,19 @@
-import { Body, Header } from "components/sections/potentiality";
-import { Layout } from "components/common";
 import { useEffect, useState } from "react";
-import { fetchPotentialityResult } from "components/sections/potentiality/helper";
 import { useReadLocalStorage } from "usehooks-ts";
-import handleErrors from "utils/errors.utils";
-import Errors from "const/error.const";
 import { useRouter } from "next/router";
+
+import { Layout } from "components/common";
+import {
+  Body,
+  Header,
+  fetchPotentialityResult,
+} from "components/sections/potentiality";
+
+import Errors from "const/error.const";
+
 import { IResult } from "interfaces/potentiality.interface";
+
+import handleErrors from "utils/errors.utils";
 
 export default function Potentiality(): JSX.Element {
   const router = useRouter();

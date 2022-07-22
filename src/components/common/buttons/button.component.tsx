@@ -1,5 +1,6 @@
-import { ButtonStyle } from "interfaces/common.interface";
 import { useEffect, useRef } from "react";
+
+import { ButtonStyle } from "interfaces/common.interface";
 
 const getStyle = (style?: ButtonStyle) => {
   switch (style) {

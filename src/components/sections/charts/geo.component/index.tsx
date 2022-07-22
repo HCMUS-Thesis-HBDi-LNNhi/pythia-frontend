@@ -5,15 +5,10 @@ import { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
 
 import MAP_JSON from "const/map.const";
 
-import {
-  IChartOptions,
-  IDataset,
-  IFeature,
-  MAP_JSON_KEY,
-} from "interfaces/chart.interface";
+import { IChartOptions, IFeature } from "interfaces/chart.interface";
 import { IData } from "interfaces/data.interface";
 
-import { fillData, formatFeatures, getDataset, getMap, zoomIn } from "./helper";
+import { formatFeatures, getDataset, getMap, zoomIn } from "./helper";
 
 interface Props {
   data: IData;

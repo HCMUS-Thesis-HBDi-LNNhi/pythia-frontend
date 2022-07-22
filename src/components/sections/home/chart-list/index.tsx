@@ -17,7 +17,7 @@ import { PageLabels } from "interfaces/common.interface";
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
 import { handleDelete, normalizedData } from "utils/charts.utils";
-import { getCategoryLabel } from "utils/handleData";
+import { getCategoryLabel } from "utils/formatter.utils";
 
 interface Props {
   data: IData;

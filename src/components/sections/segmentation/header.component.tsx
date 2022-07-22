@@ -1,12 +1,16 @@
-import { Button, Input, Tag, UploadButton } from "components/common";
-import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { TagColor } from "interfaces/common.interface";
-import icons from "const/icons.const";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import handleErrors from "utils/errors.utils";
+
+import { Button, Input, Tag, UploadButton } from "components/common";
+
+import icons from "const/icons.const";
 import Errors from "const/error.const";
+
+import { RetainModel } from "interfaces/segmentation.interface";
+import { TagColor } from "interfaces/common.interface";
+
+import handleErrors from "utils/errors.utils";
 
 interface Props {
   selectedModel: RetainModel;

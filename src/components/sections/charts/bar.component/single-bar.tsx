@@ -6,7 +6,9 @@ import { getSingleChartColor } from "const/colors.const";
 import { IChartOptions, IDataset } from "interfaces/chart.interface";
 import { IData } from "interfaces/data.interface";
 
-import { getLabels, handle2DData, getCategoryLabel } from "utils/handleData";
+import { getLabels, getCategoryLabel } from "utils/formatter.utils";
+
+import handle2DData from "../helper";
 
 interface Props {
   data: IData;

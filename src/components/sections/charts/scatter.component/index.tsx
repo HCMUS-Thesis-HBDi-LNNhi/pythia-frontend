@@ -1,9 +1,13 @@
-import { getMultipleChartColors } from "const/colors.const";
-import { IChartOptions, IScatterDataset } from "interfaces/chart.interface";
-import { IData } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
 import { Scatter } from "react-chartjs-2";
-import { getCategoryLabel } from "utils/handleData";
+
+import { getMultipleChartColors } from "const/colors.const";
+
+import { IChartOptions, IScatterDataset } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
+
+import { getCategoryLabel } from "utils/formatter.utils";
+
 import { getDatasets } from "./helper";
 
 interface Props {

@@ -1,15 +1,20 @@
+import { useRouter } from "next/router";
+import { ReactNode, useEffect, useState } from "react";
+
 import { Pane } from "components/common";
+import { ScatterChart } from "./charts";
+
 import Errors from "const/error.const";
+
 import {
   IBGNBD,
   initBGNBDResult,
   IBGNBDResult,
 } from "interfaces/segmentation.interface";
-import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+
 import handleErrors from "utils/errors.utils";
+
 import { fetchBGNBDResult } from "./helper";
-import { ScatterChart } from "./charts";
 
 const DIVIDER = 4;
 

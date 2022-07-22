@@ -1,4 +1,6 @@
 import { topojson } from "chartjs-chart-geo";
+import { NextRouter } from "next/router";
+
 import { CONTINENTS } from "const/country-code.const";
 import Errors from "const/error.const";
 import MAP_JSON from "const/map.const";
@@ -6,14 +8,13 @@ import MAP_JSON from "const/map.const";
 import { IChartOptions, IFeature } from "interfaces/chart.interface";
 import { IData, IFactData } from "interfaces/data.interface";
 import { IMap } from "interfaces/map.interface";
-import { NextRouter } from "next/router";
+
 import handleErrors from "utils/errors.utils";
 import {
   getContinentCode,
   removeDuplicateObjects,
 } from "utils/formatter.utils";
-
-import { getDate } from "utils/handleData";
+import { getDate } from "utils/formatter.utils";
 
 interface IDataset {
   label: string;

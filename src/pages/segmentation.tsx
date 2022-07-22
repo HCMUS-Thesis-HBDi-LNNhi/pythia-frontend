@@ -1,8 +1,10 @@
-import { Header, RFMBody, BGNBDBody } from "components/sections/segmentation";
-import { Layout } from "components/common";
 import { useState } from "react";
-import { RetainModel } from "interfaces/segmentation.interface";
 import { useReadLocalStorage } from "usehooks-ts";
+
+import { Layout } from "components/common";
+import { Header, RFMBody, BGNBDBody } from "components/sections/segmentation";
+
+import { RetainModel } from "interfaces/segmentation.interface";
 
 export default function Segmentation(): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");

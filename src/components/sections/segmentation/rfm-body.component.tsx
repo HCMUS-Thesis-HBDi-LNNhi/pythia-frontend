@@ -9,9 +9,9 @@ import Errors from "const/error.const";
 import { initRFMResult, IRFMResults } from "interfaces/segmentation.interface";
 
 import handleErrors from "utils/errors.utils";
+import { getCategoryLabel } from "utils/formatter.utils";
 
 import { fetchRFMResult, getDatasets } from "./helper";
-import { getCategoryLabel } from "utils/handleData";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(

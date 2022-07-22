@@ -1,5 +1,6 @@
-import { IMenuItem, PageLabels } from "interfaces/common.interface";
 import icons from "./icons.const";
+
+import { IMenuItem, PageLabels } from "interfaces/common.interface";
 
 export const menuItems: IMenuItem[] = [
   { label: PageLabels.PROFILE, icon: icons.solid.account },

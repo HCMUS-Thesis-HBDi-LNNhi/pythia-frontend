@@ -1,6 +1,18 @@
+import { NextRouter } from "next/router";
+
+import API from "const/api.const";
+import Errors from "const/error.const";
+
 import { IChartOptions, IDataset } from "interfaces/chart.interface";
 import { IData, IDimCustomer, IFactData } from "interfaces/data.interface";
-import { getDate, getCategoryLabel, getValueLabel } from ".";
+
+import handleErrors from "utils/errors.utils";
+import fetcher from "utils/fetcher.utils";
+import {
+  getCategoryLabel,
+  getDate,
+  getValueLabel,
+} from "utils/formatter.utils";
 
 /** result: {x, sum of y} */
 function render_dateKey_default(
@@ -79,4 +91,25 @@ export default function handle2DData(
       data: entries.map(([_, data]) => data),
     },
   ];
+}
+
+export async function handleFetchData(
+  userID: string | null,
+  setLoading: (value: boolean) => void,
+  router: NextRouter
+): Promise<IData | undefined> {
+  if (!userID) {
+    handleErrors(Errors[401], router);
+    return;
+  }
+  try {
+    setLoading(true);
+    const response = await fetcher.get(API.GET.getData(userID));
+    if (response.status !== 200) throw Errors[response.status] ?? response;
+    else return response.data;
+  } catch (error) {
+    handleErrors(error, router);
+  } finally {
+    setLoading(false);
+  }
 }

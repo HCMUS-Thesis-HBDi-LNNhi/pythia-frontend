@@ -1,11 +1,13 @@
-import { ChartType, IChartOptions } from "interfaces/chart.interface";
-import { IData } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
+
 import { SingleBarChart } from "./bar.component";
 import { SingleLineChart } from "./line.component";
 import PieChart from "./pie.component";
 import ScatterChart from "./scatter.component";
 import GeoChart from "./geo.component";
+
+import { ChartType, IChartOptions } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
 
 interface Props {
   data: IData;

@@ -1,7 +1,10 @@
+import { NextRouter } from "next/router";
+
 import API from "const/api.const";
 import Errors from "const/error.const";
+
 import { IResult } from "interfaces/potentiality.interface";
-import { NextRouter } from "next/router";
+
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
 

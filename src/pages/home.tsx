@@ -1,13 +1,16 @@
-import { Layout } from "components/common";
-import { ChartList } from "components/sections/home";
-import Instructions from "components/sections/home/instructions";
-import Errors from "const/error.const";
-import { IData } from "interfaces/data.interface";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+
+import { Layout } from "components/common";
+import { ChartList, Instructions } from "components/sections/home";
+import { handleFetchData } from "components/sections/charts";
+
+import Errors from "const/error.const";
+
+import { IData } from "interfaces/data.interface";
+
 import handleErrors from "utils/errors.utils";
-import { handleFetchData } from "utils/handleData";
 
 export default function Home(): JSX.Element {
   const router = useRouter();

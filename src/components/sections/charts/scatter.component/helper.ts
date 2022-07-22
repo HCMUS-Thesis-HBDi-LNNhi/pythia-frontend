@@ -1,6 +1,7 @@
 import { IChartOptions, IScatterDataset } from "interfaces/chart.interface";
 import { IData, IDimCustomer } from "interfaces/data.interface";
-import { getDate, getLabels, getValueLabel } from "utils/handleData";
+
+import { getLabels, getValueLabel, getDate } from "utils/formatter.utils";
 
 const getMap = (
   data: IData,

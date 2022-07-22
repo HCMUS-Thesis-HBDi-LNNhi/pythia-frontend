@@ -1,10 +1,11 @@
+import icons from "./icons.const";
+
 import {
   ChartType,
   IChart,
   IChartOptions,
   IIcons,
 } from "interfaces/chart.interface";
-import icons from "./icons.const";
 
 const CURRENT_YEAR = new Date().getFullYear();
 

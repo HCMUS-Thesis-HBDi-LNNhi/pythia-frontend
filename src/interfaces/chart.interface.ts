@@ -1,5 +1,6 @@
-import MAP_JSON from "const/map.const";
 import { ReactNode } from "react";
+
+import MAP_JSON from "const/map.const";
 
 export type IIcons = { [key: string]: ReactNode };
 

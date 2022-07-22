@@ -1,10 +1,14 @@
-import { getSingleChartColor } from "const/colors.const";
-import { IChartOptions, IDataset } from "interfaces/chart.interface";
-import { IData } from "interfaces/data.interface";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { getLabels, handle2DData } from "utils/handleData";
-import { getCategoryLabel } from "utils/handleData";
+
+import { getSingleChartColor } from "const/colors.const";
+
+import { IChartOptions, IDataset } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
+
+import { getLabels, getCategoryLabel } from "utils/formatter.utils";
+
+import handle2DData from "../helper";
 
 interface Props {
   data: IData;

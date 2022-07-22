@@ -17,3 +17,7 @@ import ScatterChart from "./scatter.component";
 import GeoChart from "./geo.component";
 
 export { GeoChart, PieChart, ScatterChart };
+
+import { handleFetchData } from "./helper";
+
+export { handleFetchData };

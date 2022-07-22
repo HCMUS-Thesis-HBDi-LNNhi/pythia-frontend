@@ -1,9 +1,11 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { useInterval, useReadLocalStorage } from "usehooks-ts";
-import fetcher from "utils/fetcher.utils";
-import API from "const/api.const";
 import { useRouter } from "next/router";
+
+import API from "const/api.const";
+
+import fetcher from "utils/fetcher.utils";
 import handleErrors from "utils/errors.utils";
 
 function MyApp({ Component, pageProps }: AppProps) {

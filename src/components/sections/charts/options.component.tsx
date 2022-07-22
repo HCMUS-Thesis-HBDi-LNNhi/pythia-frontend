@@ -3,14 +3,14 @@ import { Field, Form, Formik } from "formik";
 
 import { Button, Radio, Select } from "components/common";
 
-import { initCustomerIcons, initTransactionIcons } from "const/chart.const";
 import icons from "const/icons.const";
+import MAP_JSON from "const/map.const";
+import { initCustomerIcons, initTransactionIcons } from "const/chart.const";
 
 import { ChartType, IChartOptions, IIcons } from "interfaces/chart.interface";
 
 import { ChartOptionsValidate } from "utils/validate.utils";
-import { getCategoryLabel } from "utils/handleData";
-import MAP_JSON from "const/map.const";
+import { getCategoryLabel } from "utils/formatter.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
   <label className="w-full font-medium text-primary-500 text-lg">

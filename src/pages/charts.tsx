@@ -7,19 +7,15 @@ import {
   ChartHeader,
   ChartOptions,
   ChartBody,
+  handleFetchData,
 } from "components/sections/charts";
 
 import { initialChartOptions } from "const/chart.const";
 
-import {
-  ChartType,
-  IChartData,
-  IChartOptions,
-} from "interfaces/chart.interface";
+import { ChartType } from "interfaces/chart.interface";
 import { IData } from "interfaces/data.interface";
 
 import { handleCreateChart } from "utils/charts.utils";
-import { handleFetchData } from "utils/handleData";
 
 export default function Charts(): JSX.Element {
   const router = useRouter();

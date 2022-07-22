@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 import { Pane } from "components/common";
+import { BarChart, PieChart } from "./charts";
+import { ChartHeader } from "../charts";
+
 import { ChartType } from "interfaces/chart.interface";
 import { IClassify, IResult } from "interfaces/potentiality.interface";
-import { ChartHeader } from "../charts";
-import { BarChart, PieChart } from "./charts";
 
 const disabledTypes = [ChartType.scatter, ChartType.geo, ChartType.line];
 

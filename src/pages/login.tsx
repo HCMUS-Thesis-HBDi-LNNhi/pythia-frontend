@@ -1,10 +1,14 @@
-import { Button, Loading } from "components/common";
-import API from "const/api.const";
-import icons from "const/icons.const";
-import { ILoginMethod, ViewMode } from "interfaces/common.interface";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
+
+import { Button, Loading } from "components/common";
+
+import API from "const/api.const";
+import icons from "const/icons.const";
+
+import { ILoginMethod, ViewMode } from "interfaces/common.interface";
+
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
 
