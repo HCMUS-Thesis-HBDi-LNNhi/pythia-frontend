@@ -13,6 +13,7 @@ import handleErrors from "utils/errors.utils";
 import {
   getContinentCode,
   removeDuplicateObjects,
+  RoundNumber,
 } from "utils/formatter.utils";
 import { getDate } from "utils/formatter.utils";
 
@@ -43,7 +44,7 @@ export function getDataset(
       const factKey = `${customer.customer_id}_${dateKey}`;
       const customerFact = data.fact_transactions[factKey];
       if (customerFact) {
-        sum += Math.round(customerFact[y as keyof IFactData]);
+        sum += RoundNumber(customerFact[y as keyof IFactData]);
       }
     });
     map.set(mapKey, mapValue + sum);

@@ -12,6 +12,7 @@ import {
   getCategoryLabel,
   getDate,
   getValueLabel,
+  RoundNumber,
 } from "utils/formatter.utils";
 
 /** result: {x, sum of y} */
@@ -29,7 +30,7 @@ function render_dateKey_default(
       const factKey = `${customer.customer_id}_${dateKey}`;
       const customerFact = data.fact_transactions[factKey];
       if (customerFact) {
-        sum += Math.round(customerFact[y]);
+        sum += RoundNumber(customerFact[y]);
       }
     });
     result.set(mapKey, mapValue + sum);
@@ -55,7 +56,7 @@ function render_default(
       const factKey = `${customer.customer_id}_${dateKey}`;
       const customerFact = data.fact_transactions[factKey];
       if (customerFact) {
-        sum += Math.round(customerFact[y]);
+        sum += RoundNumber(customerFact[y]);
       }
     });
     result.set(mapKey, mapValue + sum);

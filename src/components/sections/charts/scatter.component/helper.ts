@@ -1,7 +1,12 @@
 import { IChartOptions, IScatterDataset } from "interfaces/chart.interface";
 import { IData, IDimCustomer } from "interfaces/data.interface";
 
-import { getLabels, getValueLabel, getDate } from "utils/formatter.utils";
+import {
+  getLabels,
+  getValueLabel,
+  getDate,
+  RoundNumber,
+} from "utils/formatter.utils";
 
 const getMap = (
   data: IData,
@@ -23,8 +28,8 @@ const getMap = (
       const factKey = `${customer.customer_id}_${dateKey}`;
       const customerFact = data.fact_transactions[factKey];
       if (customerFact) {
-        num_trans += Math.round(customerFact.num_trans);
-        total_amount += Math.round(customerFact.total_amount);
+        num_trans += RoundNumber(customerFact.num_trans);
+        total_amount += RoundNumber(customerFact.total_amount);
       }
     });
     map.set(mapKey, [...mapValue, { x: num_trans, y: total_amount }]);
@@ -41,8 +46,8 @@ const getDateKeyMap = (data: IData, dateKeys: string[]) => {
       const factKey = `${customer.customer_id}_${dateKey}`;
       const customerFact = data.fact_transactions[factKey];
       if (customerFact) {
-        const num_trans = Math.round(customerFact.num_trans);
-        const total_amount = Math.round(customerFact.total_amount);
+        const num_trans = RoundNumber(customerFact.num_trans);
+        const total_amount = RoundNumber(customerFact.total_amount);
         map.set(mapKey, [...mapValue, { x: num_trans, y: total_amount }]);
       }
     });

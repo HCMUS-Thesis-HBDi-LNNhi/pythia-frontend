@@ -11,6 +11,7 @@ import Errors from "const/error.const";
 import { IData } from "interfaces/data.interface";
 
 import handleErrors from "utils/errors.utils";
+import { FigureBoxes } from "components/sections/home/default";
 
 export default function Home(): JSX.Element {
   const router = useRouter();
@@ -34,7 +35,12 @@ export default function Home(): JSX.Element {
         className="space-y-8 text-primary-700"
         isLoading={isLoading}
       >
-        {data && <ChartList setLoading={setLoading} data={data} />}
+        {data && (
+          <>
+            <FigureBoxes data={data} />
+            <ChartList setLoading={setLoading} data={data} />
+          </>
+        )}
       </Layout>
       {firstUser && <Instructions />}
     </>

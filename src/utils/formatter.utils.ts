@@ -1,5 +1,8 @@
 import { CONTINENTS, COUNTRIES } from "const/country-code.const";
 
+export const RoundNumber = (value: number, digit: number = 0) =>
+  Math.round(value * Math.pow(10, digit)) / Math.pow(10, digit);
+
 export const formatDate = (
   date: Date,
   formatType: string = "en-AU"

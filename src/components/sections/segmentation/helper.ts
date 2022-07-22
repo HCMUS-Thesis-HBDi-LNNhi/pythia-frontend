@@ -12,6 +12,7 @@ import {
 
 import fetcher from "utils/fetcher.utils";
 import handleErrors from "utils/errors.utils";
+import { RoundNumber } from "utils/formatter.utils";
 
 export async function fetchRFMResult(
   id: string,
@@ -60,7 +61,7 @@ const getNumTransDatasets = (
   );
   const min = num_trans[0];
   const max = num_trans[num_trans.length - 1];
-  const mid = Math.round((max - min) / 2);
+  const mid = RoundNumber((max - min) / 2);
   const transKey = [`Under ${mid} transactions`, `Over ${mid} transactions`];
 
   customerIndexes
@@ -103,7 +104,7 @@ const getCLVDatasets = (
       result.set(mapKey, [...mapValue, [xValue, y[customerIndex]]]);
     });
   return uniqueKeys.map((value) => ({
-    label: (Math.round(rfmResult.clv[value] * 100) / 100).toString(),
+    label: RoundNumber(rfmResult.clv[value]).toString(),
     data: result.get(value) ?? [],
   }));
 };
