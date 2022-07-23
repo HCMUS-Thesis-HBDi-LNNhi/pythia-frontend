@@ -14,10 +14,11 @@ interface Props {
   chartType: ChartType;
   chartOptions: IChartOptions;
   setChartOptions?: (value: IChartOptions) => void;
+  isPinned?: boolean;
 }
 
 export default function ChartBody(props: Props): JSX.Element {
-  const { data, chartType, chartOptions, setChartOptions } = props;
+  const { data, chartType, chartOptions, setChartOptions, isPinned } = props;
   const [chartProps, setChartProps] = useState({ data, chartOptions });
 
   function renderChart(): JSX.Element {
@@ -31,7 +32,13 @@ export default function ChartBody(props: Props): JSX.Element {
       case ChartType.scatter:
         return <ScatterChart {...chartProps} />;
       case ChartType.geo:
-        return <GeoChart {...chartProps} setChartOptions={setChartOptions} />;
+        return (
+          <GeoChart
+            {...chartProps}
+            setChartOptions={setChartOptions}
+            isPinned={isPinned}
+          />
+        );
       default:
         return <div>Wrong chart type</div>;
     }

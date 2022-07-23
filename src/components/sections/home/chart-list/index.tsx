@@ -18,6 +18,7 @@ import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
 import { handleDelete, normalizedData } from "utils/charts.utils";
 import { getCategoryLabel } from "utils/formatter.utils";
+import { DefaultGeoCustomersPerRegion } from "./default-charts.component";
 
 interface Props {
   data: IData;
@@ -69,6 +70,7 @@ export default function ChartList(props: Props): JSX.Element {
           data={props.data}
           chartType={chartData.chartType}
           chartOptions={chartData}
+          isPinned
         />
       </ChartContainer>
     );
@@ -81,6 +83,7 @@ export default function ChartList(props: Props): JSX.Element {
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-2">
+      <DefaultGeoCustomersPerRegion {...props.data} />
       {chartData.map((item) => renderChart(item))}
       <div
         className={[

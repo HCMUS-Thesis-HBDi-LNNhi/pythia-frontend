@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { IData } from "interfaces/data.interface";
 import { IFigure } from "interfaces/home.interface";
+
 import { RoundNumber } from "utils/formatter.utils";
 
 const FigureBox = (figure: IFigure): JSX.Element => {

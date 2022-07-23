@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { Layout } from "components/common";
-import { ChartList, Instructions } from "components/sections/home";
+import { ChartList, Instructions, FigureBoxes } from "components/sections/home";
 import { handleFetchData } from "components/sections/charts";
 
 import Errors from "const/error.const";
@@ -11,7 +11,6 @@ import Errors from "const/error.const";
 import { IData } from "interfaces/data.interface";
 
 import handleErrors from "utils/errors.utils";
-import { FigureBoxes } from "components/sections/home/default";
 
 export default function Home(): JSX.Element {
   const router = useRouter();

@@ -1,20 +1,10 @@
-import { topojson } from "chartjs-chart-geo";
-import { NextRouter } from "next/router";
-
 import { CONTINENTS } from "const/country-code.const";
-import Errors from "const/error.const";
 import MAP_JSON from "const/map.const";
 
 import { IChartOptions, IFeature } from "interfaces/chart.interface";
 import { IData, IFactData } from "interfaces/data.interface";
-import { IMap } from "interfaces/map.interface";
 
-import handleErrors from "utils/errors.utils";
-import {
-  getContinentCode,
-  removeDuplicateObjects,
-  RoundNumber,
-} from "utils/formatter.utils";
+import { getContinentCode, RoundNumber } from "utils/formatter.utils";
 import { getDate } from "utils/formatter.utils";
 
 interface IDataset {
@@ -54,29 +44,6 @@ export function getDataset(
   map.forEach((data, label) => result.push({ label, data }));
   return result;
 }
-
-export const getMap = async (
-  map: IMap,
-  router: NextRouter
-): Promise<IFeature[]> => {
-  if (!map) return [];
-  const result = await fetch(map.url)
-    .then((response) => response.json())
-    .then((value) => {
-      const features = topojson.feature(
-        value,
-        value.objects[map.objectsKey]
-        // @ts-ignore
-      ).features;
-      const uniqueFeatures = removeDuplicateObjects<IFeature>(features);
-      return uniqueFeatures;
-    })
-    .catch(() => {
-      handleErrors(Errors.geError, router);
-      return [];
-    });
-  return result;
-};
 
 export const fillData = (
   x: string,

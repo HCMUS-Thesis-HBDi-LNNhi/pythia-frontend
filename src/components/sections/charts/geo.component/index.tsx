@@ -8,16 +8,18 @@ import MAP_JSON from "const/map.const";
 import { IChartOptions, IFeature } from "interfaces/chart.interface";
 import { IData } from "interfaces/data.interface";
 
-import { formatFeatures, getDataset, getMap, zoomIn } from "./helper";
+import { formatFeatures, getDataset, zoomIn } from "./helper";
+import { getMap } from "utils/map.utils";
 
 interface Props {
   data: IData;
   chartOptions: IChartOptions;
   setChartOptions?: (value: IChartOptions) => void;
+  isPinned?: boolean;
 }
 
 export default function GeoChart(props: Props) {
-  const { data, chartOptions, setChartOptions } = props;
+  const { data, chartOptions, setChartOptions, isPinned } = props;
 
   const router = useRouter();
   const chartRef = useRef<ChartJSOrUndefined<any>>(undefined);
@@ -76,6 +78,7 @@ export default function GeoChart(props: Props) {
           color: {
             beginAtZero: true,
             interpolate: "ylGn",
+            display: !isPinned,
           },
         },
       }}
