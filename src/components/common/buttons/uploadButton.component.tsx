@@ -13,6 +13,7 @@ import { FileType } from "interfaces/utils.interface";
 
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
+import icons from "const/icons.const";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -50,7 +51,9 @@ export default function UploadButton(props: Props) {
         }}
       />
       <Button
-        style="solid"
+        style="outline"
+        className="border border-primary-500 ml-2"
+        icon={icons.outline.upload}
         onClick={() => {
           inputRef.current?.click();
         }}

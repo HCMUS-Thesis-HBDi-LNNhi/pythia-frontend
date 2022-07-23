@@ -6,12 +6,17 @@ import { ScatterChart, BarChart } from "./charts";
 
 import Errors from "const/error.const";
 
-import { initRFMResult, IRFMResults } from "interfaces/segmentation.interface";
+import {
+  initRFMResult,
+  IRFM,
+  IRFMResults,
+} from "interfaces/segmentation.interface";
 
 import handleErrors from "utils/errors.utils";
 import { getCategoryLabel } from "utils/formatter.utils";
 
 import { fetchRFMResult, getDatasets } from "./helper";
+import { ICSVData } from "interfaces/utils.interface";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -38,6 +43,7 @@ interface Props {
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
   setStatus: (value: string) => void;
+  setCSV: (value: ICSVData) => void;
 }
 
 export default function RFMBody(props: Props): JSX.Element {
@@ -59,6 +65,20 @@ export default function RFMBody(props: Props): JSX.Element {
         )
       );
       props.setStatus(value.status);
+      props.setCSV({
+        headers: [
+          { label: "Customer ID", key: "customer_id" },
+          { label: "CLV", key: "clv" },
+        ],
+        data: Object.values(value.rfm_result.rfm.customer_id).map(
+          (v, index) => {
+            return {
+              customer_id: v,
+              clv: value.rfm_result.clv[value.rfm_result.rfm.cluster_id[index]],
+            };
+          }
+        ),
+      });
     });
     // eslint-disable-next-line
   }, [props.userID]);

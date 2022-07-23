@@ -1,13 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 
-import { Button, UploadButton } from "components/common";
+import { Button, CSVExportButton, UploadButton } from "components/common";
 
 import icons from "const/icons.const";
+
+import { ICSVData } from "interfaces/utils.interface";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
   displayGrid: boolean;
   setDisplayGrid: Dispatch<SetStateAction<boolean>>;
+  csvData?: ICSVData;
 }
 
 export default function Header(props: Props): JSX.Element {
@@ -32,6 +35,7 @@ export default function Header(props: Props): JSX.Element {
             Templates
           </a>
         </Button>
+        {props.csvData && <CSVExportButton {...props.csvData} />}
         <div className="flex items-center justify-end ml-2">
           <button
             className={[

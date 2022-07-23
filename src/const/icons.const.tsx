@@ -26,6 +26,7 @@ const outline = {
   geo_chart: <Icon icon="gis:world-map-alt" />,
   pin: <Icon icon="bi:pin-angle" />,
   download: <Icon icon="akar-icons:download" />,
+  upload: <Icon icon="bytesize:export" />,
   money: <Icon icon="ri:money-dollar-circle-line" />,
   transactions: <Icon icon="icon-park-outline:bill" />,
   age: <Icon icon="cil:baby-carriage" />,

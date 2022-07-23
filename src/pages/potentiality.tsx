@@ -12,6 +12,7 @@ import {
 import Errors from "const/error.const";
 
 import { IResult } from "interfaces/potentiality.interface";
+import { ICSVData } from "interfaces/utils.interface";
 
 import handleErrors from "utils/errors.utils";
 
@@ -21,6 +22,24 @@ export default function Potentiality(): JSX.Element {
   const [isLoading, setLoading] = useState(false);
   const [result, setResult] = useState<IResult>();
   const [displayGrid, setDisplayGrid] = useState(true);
+
+  const generateCSV = (): ICSVData => {
+    return {
+      headers: [
+        { label: "Customer ID", key: "customer_id" },
+        { label: "Potential", key: "potential" },
+      ],
+      data: (result?.result ?? []).map((value) => {
+        return {
+          customer_id: value.customer_id,
+          potential:
+            value.labels === 0
+              ? "Non potential customers"
+              : "Potential customers",
+        };
+      }),
+    };
+  };
 
   useEffect(() => {
     if (!userID) {
@@ -43,6 +62,7 @@ export default function Potentiality(): JSX.Element {
         setLoading={setLoading}
         displayGrid={displayGrid}
         setDisplayGrid={setDisplayGrid}
+        csvData={generateCSV()}
       />
       {result && <Body result={result} displayGrid={displayGrid} />}
     </Layout>

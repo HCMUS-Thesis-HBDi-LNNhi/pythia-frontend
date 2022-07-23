@@ -2,13 +2,20 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
 
-import { Button, Input, Tag, UploadButton } from "components/common";
+import {
+  Button,
+  CSVExportButton,
+  Input,
+  Tag,
+  UploadButton,
+} from "components/common";
 
 import icons from "const/icons.const";
 import Errors from "const/error.const";
 
 import { RetainModel } from "interfaces/segmentation.interface";
 import { TagColor } from "interfaces/common.interface";
+import { ICSVData } from "interfaces/utils.interface";
 
 import handleErrors from "utils/errors.utils";
 
@@ -19,6 +26,7 @@ interface Props {
   displayGrid: boolean;
   setDisplayGrid: Dispatch<SetStateAction<boolean>>;
   status: string;
+  csvData?: ICSVData;
 }
 
 export default function Header(props: Props): JSX.Element {
@@ -51,7 +59,7 @@ export default function Header(props: Props): JSX.Element {
         <div className="flex items-center justify-between">
           <strong>Status: </strong>
           <Tag
-            className="capitalize"
+            className="capitalize text-center mx-10"
             color={props.status === "done" ? TagColor.green : TagColor.blue}
           >
             {props.status}
@@ -104,23 +112,19 @@ export default function Header(props: Props): JSX.Element {
           </div>
         )}
         {props.selectedModel === RetainModel.bg_nbd && <div />}
-        <div className="flex items-center justify-between">
-          <strong>Demographic data: </strong>
+        <div className="w-full flex justify-end col-span-3">
           <UploadButton
             fileType="demographic"
             setLoading={props.setLoading}
-            label="Upload data"
+            label="Upload customers"
           />
-        </div>
-        <div className="flex items-center justify-between">
-          <strong>Transactions data: </strong>
+          <div className="ml-2" />
           <UploadButton
             fileType="transaction"
             setLoading={props.setLoading}
-            label="Upload data"
+            label="Upload transactions"
           />
-        </div>
-        <div className="flex justify-end">
+          <div className="ml-2" />
           <Button
             style="outline"
             className="border border-primary-500"
@@ -130,6 +134,7 @@ export default function Header(props: Props): JSX.Element {
               Templates
             </a>
           </Button>
+          {props.csvData && <CSVExportButton {...props.csvData} />}
         </div>
       </div>
     </main>

@@ -5,6 +5,7 @@ import { Layout } from "components/common";
 import { Header, RFMBody, BGNBDBody } from "components/sections/segmentation";
 
 import { RetainModel } from "interfaces/segmentation.interface";
+import { ICSVData } from "interfaces/utils.interface";
 
 export default function Segmentation(): JSX.Element {
   const userID = useReadLocalStorage<string>("user-id");
@@ -12,6 +13,7 @@ export default function Segmentation(): JSX.Element {
   const [selectedModel, setSelectedModel] = useState(RetainModel.rfm);
   const [displayGrid, setDisplayGrid] = useState(true);
   const [status, setStatus] = useState("");
+  const [csv, setCSV] = useState<ICSVData>();
 
   return (
     <Layout
@@ -26,6 +28,7 @@ export default function Segmentation(): JSX.Element {
         displayGrid={displayGrid}
         setDisplayGrid={setDisplayGrid}
         status={status}
+        csvData={csv}
       />
       {selectedModel === RetainModel.bg_nbd ? (
         <BGNBDBody
@@ -33,6 +36,7 @@ export default function Segmentation(): JSX.Element {
           setLoading={setLoading}
           displayGrid={displayGrid}
           setStatus={setStatus}
+          setCSV={setCSV}
         />
       ) : (
         <RFMBody
@@ -40,6 +44,7 @@ export default function Segmentation(): JSX.Element {
           setLoading={setLoading}
           displayGrid={displayGrid}
           setStatus={setStatus}
+          setCSV={setCSV}
         />
       )}
     </Layout>

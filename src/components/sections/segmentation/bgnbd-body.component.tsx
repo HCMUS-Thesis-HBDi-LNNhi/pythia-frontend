@@ -15,6 +15,7 @@ import {
 import handleErrors from "utils/errors.utils";
 
 import { fetchBGNBDResult } from "./helper";
+import { ICSVData } from "interfaces/utils.interface";
 
 const DIVIDER = 4;
 
@@ -37,6 +38,7 @@ interface Props {
   displayGrid: boolean;
   setLoading: (value: boolean) => void;
   setStatus: (value: string) => void;
+  setCSV: (value: ICSVData) => void;
 }
 
 export default function BGNBDBody(props: Props): JSX.Element {
@@ -53,6 +55,16 @@ export default function BGNBDBody(props: Props): JSX.Element {
       if (!value) return;
       setBGNBDResult(value.bg_nbd_result);
       props.setStatus(value.status);
+      props.setCSV({
+        headers: [
+          { label: "Customer ID", key: "customer_id" },
+          { label: "Prediction", key: "predict" },
+        ],
+        data: Object.values(value.bg_nbd_result.bgnbd).map((v) => ({
+          customer_id: v.id,
+          predict: v.predict,
+        })),
+      });
     });
     // eslint-disable-next-line
   }, [props.userID]);
