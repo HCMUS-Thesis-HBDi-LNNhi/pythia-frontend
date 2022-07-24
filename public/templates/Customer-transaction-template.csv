@@ -1,2 +1,2 @@
-Customer ID,Transaction date,Transaction amount
+customer_id,transaction_date,transaction_amount
 ExampleID,dd/mm/yyyy,100.00

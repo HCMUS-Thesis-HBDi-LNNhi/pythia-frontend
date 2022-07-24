@@ -1,2 +1,2 @@
-ID,Day of birth,Gender,Country,City,Job title,Job industry,Wealth segment
+id,dob,gender,country,city,job_title,job_industry,wealth_segment
 ExampleID,dd/mm/yyyy,Female/Male,Vietnam,Ho Chi Minh,General Manager,IT,High Net Worth

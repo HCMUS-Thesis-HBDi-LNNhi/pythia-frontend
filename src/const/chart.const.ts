@@ -65,6 +65,7 @@ export const initTransactionIcons: IIcons = {
   total_amount: icons.outline.money,
 };
 
-export const transactionHeader = "user_id,amount,date";
+export const transactionHeader =
+  "customer_id,transaction_date,transaction_amount";
 export const demographicHeader =
   "id,dob,gender,country,city,job_title,job_industry,wealth_segment";
