@@ -70,7 +70,7 @@ async function handleUpload(
   type: FileType,
   setLoading: Dispatch<SetStateAction<boolean>>,
   router: NextRouter
-) {
+): Promise<void> {
   try {
     setLoading(true);
 
@@ -78,13 +78,16 @@ async function handleUpload(
     reader.onload = async function (e) {
       const rows = e.target?.result as string;
       const header = rows.split("\r\n")[0];
-      switch (type) {
-        case "transaction":
-          if (header !== transactionHeader) throw Errors.formatError;
-          break;
-        default:
-          if (header !== demographicHeader) throw Errors.formatError;
-          break;
+      if (type === "transaction") {
+        if (header !== transactionHeader) {
+          handleErrors(Errors.formatError, router);
+          return;
+        }
+      } else {
+        if (header !== demographicHeader) {
+          handleErrors(Errors.formatError, router);
+          return;
+        }
       }
 
       let url = API.POST.uploadFile;
