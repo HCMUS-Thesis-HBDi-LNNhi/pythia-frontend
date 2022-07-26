@@ -19,6 +19,7 @@ interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
   fileType: FileType;
   label?: string;
+  setUploadSuccess?: (value: boolean) => void;
 }
 
 export default function UploadButton(props: Props) {
@@ -33,7 +34,14 @@ export default function UploadButton(props: Props) {
       return;
     }
     if (file) {
-      handleUpload(file, userID, props.fileType, props.setLoading, router);
+      handleUpload(
+        file,
+        userID,
+        props.fileType,
+        props.setLoading,
+        router,
+        props.setUploadSuccess
+      );
     }
   }, [file, props, router, userID]);
 
@@ -69,7 +77,8 @@ async function handleUpload(
   userID: string,
   type: FileType,
   setLoading: Dispatch<SetStateAction<boolean>>,
-  router: NextRouter
+  router: NextRouter,
+  setUploadSuccess?: (value: boolean) => void
 ): Promise<void> {
   try {
     setLoading(true);
@@ -77,7 +86,7 @@ async function handleUpload(
     const reader = new FileReader();
     reader.onload = async function (e) {
       const rows = e.target?.result as string;
-      const header = rows.split("\r\n")[0];
+      const header = rows.split("\n")[0].replaceAll(" ", "");
       if (type === "transaction") {
         if (header !== transactionHeader) {
           handleErrors(Errors.formatError, router);
@@ -108,7 +117,10 @@ async function handleUpload(
       const response = await fetcher.post(url, formData, config);
 
       if (response.status !== 204) throw Errors[response.status] ?? response;
-      else toast("Upload successful", "success");
+      else {
+        toast("Upload successful", "success");
+        setUploadSuccess && setUploadSuccess(true);
+      }
     };
     reader.readAsText(file);
   } catch (error) {

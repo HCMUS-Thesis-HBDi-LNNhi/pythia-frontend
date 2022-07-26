@@ -11,12 +11,14 @@ import fetcher from "utils/fetcher.utils";
 export async function fetchPotentialityResult(
   id: string,
   setLoading: (value: boolean) => void,
-  router: NextRouter
+  router: NextRouter,
+  setFirstUser: (value: boolean) => void
 ): Promise<IResult | undefined> {
   try {
     setLoading(true);
     const response = await fetcher.get(API.GET.getPotentialityResult(id));
-    if (response.status !== 200) throw Errors[response.status] ?? response;
+    if (response.status === 400) setFirstUser(true);
+    else if (response.status !== 200) throw Errors[response.status] ?? response;
     else return response.data;
   } catch (error) {
     handleErrors(error, router);

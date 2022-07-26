@@ -15,14 +15,14 @@ import handleErrors from "utils/errors.utils";
 export default function Home(): JSX.Element {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
-  const [firstUser, _setFirstUser] = useState(false);
+  const [firstUser, setFirstUser] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<IData>();
 
   useEffect(() => {
     !userID
       ? handleErrors(Errors[401], router)
-      : handleFetchData(userID, setLoading, router).then(
+      : handleFetchData(userID, router, setLoading, setFirstUser).then(
           (res) => res && setData(res)
         );
   }, [userID, router]);
@@ -41,7 +41,9 @@ export default function Home(): JSX.Element {
           </>
         )}
       </Layout>
-      {firstUser && <Instructions />}
+      {firstUser && (
+        <Instructions setLoading={setLoading} setFirstUser={setFirstUser} />
+      )}
     </>
   );
 }

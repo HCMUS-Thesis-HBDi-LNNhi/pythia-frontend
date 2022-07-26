@@ -6,6 +6,7 @@ import { Layout } from "components/common";
 import {
   Body,
   Header,
+  Instructions,
   fetchPotentialityResult,
 } from "components/sections/potentiality";
 
@@ -22,6 +23,7 @@ export default function Potentiality(): JSX.Element {
   const [isLoading, setLoading] = useState(false);
   const [result, setResult] = useState<IResult>();
   const [displayGrid, setDisplayGrid] = useState(true);
+  const [firstUser, setFirstUser] = useState(false);
 
   const generateCSV = (): ICSVData => {
     return {
@@ -46,25 +48,30 @@ export default function Potentiality(): JSX.Element {
       handleErrors(Errors[401], router);
       return;
     }
-    fetchPotentialityResult(userID, setLoading, router).then(
+    fetchPotentialityResult(userID, setLoading, router, setFirstUser).then(
       (value) => value && setResult(value)
     );
     // eslint-disable-next-line
   }, [userID]);
 
   return (
-    <Layout
-      title="Potentiality"
-      className="space-y-8 text-primary-700"
-      isLoading={isLoading}
-    >
-      <Header
-        setLoading={setLoading}
-        displayGrid={displayGrid}
-        setDisplayGrid={setDisplayGrid}
-        csvData={generateCSV()}
-      />
-      {result && <Body result={result} displayGrid={displayGrid} />}
-    </Layout>
+    <>
+      <Layout
+        title="Potentiality"
+        className="space-y-8 text-primary-700"
+        isLoading={isLoading}
+      >
+        <Header
+          setLoading={setLoading}
+          displayGrid={displayGrid}
+          setDisplayGrid={setDisplayGrid}
+          csvData={generateCSV()}
+        />
+        {result && <Body result={result} displayGrid={displayGrid} />}
+      </Layout>
+      {firstUser && (
+        <Instructions setLoading={setLoading} setFirstUser={setFirstUser} />
+      )}
+    </>
   );
 }
