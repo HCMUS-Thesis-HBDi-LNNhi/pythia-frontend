@@ -98,7 +98,7 @@ export async function handleFetchData(
   userID: string | null,
   router: NextRouter,
   setLoading: (value: boolean) => void,
-  setFirstUser: (value: boolean) => void
+  setFirstUser?: (value: boolean) => void
 ): Promise<IData | undefined> {
   if (!userID) {
     handleErrors(Errors[401], router);
@@ -107,8 +107,10 @@ export async function handleFetchData(
   try {
     setLoading(true);
     const response = await fetcher.get(API.GET.getData(userID));
-    if (response.status === 400) setFirstUser(true);
-    else if (response.status !== 200) throw Errors[response.status] ?? response;
+    if (response.status === 400 && setFirstUser) {
+      setFirstUser(true);
+    } else if (response.status !== 200)
+      throw Errors[response.status] ?? response;
     else return response.data;
   } catch (error) {
     handleErrors(error, router);

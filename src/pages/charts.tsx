@@ -29,7 +29,7 @@ export default function Charts(): JSX.Element {
   const [chartOptions, setChartOptions] = useState(initialChartOptions);
 
   useEffect(() => {
-    handleFetchData(userID, setLoading, router).then((res) => {
+    handleFetchData(userID, router, setLoading).then((res) => {
       const params = router.query;
       if (!res) return;
       setData(res);
