@@ -62,7 +62,7 @@ export const getDatasets = (
   let map = new Map<string, { x: number; y: number }[]>();
   let dateKeys = getDate(chartOptions.quarters, chartOptions.years);
 
-  if (chartOptions.x !== "date_key") map = getDateKeyMap(data, dateKeys);
+  if (chartOptions.x === "date_key") map = getDateKeyMap(data, dateKeys);
   else map = getMap(data, chartOptions, dateKeys);
 
   const result: IScatterDataset[] = [];
