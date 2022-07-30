@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
 import { Button, Dialog, UploadButton } from "components/common";
+import icons from "const/icons.const";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -27,7 +28,16 @@ export default function Instructions(props: Props): JSX.Element {
           setUploadSuccess={setClassification}
         />
       </div>
-      <div className="grid place-content-center pt-6">
+      <div className="flex justify-end items-center space-x-2 pt-4">
+        <Button
+          style="outline"
+          className="border border-primary-500"
+          icon={icons.outline.download}
+        >
+          <a href="templates.zip" download="Customer transaction template">
+            Templates
+          </a>
+        </Button>
         <Button
           style="solid"
           onClick={() => {
@@ -36,7 +46,7 @@ export default function Instructions(props: Props): JSX.Element {
           }}
           disabled={!classification}
         >
-          Submit
+          Finish
         </Button>
       </div>
     </Dialog>
