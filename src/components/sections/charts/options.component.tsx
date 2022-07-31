@@ -109,8 +109,8 @@ export default function ChartOptions(props: Props): JSX.Element {
         break;
       case ChartType.line:
         setCustomerIcons({
-          date_key: icons.outline.calendar,
           dob: icons.outline.age,
+          date_key: icons.outline.calendar,
         });
         setTransactionIcons(initTransactionIcons);
         break;

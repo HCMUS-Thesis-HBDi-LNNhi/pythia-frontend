@@ -55,15 +55,6 @@ export default function Charts(): JSX.Element {
 
   useEffect(() => {
     switch (chartType) {
-      case ChartType.line:
-        setChartOptions({
-          ...chartOptions,
-          x:
-            chartOptions.x !== "date_key" && chartOptions.x !== "dob"
-              ? "date_key"
-              : chartOptions.x,
-        });
-        return;
       case ChartType.geo:
         setChartOptions({
           ...chartOptions,
