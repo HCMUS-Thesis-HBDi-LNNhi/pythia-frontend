@@ -26,7 +26,8 @@ const outline = {
   geo_chart: <Icon icon="gis:world-map-alt" />,
   pin: <Icon icon="bi:pin-angle" />,
   download: <Icon icon="akar-icons:download" />,
-  money: <Icon icon="healthicons:money-bag-outline" />,
+  upload: <Icon icon="akar-icons:share-box" />,
+  money: <Icon icon="ri:money-dollar-circle-line" />,
   transactions: <Icon icon="icon-park-outline:bill" />,
   age: <Icon icon="cil:baby-carriage" />,
   gender: <Icon icon="icons8:gender" />,
@@ -41,6 +42,7 @@ const outline = {
   zoomOut: <Icon icon="akar-icons:zoom-out" />,
   grid: <Icon icon="gg:display-grid" />,
   list: <Icon icon="fluent:text-bullet-list-square-20-regular" />,
+  wealth_segmentation: <Icon icon="charm:people" />,
 };
 
 const solid = {
@@ -65,7 +67,6 @@ const solid = {
   line_chart: <Icon icon="healthicons:chart-line-negative" />,
   geo_chart: <Icon icon="gis:world-map-alt-o" />,
   pin: <Icon icon="bi:pin-angle-fill" />,
-  money: <Icon icon="healthicons:money-bag" />,
   transaction: <Icon icon="icon-park-solid:bill" />,
   age: <Icon icon="bxs:baby-carriage" />,
   country: <Icon icon="bi:flag-fill" />,

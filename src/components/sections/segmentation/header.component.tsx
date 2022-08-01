@@ -1,12 +1,29 @@
-import { Button, Input, Tag, UploadButton } from "components/common";
-import { RetainModel } from "interfaces/segmentation.interface";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { TagColor } from "interfaces/common.interface";
-import icons from "const/icons.const";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import handleErrors from "utils/errors.utils";
+
+import {
+  Button,
+  CSVExportButton,
+  Input,
+  Tag,
+  UploadButton,
+} from "components/common";
+
+import icons from "const/icons.const";
 import Errors from "const/error.const";
+
+import { RetainModel } from "interfaces/segmentation.interface";
+import { TagColor } from "interfaces/common.interface";
+import { ICSVData } from "interfaces/utils.interface";
+
+import handleErrors from "utils/errors.utils";
+import { DEFAULT_END_DATE, DEFAULT_PREDICT_TIME } from "const/chart.const";
+import {
+  DateToNumber,
+  formatDateInput,
+  NumberToDate,
+} from "utils/formatter.utils";
 
 interface Props {
   selectedModel: RetainModel;
@@ -15,20 +32,25 @@ interface Props {
   displayGrid: boolean;
   setDisplayGrid: Dispatch<SetStateAction<boolean>>;
   status: string;
+  csvData?: ICSVData;
 }
 
 export default function Header(props: Props): JSX.Element {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
+  const [endDate, setEndDate] = useLocalStorage("end-date", DEFAULT_END_DATE);
+  const [predictTime, setPredictTime] = useLocalStorage(
+    "predict-time",
+    DEFAULT_PREDICT_TIME
+  );
+  const [_, setTrigger] = useLocalStorage("trigger", false);
 
   useEffect(() => {
     if (!userID) handleErrors(Errors[401], router);
   }, [props.setLoading, router, userID]);
 
   return (
-    <main
-      className={["border border-gray-300 shadow rounded-lg", "p-4"].join(" ")}
-    >
+    <main className="border border-gray-300 shadow rounded-lg p-4">
       <div className="grid grid-cols-[38%,38%,20%] gap-y-4 gap-x-6">
         <div className="flex items-center justify-between">
           <label htmlFor="model">
@@ -81,8 +103,11 @@ export default function Header(props: Props): JSX.Element {
             <Input
               type="date"
               id="last_day"
-              defaultValue={new Date().toISOString().substring(0, 10)}
               className="min-w-[12rem]"
+              value={formatDateInput(
+                endDate ? NumberToDate(endDate) : new Date()
+              )}
+              setValue={(value) => setEndDate(DateToNumber(new Date(value)))}
             />
           </div>
         )}
@@ -94,29 +119,43 @@ export default function Header(props: Props): JSX.Element {
             <Input
               type="number"
               id="predict_days"
-              defaultValue={365}
               className="text-center max-w-[10rem]"
+              value={predictTime}
+              setValue={(value) =>
+                typeof value === "number"
+                  ? setPredictTime(value)
+                  : setPredictTime(parseInt(value))
+              }
             />
           </div>
         )}
         {props.selectedModel === RetainModel.bg_nbd && <div />}
-        <div className="flex items-center justify-between">
-          <strong>Demographic data: </strong>
+        {props.selectedModel === RetainModel.bg_nbd && (
+          <div className="w-full col-span-3 italic text-sm">
+            *Last observed day and Predict days are set to default after log out
+          </div>
+        )}
+        <div className="w-full flex justify-end col-span-3">
+          <Button
+            style="solid"
+            onClick={() => {
+              setTrigger(true);
+              window.location.reload();
+            }}
+          >
+            Update data
+          </Button>
           <UploadButton
             fileType="demographic"
             setLoading={props.setLoading}
-            label="Upload data"
+            label="Upload customers"
           />
-        </div>
-        <div className="flex items-center justify-between">
-          <strong>Transactions data: </strong>
           <UploadButton
             fileType="transaction"
             setLoading={props.setLoading}
-            label="Upload data"
+            label="Upload transactions"
           />
-        </div>
-        <div className="flex justify-end">
+          <div className="ml-2" />
           <Button
             style="outline"
             className="border border-primary-500"
@@ -126,6 +165,7 @@ export default function Header(props: Props): JSX.Element {
               Templates
             </a>
           </Button>
+          {props.csvData && <CSVExportButton {...props.csvData} />}
         </div>
       </div>
     </main>

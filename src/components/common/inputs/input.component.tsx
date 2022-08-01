@@ -7,12 +7,12 @@ import {
 interface Props {
   type: HTMLInputTypeAttribute;
   placeholder?: string;
-  value?: string | number | readonly string[];
-  setValue?: (value: string | number | readonly string[]) => void;
+  value?: string | number;
+  setValue?: (value: string | number) => void;
   fill?: boolean;
   className?: string;
   id?: string;
-  defaultValue?: string | number | readonly string[];
+  defaultValue?: string | number;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }

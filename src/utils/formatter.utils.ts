@@ -1,5 +1,29 @@
 import { CONTINENTS, COUNTRIES } from "const/country-code.const";
 
+import { Age, Gender, IData, IDimCustomer } from "interfaces/data.interface";
+import { IChartOptions, IChartYear } from "interfaces/chart.interface";
+
+import { ParsedUrlQuery } from "querystring";
+
+export const RoundNumber = (value: number, digit: number = 0) =>
+  Math.round(value * Math.pow(10, digit)) / Math.pow(10, digit);
+
+const formatTimeRange = (time: string) =>
+  time.split("_").map((value) => parseInt(value));
+
+export const formatChartsParams = (params: ParsedUrlQuery) => {
+  const from = formatTimeRange(params.from?.toString() ?? "");
+  const to = formatTimeRange(params.to?.toString() ?? "");
+  let result: { [key: string]: any } = {};
+  if (params.x) result["x"] = params.x.toString();
+  if (params.y) result["y"] = params.y.toString();
+  if (params.from && params.to) {
+    result["years"] = { from: from[1], to: to[1] };
+    result["quarters"] = { from: from[0], to: to[0] };
+  }
+  return result;
+};
+
 export const formatDate = (
   date: Date,
   formatType: string = "en-AU"
@@ -22,3 +46,129 @@ export const getContinentCode = (name: string) => {
   const result = countries.find((value) => value.name === name);
   return result && (result.continent as keyof typeof CONTINENTS);
 };
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+export function getDate(quarters: IChartYear, years: IChartYear): string[] {
+  const result: string[] = [];
+
+  let currentQuarter = quarters.from;
+  let currentYear = years.from;
+
+  while (currentYear <= years.to) {
+    if (currentQuarter > quarters.to && currentYear === years.to) break;
+    result.push(`${currentQuarter}_${currentYear}`);
+    if (currentQuarter < 4) currentQuarter++;
+    else (currentQuarter = 1), currentYear++;
+  }
+
+  return result;
+}
+
+export const getLabels = (
+  data: IData,
+  chartOptions: IChartOptions
+): string[] => {
+  const { x, quarters, years } = chartOptions;
+  switch (x) {
+    case "date_key":
+      return getDate(quarters, years).map(
+        (value) => `Q${value.replace("_", "/")}`
+      );
+    case "dob":
+      return Object.values(Age);
+    case "gender":
+      return Object.values(Gender);
+    default:
+      return Array.from(
+        new Set(
+          data.dim_customers.map(
+            (value) => value[x as keyof IDimCustomer] ?? ""
+          )
+        )
+      );
+  }
+};
+
+export const getValueLabel = (key: string, category?: string): string => {
+  switch (category) {
+    case "gender":
+      switch (key) {
+        case "0":
+          return Gender.female;
+        case "1":
+          return Gender.male;
+        default:
+          return Gender.others;
+      }
+    case "dob":
+      const age = CURRENT_YEAR - parseInt(key.split("/")[2]);
+      switch (true) {
+        case age < 18:
+          return Age.teen;
+        case age >= 18 && age < 26:
+          return Age.young_adult;
+        case age >= 26 && age < 46:
+          return Age.adult;
+        case age >= 46 && age < 66:
+          return Age.middle_age;
+        default:
+          return Age.elder;
+      }
+    case "date_key":
+      return `Q${key.replace("_", "/")}`;
+    default:
+      return key;
+  }
+};
+
+export const getCategoryLabel = (key: string) => {
+  switch (key) {
+    // IFactData + RFM
+    case "num_trans":
+      return "Total transactions";
+    case "total_amount":
+      return "Total amount";
+    case "recency":
+      return "Recency";
+    case "cluster_id":
+      return "Cluster ID";
+    //  IDimCustomer
+    case "customer_id":
+      return "Customer ID";
+    case "city":
+      return "City";
+    case "country":
+      return "Country";
+    case "dob":
+      return "Age";
+    case "gender":
+      return "Gender";
+    case "job_industry":
+      return "Job industry";
+    case "job_title":
+      return "Job title";
+    case "date_key":
+      return "Quarters";
+    case "wealth_segment":
+      return "Wealth segment";
+    // MAP_JSON
+    case "world":
+      return "World countries";
+    case "world_continents":
+      return "World continents";
+    default:
+      return key.replaceAll("_", " ");
+  }
+};
+
+export const DEFAULT_START_DATE = new Date("01/01/1990");
+
+export const DateToNumber = (endDate: Date): number =>
+  (endDate.getTime() - DEFAULT_START_DATE.getTime()) / 3600;
+
+export const NumberToDate = (value: number): Date =>
+  new Date(value * 3600 + DEFAULT_START_DATE.getTime());
+
+export const formatDateInput = (date: Date): string =>
+  date.toISOString().substring(0, 10);

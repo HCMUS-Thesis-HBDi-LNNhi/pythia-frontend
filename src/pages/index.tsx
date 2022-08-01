@@ -1,7 +1,8 @@
-import { PageLabels, ViewMode } from "interfaces/common.interface";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
+
+import { PageLabels, ViewMode } from "interfaces/common.interface";
 
 export default function Router(): void {
   const router = useRouter();

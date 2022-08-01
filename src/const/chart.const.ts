@@ -1,10 +1,12 @@
+import icons from "./icons.const";
+
 import {
   ChartType,
   IChart,
   IChartOptions,
-  IIconsList,
+  IIcons,
 } from "interfaces/chart.interface";
-import icons from "./icons.const";
+import { DateToNumber } from "utils/formatter.utils";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -48,17 +50,26 @@ export const ChartTypes: IChart[] = [
   },
 ];
 
-export const initCustomerIcons: IIconsList = {
+export const initCustomerIcons: IIcons = {
   dob: icons.outline.age,
   gender: icons.outline.gender,
   country: icons.outline.country,
   city: icons.outline.city,
   job_title: icons.outline.job_title,
   job_industry: icons.outline.job_industry,
+  wealth_segment: icons.outline.wealth_segmentation,
   date_key: icons.outline.calendar,
 };
 
-export const initTransactionIcons: IIconsList = {
+export const initTransactionIcons: IIcons = {
   num_trans: icons.outline.transactions,
   total_amount: icons.outline.money,
 };
+
+export const transactionHeader =
+  "customer_id,transaction_date,transaction_amount";
+export const demographicHeader =
+  "id,dob,gender,country,city,job_title,job_industry,wealth_segment";
+
+export const DEFAULT_PREDICT_TIME = 365;
+export const DEFAULT_END_DATE = DateToNumber(new Date());

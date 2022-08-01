@@ -1,17 +1,16 @@
-import { Button, Radio } from "components/common";
-import { initCustomerIcons, initTransactionIcons } from "const/chart.const";
-import icons from "const/icons.const";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
-import {
-  ChartType,
-  IChartOptions,
-  IIconsList,
-  XAxisType,
-  YAxisType,
-} from "interfaces/chart.interface";
-import { CategoryDataLabels, FactDataLabels } from "interfaces/data.interface";
-import React, { ReactNode, useEffect, useState } from "react";
+
+import { Button, Radio, Select } from "components/common";
+
+import icons from "const/icons.const";
+import MAP_JSON from "const/map.const";
+import { initCustomerIcons, initTransactionIcons } from "const/chart.const";
+
+import { ChartType, IChartOptions, IIcons } from "interfaces/chart.interface";
+
 import { ChartOptionsValidate } from "utils/validate.utils";
+import { getCategoryLabel } from "utils/formatter.utils";
 
 const Heading = (props: { label: string }): JSX.Element => (
   <label className="w-full font-medium text-primary-500 text-lg">
@@ -40,11 +39,11 @@ const InputDate = (props: {
   </div>
 );
 
-const InputTransactions = (props: {
+const RadioGroup = (props: {
   label: string;
   className: string;
   groupName: string;
-  fieldValue: (keyof typeof FactDataLabels)[];
+  fieldValue: string[];
   icons: React.ReactNode[];
 }): JSX.Element => (
   <div className={props.className}>
@@ -58,7 +57,7 @@ const InputTransactions = (props: {
           key={value}
           groupName={props.groupName}
           value={value}
-          label={FactDataLabels[value]}
+          label={getCategoryLabel(value)}
         >
           <div className="text-3xl">{props.icons[index]}</div>
         </Radio>
@@ -67,33 +66,24 @@ const InputTransactions = (props: {
   </div>
 );
 
-const InputCustomers = (props: {
+const RegionSelection = (props: {
   label: string;
   className: string;
-  groupName: string;
-  fieldValue: (keyof typeof CategoryDataLabels)[];
-  icons: React.ReactNode[];
+  name: string;
+  fieldValue: string[];
 }): JSX.Element => (
   <div className={props.className}>
     <Heading label={props.label} />
-    <ul
-      role="group"
-      className={[
-        "space-y-2 grid grid-cols-7",
-        "lg:grid-cols-2 lg:gap-x-12",
-      ].join(" ")}
-    >
-      {props.fieldValue.map((value, index) => (
-        <Radio
-          key={value}
-          groupName={props.groupName}
-          value={value}
-          label={CategoryDataLabels[value]}
-        >
-          <div className="text-3xl">{props.icons[index]}</div>
-        </Radio>
-      ))}
-    </ul>
+    <Select
+      className="capitalize w-full"
+      options={props.fieldValue.map((value) => ({
+        label: getCategoryLabel(value),
+        id: value,
+        value,
+      }))}
+      name={props.name}
+      label={props.label}
+    />
   </div>
 );
 
@@ -104,8 +94,8 @@ interface Props {
 }
 
 export default function ChartOptions(props: Props): JSX.Element {
-  const [customerIcons, setCustomerIcons] = useState<IIconsList | null>();
-  const [transactionIcons, setTransactionIcons] = useState<IIconsList | null>();
+  const [customerIcons, setCustomerIcons] = useState<IIcons | null>(null);
+  const [transactionIcons, setTransactionIcons] = useState<IIcons | null>(null);
 
   useEffect(() => {
     switch (props.chartType) {
@@ -119,8 +109,8 @@ export default function ChartOptions(props: Props): JSX.Element {
         break;
       case ChartType.line:
         setCustomerIcons({
-          date_key: icons.outline.calendar,
           dob: icons.outline.age,
+          date_key: icons.outline.calendar,
         });
         setTransactionIcons(initTransactionIcons);
         break;
@@ -158,23 +148,30 @@ export default function ChartOptions(props: Props): JSX.Element {
             label="To quarter"
             fieldNames={["quarters.to", "years.to"]}
           />
-          {customerIcons && (
-            <InputCustomers
+          {customerIcons ? (
+            <RadioGroup
               label={
                 props.chartType === ChartType.scatter ? "Value" : "X Value"
               }
               className="col-span-3"
               groupName="x"
-              fieldValue={Object.keys(customerIcons) as XAxisType[]}
+              fieldValue={Object.keys(customerIcons)}
               icons={Object.values(customerIcons)}
+            />
+          ) : (
+            <RegionSelection
+              label="Region"
+              className="col-span-3"
+              name="x"
+              fieldValue={Object.keys(MAP_JSON)}
             />
           )}
           {transactionIcons && (
-            <InputTransactions
+            <RadioGroup
               label={props.chartType === ChartType.geo ? "Value" : "Y Value"}
               className="col-span-3"
               groupName="y"
-              fieldValue={Object.keys(transactionIcons) as YAxisType[]}
+              fieldValue={Object.keys(transactionIcons)}
               icons={Object.values(transactionIcons)}
             />
           )}

@@ -18,33 +18,16 @@ export enum Transaction {
   upper = "Upper",
 }
 
-export enum FactDataLabels {
-  num_trans = "Total transactions",
-  total_amount = "Total amount",
-  recency = "Recency",
-  cluster_id = "Cluster",
-  customer_id = "Customer ID",
-}
-
-export enum CategoryDataLabels {
-  city = "City",
-  country = "Country",
-  customer_id = "Customer ID",
-  dob = "Age",
-  gender = "Gender",
-  job_industry = "Job industry",
-  job_title = "Job title",
-  date_key = "Quarters",
-}
-
 export interface IDimCustomer {
   city: string;
   country: string;
-  customer_id: string;
+  customer_id?: string;
   dob: string;
   gender: string;
   job_industry: string;
   job_title: string;
+  wealth_segment: string;
+  date_key?: string;
 }
 
 export interface IDimDate {

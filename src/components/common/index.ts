@@ -6,8 +6,9 @@ export { Layout, toast, Loading };
 
 import Button from "./buttons/button.component";
 import UploadButton from "./buttons/uploadButton.component";
+import CSVExportButton from "./buttons/csvExportButton.component";
 
-export { Button, UploadButton };
+export { Button, UploadButton, CSVExportButton };
 
 import Input from "./inputs/input.component";
 import Radio from "./inputs/radio.component";

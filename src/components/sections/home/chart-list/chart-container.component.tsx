@@ -1,11 +1,12 @@
 import { Button } from "components/common";
+
 import icons from "const/icons.const";
 
 interface Props {
   label: string;
   children: React.ReactNode;
-  delete: () => void;
-  onClick: () => void;
+  delete?: () => void;
+  onClick?: () => void;
 }
 
 export default function ChartContainer(props: Props): JSX.Element {
@@ -20,17 +21,19 @@ export default function ChartContainer(props: Props): JSX.Element {
         {props.label}
       </div>
       <button
-        className="w-full h-full p-8 grid place-content-center"
-        onClick={() => props.onClick()}
+        className="w-full h-full px-5 grid place-content-center"
+        onClick={() => props.onClick && props.onClick()}
       >
         {props.children}
       </button>
-      <Button
-        className="text-lg place-self-end absolute !p-2"
-        style="outline"
-        icon={icons.solid.trash}
-        onClick={() => props.delete()}
-      />
+      {props.delete && (
+        <Button
+          className="text-lg place-self-end absolute !p-4"
+          style="outline"
+          icon={icons.solid.trash}
+          onClick={() => props.delete && props.delete()}
+        />
+      )}
     </div>
   );
 }

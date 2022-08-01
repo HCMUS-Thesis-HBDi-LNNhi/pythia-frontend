@@ -1,17 +1,19 @@
-const WORLD_JSON = {
-  world: {
-    url: "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json",
-    objectsKey: "countries1",
-    propertiesKey: "name",
-  },
+import { IMapJson } from "interfaces/map.interface";
+
+const WORLD_JSON: IMapJson = {
   world_continents: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/world-continents.json",
     objectsKey: "continent",
     propertiesKey: "continent",
   },
+  world: {
+    url: "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json",
+    objectsKey: "countries1",
+    propertiesKey: "name",
+  },
 };
 
-const CONTINENTS_JSON = {
+const CONTINENTS_JSON: IMapJson = {
   africa: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/continents/africa.json",
     objectsKey: "continent_Africa_subunits",
@@ -44,7 +46,7 @@ const CONTINENTS_JSON = {
   },
 };
 
-const COUNTRIES_JSON = {
+/* const COUNTRIES_JSON: IMapJson = {
   algeria: {
     url: "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/algeria/algeria-provinces.json",
     objectsKey: "DZA_adm1",
@@ -225,8 +227,8 @@ const COUNTRIES_JSON = {
     objectsKey: "VEN_adm1",
     propertiesKey: "NAME_1",
   },
-};
+}; */
 
-const MAP_JSON = { ...WORLD_JSON, ...CONTINENTS_JSON };
+const MAP_JSON: IMapJson = { ...WORLD_JSON, ...CONTINENTS_JSON };
 
 export default MAP_JSON;

@@ -23,19 +23,6 @@ export interface IRFMResponse {
   status: string;
 }
 
-export const initRFMResult: IRFMResults = {
-  account_id: "",
-  clv: [],
-  in_progress: true,
-  rfm: {
-    cluster_id: {},
-    customer_id: {},
-    num_trans: {},
-    recency: {},
-    total_amount: {},
-  },
-};
-
 export interface IBGNBD {
   T: number;
   id: string;
@@ -53,8 +40,3 @@ export interface IBGNBDResponse {
   bg_nbd_result: IBGNBDResult;
   status: string;
 }
-
-export const initBGNBDResult: IBGNBDResult = {
-  account_id: "",
-  bgnbd: [],
-};

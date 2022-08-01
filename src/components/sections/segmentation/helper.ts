@@ -1,4 +1,52 @@
-import { IRFM, IRFMResults } from "interfaces/segmentation.interface";
+import { NextRouter } from "next/router";
+
+import API from "const/api.const";
+import Errors from "const/error.const";
+
+import {
+  IBGNBDResponse,
+  IRFM,
+  IRFMResults,
+  IRFMResponse,
+} from "interfaces/segmentation.interface";
+
+import fetcher from "utils/fetcher.utils";
+import handleErrors from "utils/errors.utils";
+import { RoundNumber } from "utils/formatter.utils";
+
+export async function fetchRFMResult(
+  id: string,
+  setLoading: (value: boolean) => void,
+  router: NextRouter
+): Promise<IRFMResponse | undefined> {
+  try {
+    setLoading(true);
+    const response = await fetcher.get(API.GET.getRFMResult(id));
+    if (response.status !== 200) throw Errors[response.status] ?? response;
+    else return response.data;
+  } catch (error) {
+    handleErrors(error, router);
+  } finally {
+    setLoading(false);
+  }
+}
+
+export async function fetchBGNBDResult(
+  id: string,
+  setLoading: (value: boolean) => void,
+  router: NextRouter
+): Promise<IBGNBDResponse | undefined> {
+  try {
+    setLoading(true);
+    const response = await fetcher.get(API.GET.getBGNBDResult(id));
+    if (response.status === 200) return response.data;
+    else throw response;
+  } catch (error) {
+    handleErrors(error, router);
+  } finally {
+    setLoading(false);
+  }
+}
 
 const getNumTransDatasets = (
   rfmResult: IRFMResults,
@@ -13,7 +61,7 @@ const getNumTransDatasets = (
   );
   const min = num_trans[0];
   const max = num_trans[num_trans.length - 1];
-  const mid = Math.round((max - min) / 2);
+  const mid = RoundNumber((max - min) / 2);
   const transKey = [`Under ${mid} transactions`, `Over ${mid} transactions`];
 
   customerIndexes
@@ -56,7 +104,7 @@ const getCLVDatasets = (
       result.set(mapKey, [...mapValue, [xValue, y[customerIndex]]]);
     });
   return uniqueKeys.map((value) => ({
-    label: (Math.round(rfmResult.clv[value] * 100) / 100).toString(),
+    label: RoundNumber(rfmResult.clv[value]).toString(),
     data: result.get(value) ?? [],
   }));
 };

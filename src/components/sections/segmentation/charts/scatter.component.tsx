@@ -1,39 +1,23 @@
-import { toast } from "components/common";
-import { getMultipleChartColors } from "const/colors.const";
-import { IDataset, XAxisType } from "interfaces/chart.interface";
-import { useEffect } from "react";
 import { Scatter } from "react-chartjs-2";
 
+import { getMultipleChartColors } from "const/colors.const";
+
 interface Props {
-  datasets: IDataset[];
+  datasets: { label: string; data: [number, number][] }[];
   xLabel?: string;
   yLabel?: string;
-  category?: XAxisType;
+  category?: string;
   tooltip?: (tooltipItems: Array<any>) => string | string[];
 }
 
 export default function ScatterChart(props: Props): JSX.Element {
-  useEffect(() => {
-    if (props.datasets.length <= 10) {
-      toast(
-        "For charts with less than 10 values, we recommend using BAR chart or PIE chart.",
-        "general"
-      );
-    }
-  }, [props.datasets]);
-
   return (
     <Scatter
       data={{
         datasets: props.datasets.map((value, index) => ({
           ...getMultipleChartColors({ index }),
           label: value.label,
-          data: [
-            {
-              x: value.data[0],
-              y: value.data[1],
-            },
-          ],
+          data: value.data.map(([x, y]) => ({ x, y })),
         })),
       }}
       options={{
@@ -75,9 +59,6 @@ export default function ScatterChart(props: Props): JSX.Element {
               },
               label: () => "",
             },
-          },
-          legend: {
-            display: false,
           },
         },
       }}

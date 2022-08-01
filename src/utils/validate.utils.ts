@@ -1,4 +1,5 @@
 import { toast } from "components/common";
+
 import { IChartOptions } from "interfaces/chart.interface";
 
 const MIN_YEAR = 1900;

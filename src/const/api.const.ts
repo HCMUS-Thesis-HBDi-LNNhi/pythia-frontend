@@ -12,6 +12,7 @@ const POST = {
   createPinnedChart: "/pinned_charts",
   uploadFile: "/files",
   uploadClassifyData: (id: string) => `/users/${id}/classify_customers`,
+  triggerModels: (id: string) => `/users/${id}/trigger_models`,
 };
 
 const DELETE = {

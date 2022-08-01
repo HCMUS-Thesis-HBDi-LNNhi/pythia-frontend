@@ -10,26 +10,37 @@ axios.default.interceptors.request.use(function (config) {
   return config;
 });
 
-const get = (
+const get = async (
   url: string,
   config?: axios.AxiosRequestConfig<any>
 ): Promise<axios.AxiosResponse<any, any>> => {
-  return axios.default.get(process.env.NEXT_PUBLIC_DOMAIN + url, config);
+  return await axios.default
+    .get(process.env.NEXT_PUBLIC_DOMAIN + url, config)
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
-const post = (
+const post = async (
   url: string,
   data?: any,
   config?: axios.AxiosRequestConfig<any>
 ): Promise<axios.AxiosResponse<any, any>> => {
-  return axios.default.post(process.env.NEXT_PUBLIC_DOMAIN + url, data, config);
+  return await axios.default
+    .post(process.env.NEXT_PUBLIC_DOMAIN + url, data, config)
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
-const handleDelete = (
+const handleDelete = async (
   url: string,
   config?: axios.AxiosRequestConfig<any>
 ): Promise<axios.AxiosResponse<any, any>> => {
-  return axios.default.delete(process.env.NEXT_PUBLIC_DOMAIN + url, config);
+  return await axios.default
+    .delete(process.env.NEXT_PUBLIC_DOMAIN + url, config)
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
-export const fetcher = { get, post, handleDelete };
+const fetcher = { get, post, handleDelete };
+
+export default fetcher;

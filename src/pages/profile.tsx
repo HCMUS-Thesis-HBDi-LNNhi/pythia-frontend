@@ -1,11 +1,15 @@
-import { Layout } from "components/common";
-import Errors from "const/error.const";
-import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+
+import { Layout } from "components/common";
+
+import Errors from "const/error.const";
+
+import { IHistory, IHistoryResponse } from "interfaces/profile.interface";
+
 import handleErrors from "utils/errors.utils";
-import { fetcher } from "utils/fetcher.utils";
+import fetcher from "utils/fetcher.utils";
 import { formatDate } from "utils/formatter.utils";
 
 export default function Profile(): JSX.Element {

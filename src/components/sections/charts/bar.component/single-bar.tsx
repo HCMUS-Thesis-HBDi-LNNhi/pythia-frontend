@@ -1,32 +1,37 @@
-import { toast } from "components/common";
-import { getSingleChartColor } from "const/colors.const";
-import { IDataset } from "interfaces/chart.interface";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
+import { getSingleChartColor } from "const/colors.const";
+
+import { IChartOptions, IDataset } from "interfaces/chart.interface";
+import { IData } from "interfaces/data.interface";
+
+import { getLabels, getCategoryLabel } from "utils/formatter.utils";
+
+import handle2DData from "../helper";
+
 interface Props {
-  labels: string[];
-  datasets: IDataset[];
-  xLabel?: string;
-  yLabel?: string;
-  tooltip?: (tooltipItems: Array<any>) => string | string[];
+  data: IData;
+  chartOptions: IChartOptions;
 }
 
 export default function SingleBarChart(props: Props): JSX.Element {
+  const { data, chartOptions } = props;
+  const [labels, setLabels] = useState<string[]>(getLabels(data, chartOptions));
+  const [datasets, setDatasets] = useState<IDataset[]>(
+    handle2DData(data, chartOptions, labels)
+  );
+
   useEffect(() => {
-    if (props.labels.length > 10) {
-      toast(
-        "For charts with more than 10 values, we recommend using SCATTER chart.",
-        "general"
-      );
-    }
-  }, [props.labels]);
+    setLabels(getLabels(data, chartOptions));
+    setDatasets(handle2DData(data, chartOptions, labels));
+  }, [data, chartOptions, labels]);
 
   return (
     <Bar
       data={{
-        labels: props.labels,
-        datasets: props.datasets.map((value) => ({
+        labels,
+        datasets: datasets.map((value) => ({
           ...value,
           ...getSingleChartColor(),
         })),
@@ -35,23 +40,23 @@ export default function SingleBarChart(props: Props): JSX.Element {
         scales: {
           x: {
             title: {
-              display: !!props.xLabel,
-              text: props.xLabel,
+              display: true,
+              text: getCategoryLabel(chartOptions.x),
               font: {
                 weight: "bold",
               },
             },
             ticks: {
-              display: props.labels.length <= 10,
+              display: labels.length <= 10,
             },
             grid: {
-              display: props.labels.length <= 10,
+              display: labels.length <= 10,
             },
           },
           y: {
             title: {
-              display: !!props.yLabel,
-              text: props.yLabel,
+              display: true,
+              text: getCategoryLabel(chartOptions.y),
               font: {
                 weight: "bold",
               },
@@ -62,7 +67,6 @@ export default function SingleBarChart(props: Props): JSX.Element {
           tooltip: {
             callbacks: {
               title: (tooltipItems) => {
-                if (props.tooltip) return props.tooltip(tooltipItems);
                 return tooltipItems.map(
                   (value) => value.label + ": " + value.formattedValue
                 );

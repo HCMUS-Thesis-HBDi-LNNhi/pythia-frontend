@@ -1,10 +1,12 @@
-import { toast } from "components/common";
-import Errors from "const/error.const";
-import { PageLabels } from "interfaces/common.interface";
 import { NextRouter } from "next/router";
 
+import { toast } from "components/common";
+
+import Errors from "const/error.const";
+
+import { PageLabels } from "interfaces/common.interface";
+
 export default function handleErrors(error: any, router: NextRouter) {
-  console.error(error);
   switch (error) {
     case Errors[401]:
       toast("Your session has expired, please login again!", "failure");
