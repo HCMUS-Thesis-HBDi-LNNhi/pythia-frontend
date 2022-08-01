@@ -43,7 +43,7 @@ interface Props {
 
 export default function BGNBDBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>(initBGNBDResult);
+  const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
   useEffect(() => {
@@ -53,32 +53,41 @@ export default function BGNBDBody(props: Props): JSX.Element {
     }
     fetchBGNBDResult(props.userID, props.setLoading, router).then((value) => {
       if (!value) return;
-      setBGNBDResult(value.bg_nbd_result);
+      switch (value.status) {
+        case "done":
+          setBGNBDResult(value.bg_nbd_result);
+          props.setCSV({
+            headers: [
+              { label: "Customer ID", key: "customer_id" },
+              { label: "Prediction", key: "predict" },
+            ],
+            data: Object.values(value.bg_nbd_result.bgnbd).map((v) => ({
+              customer_id: v.id,
+              predict: v.predict,
+            })),
+          });
+          break;
+        case "no data":
+        case "in progress":
+        default:
+          break;
+      }
       props.setStatus(value.status);
-      props.setCSV({
-        headers: [
-          { label: "Customer ID", key: "customer_id" },
-          { label: "Prediction", key: "predict" },
-        ],
-        data: Object.values(value.bg_nbd_result.bgnbd).map((v) => ({
-          customer_id: v.id,
-          predict: v.predict,
-        })),
-      });
     });
     // eslint-disable-next-line
   }, [props.userID]);
 
   useEffect(() => {
+    if (!bgnbdResult) return;
     const labels = Object.values(bgnbdResult.bgnbd).map(
       (v) => "Customer ID: " + v.id
     );
     setTooltipLabels([...labels]);
   }, [bgnbdResult]);
 
-  const getMap = (key: keyof IBGNBD) => {
+  const getMap = (key: keyof IBGNBD, results: IBGNBDResult) => {
     const map = new Map<number, [number, number][]>();
-    bgnbdResult.bgnbd
+    results.bgnbd
       .filter((value) => value[key] !== 0)
       .forEach((value) => {
         if (key === "id") return;
@@ -86,46 +95,43 @@ export default function BGNBDBody(props: Props): JSX.Element {
         const mapValue = map.get(mapKey) ?? [];
         map.set(mapKey, [...mapValue, [value.predict, value[key]]]);
       });
-    return map;
+    return Array.from(map)
+      .sort((a, b) => a[0] - b[0])
+      .map((value) => {
+        return {
+          label: `Over ${value[0] * DIVIDER} transactions`,
+          data: value[1],
+        };
+      });
   };
 
   return (
-    <div
-      className={[
-        "grid gap-2",
-        props.displayGrid ? "grid-cols-2 " : "grid-cols-1",
-      ].join(" ")}
-    >
-      <BGNBDItems label="Grouped by number of transactions">
-        <ScatterChart
-          xLabel="Prediction"
-          yLabel="Total observation time"
-          datasets={Array.from(getMap("T"))
-            .sort((a, b) => a[0] - b[0])
-            .map((value) => {
-              return {
-                label: `Over ${value[0] * DIVIDER} transactions`,
-                data: value[1],
-              };
-            })}
-          tooltip={() => tooltipLabels}
-        />
-      </BGNBDItems>
-      <BGNBDItems label="Grouped by number of transactions">
-        <ScatterChart
-          xLabel="Prediction"
-          yLabel="Time of last transaction"
-          datasets={Array.from(getMap("t_x"))
-            .sort((a, b) => a[0] - b[0])
-            .map((value) => {
-              return {
-                label: `Over ${value[0] * DIVIDER} transactions`,
-                data: value[1],
-              };
-            })}
-          tooltip={() => tooltipLabels}
-        />
-      </BGNBDItems>
-    </div>
+    <>
+      {bgnbdResult && (
+        <div
+          className={[
+            "grid gap-2",
+            props.displayGrid ? "grid-cols-2 " : "grid-cols-1",
+          ].join(" ")}
+        >
+          <BGNBDItems label="Grouped by number of transactions">
+            <ScatterChart
+              xLabel="Prediction"
+              yLabel="Total observation time"
+              datasets={getMap("T", bgnbdResult)}
+              tooltip={() => tooltipLabels}
+            />
+          </BGNBDItems>
+          <BGNBDItems label="Grouped by number of transactions">
+            <ScatterChart
+              xLabel="Prediction"
+              yLabel="Time of last transaction"
+              datasets={getMap("t_x", bgnbdResult)}
+              tooltip={() => tooltipLabels}
+            />
+          </BGNBDItems>
+        </div>
+      )}
+    </>
   );
 }
