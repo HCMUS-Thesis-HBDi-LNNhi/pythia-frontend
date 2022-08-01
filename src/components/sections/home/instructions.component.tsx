@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 
 import { Button, Dialog, UploadButton } from "components/common";
 import icons from "const/icons.const";
+import { useLocalStorage } from "usehooks-ts";
 
 interface Props {
   setLoading: Dispatch<SetStateAction<boolean>>;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export default function Instructions(props: Props): JSX.Element {
+  const [_, setTrigger] = useLocalStorage("trigger", false);
+
   const [transaction, setTransaction] = useState(false);
   const [demographic, setDemographic] = useState(false);
 
@@ -54,6 +57,7 @@ export default function Instructions(props: Props): JSX.Element {
           style="solid"
           onClick={() => {
             props.setFirstUser(false);
+            setTrigger(true);
             window.location.reload();
           }}
           disabled={!transaction || !demographic}

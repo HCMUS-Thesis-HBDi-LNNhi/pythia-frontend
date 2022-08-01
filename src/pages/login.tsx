@@ -11,13 +11,11 @@ import { ILoginMethod, ViewMode } from "interfaces/common.interface";
 
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
+import { DEFAULT_END_DATE } from "const/chart.const";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
-  const [_viewMode, setViewMode] = useLocalStorage<ViewMode | undefined>(
-    "view-mode",
-    undefined
-  );
+  const [_viewMode, setViewMode] = useLocalStorage<ViewMode>("view-mode", "");
   const [isLoading, setLoading] = useState(false);
 
   const loginMethods: ILoginMethod[] = [

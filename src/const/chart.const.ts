@@ -6,6 +6,7 @@ import {
   IChartOptions,
   IIcons,
 } from "interfaces/chart.interface";
+import { DateToNumber } from "utils/formatter.utils";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -69,3 +70,6 @@ export const transactionHeader =
   "customer_id,transaction_date,transaction_amount";
 export const demographicHeader =
   "id,dob,gender,country,city,job_title,job_industry,wealth_segment";
+
+export const DEFAULT_PREDICT_TIME = 365;
+export const DEFAULT_END_DATE = DateToNumber(new Date());

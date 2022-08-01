@@ -1,5 +1,10 @@
 import { CONTINENTS, COUNTRIES } from "const/country-code.const";
 
+import { Age, Gender, IData, IDimCustomer } from "interfaces/data.interface";
+import { IChartOptions, IChartYear } from "interfaces/chart.interface";
+
+import { ParsedUrlQuery } from "querystring";
+
 export const RoundNumber = (value: number, digit: number = 0) =>
   Math.round(value * Math.pow(10, digit)) / Math.pow(10, digit);
 
@@ -41,10 +46,6 @@ export const getContinentCode = (name: string) => {
   const result = countries.find((value) => value.name === name);
   return result && (result.continent as keyof typeof CONTINENTS);
 };
-
-import { Age, Gender, IData, IDimCustomer } from "interfaces/data.interface";
-import { IChartOptions, IChartYear } from "interfaces/chart.interface";
-import { ParsedUrlQuery } from "querystring";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -160,3 +161,14 @@ export const getCategoryLabel = (key: string) => {
       return key.replaceAll("_", " ");
   }
 };
+
+export const DEFAULT_START_DATE = new Date("01/01/1990");
+
+export const DateToNumber = (endDate: Date): number =>
+  (endDate.getTime() - DEFAULT_START_DATE.getTime()) / 3600;
+
+export const NumberToDate = (value: number): Date =>
+  new Date(value * 3600 + DEFAULT_START_DATE.getTime());
+
+export const formatDateInput = (date: Date): string =>
+  date.toISOString().substring(0, 10);

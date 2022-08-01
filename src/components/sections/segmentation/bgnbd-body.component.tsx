@@ -6,16 +6,13 @@ import { ScatterChart } from "./charts";
 
 import Errors from "const/error.const";
 
-import {
-  IBGNBD,
-  initBGNBDResult,
-  IBGNBDResult,
-} from "interfaces/segmentation.interface";
+import { IBGNBD, IBGNBDResult } from "interfaces/segmentation.interface";
 
 import handleErrors from "utils/errors.utils";
 
 import { fetchBGNBDResult } from "./helper";
 import { ICSVData } from "interfaces/utils.interface";
+import { useLocalStorage } from "usehooks-ts";
 
 const DIVIDER = 4;
 
@@ -43,6 +40,7 @@ interface Props {
 
 export default function BGNBDBody(props: Props): JSX.Element {
   const router = useRouter();
+  const [trigger, setTrigger] = useLocalStorage("trigger", false);
   const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
@@ -67,8 +65,9 @@ export default function BGNBDBody(props: Props): JSX.Element {
             })),
           });
           break;
-        case "no data":
         case "in progress":
+          if (!trigger) setTrigger(true);
+          break;
         default:
           break;
       }
