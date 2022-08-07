@@ -12,7 +12,6 @@ import handleErrors from "utils/errors.utils";
 
 import { fetchBGNBDResult } from "./helper";
 import { ICSVData } from "interfaces/utils.interface";
-import { useLocalStorage } from "usehooks-ts";
 
 const DIVIDER = 4;
 
@@ -40,7 +39,6 @@ interface Props {
 
 export default function BGNBDBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [trigger, setTrigger] = useLocalStorage("trigger", false);
   const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
@@ -66,7 +64,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
           });
           break;
         case "in progress":
-          if (!trigger) setTrigger(true);
+          setTimeout(() => window.location.reload(), 5000);
           break;
         default:
           break;

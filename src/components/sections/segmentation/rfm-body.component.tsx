@@ -13,7 +13,6 @@ import { getCategoryLabel } from "utils/formatter.utils";
 
 import { fetchRFMResult, getDatasets } from "./helper";
 import { ICSVData } from "interfaces/utils.interface";
-import { useLocalStorage } from "usehooks-ts";
 
 const getNoCustomerPerCLV = (rfmResult: IRFMResults, clv: number) => {
   return Object.values(rfmResult.rfm.cluster_id).filter(
@@ -45,7 +44,6 @@ interface Props {
 
 export default function RFMBody(props: Props): JSX.Element {
   const router = useRouter();
-  const [trigger, setTrigger] = useLocalStorage("trigger", false);
   const [rfmResult, setRFMResult] = useState<IRFMResults>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
@@ -82,7 +80,7 @@ export default function RFMBody(props: Props): JSX.Element {
           });
           break;
         case "in progress":
-          if (!trigger) setTrigger(true);
+          setTimeout(() => window.location.reload(), 5000);
           break;
         default:
           break;
