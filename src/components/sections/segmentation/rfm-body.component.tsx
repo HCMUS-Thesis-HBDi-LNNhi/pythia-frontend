@@ -131,7 +131,9 @@ export default function RFMBody(props: Props): JSX.Element {
                 "num_trans",
                 rfmResult
               )}
-              tooltip={() => tooltipLabels}
+              tooltip={(tooltipItems) =>
+                tooltipLabels[tooltipItems[0].dataIndex]
+              }
             />
           </RFMItems>
           <RFMItems label="Grouped by Customer Lifetime Value">
@@ -139,7 +141,9 @@ export default function RFMBody(props: Props): JSX.Element {
               xLabel={getCategoryLabel("num_trans")}
               yLabel={getCategoryLabel("recency")}
               datasets={getDatasets("num_trans", "recency", "clv", rfmResult)}
-              tooltip={() => tooltipLabels}
+              tooltip={(tooltipItems) =>
+                tooltipLabels[tooltipItems[0].dataIndex]
+              }
             />
           </RFMItems>
           <RFMItems label="Grouped by Customer Lifetime Value">
@@ -152,7 +156,9 @@ export default function RFMBody(props: Props): JSX.Element {
                 "clv",
                 rfmResult
               )}
-              tooltip={() => tooltipLabels}
+              tooltip={(tooltipItems) =>
+                tooltipLabels[tooltipItems[0].dataIndex]
+              }
             />
           </RFMItems>
         </div>

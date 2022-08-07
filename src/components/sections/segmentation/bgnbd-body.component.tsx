@@ -79,26 +79,26 @@ export default function BGNBDBody(props: Props): JSX.Element {
   useEffect(() => {
     if (!bgnbdResult) return;
     const labels = Object.values(bgnbdResult.bgnbd).map(
-      (v) => "Customer ID: " + v.id
+      (v) => "Customer " + v.id
     );
     setTooltipLabels([...labels]);
   }, [bgnbdResult]);
 
   const getMap = (key: keyof IBGNBD, results: IBGNBDResult) => {
     const map = new Map<number, [number, number][]>();
-    results.bgnbd
-      .filter((value) => value[key] !== 0)
-      .forEach((value) => {
-        if (key === "id") return;
-        let mapKey = Math.floor((value.x + 1) / DIVIDER);
-        const mapValue = map.get(mapKey) ?? [];
-        map.set(mapKey, [...mapValue, [value.predict, value[key]]]);
-      });
+    results.bgnbd.forEach((value) => {
+      if (key === "id") return;
+      // let mapKey = Math.floor((value.x + 1) / DIVIDER);
+      let mapKey = value.x + 1;
+      const mapValue = map.get(mapKey) ?? [];
+      map.set(mapKey, [...mapValue, [value.predict, value[key]]]);
+    });
     return Array.from(map)
       .sort((a, b) => a[0] - b[0])
       .map((value) => {
         return {
-          label: `Over ${value[0] * DIVIDER} transactions`,
+          // label: `Over ${value[0] * DIVIDER} transactions`,
+          label: value[0].toString(),
           data: value[1],
         };
       });
@@ -118,7 +118,9 @@ export default function BGNBDBody(props: Props): JSX.Element {
               xLabel="Prediction"
               yLabel="Total observation time"
               datasets={getMap("T", bgnbdResult)}
-              tooltip={() => tooltipLabels}
+              tooltip={(tooltipItems) =>
+                tooltipLabels[tooltipItems[0].dataIndex]
+              }
             />
           </BGNBDItems>
           <BGNBDItems label="Grouped by number of transactions">
@@ -126,7 +128,9 @@ export default function BGNBDBody(props: Props): JSX.Element {
               xLabel="Prediction"
               yLabel="Time of last transaction"
               datasets={getMap("t_x", bgnbdResult)}
-              tooltip={() => tooltipLabels}
+              tooltip={(tooltipItems) =>
+                tooltipLabels[tooltipItems[0].dataIndex]
+              }
             />
           </BGNBDItems>
         </div>
