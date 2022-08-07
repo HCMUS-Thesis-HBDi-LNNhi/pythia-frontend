@@ -26,24 +26,6 @@ export default function UploadButton(props: Props) {
   const router = useRouter();
   const userID = useReadLocalStorage<string>("user-id");
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [file, setFile] = useState<File | null>(null);
-
-  useEffect(() => {
-    if (!userID) {
-      handleErrors(Errors[401], router);
-      return;
-    }
-    if (file) {
-      handleUpload(
-        file,
-        userID,
-        props.fileType,
-        props.setLoading,
-        router,
-        props.setUploadSuccess
-      );
-    }
-  }, [file, props, router, userID]);
 
   return (
     <>
@@ -53,7 +35,21 @@ export default function UploadButton(props: Props) {
         ref={inputRef}
         hidden
         onChange={(e) => {
-          setFile(e.target.files && e.target.files[0]);
+          if (!userID) {
+            handleErrors(Errors[401], router);
+            return;
+          }
+          const file = e.target.files && e.target.files[0];
+          if (file) {
+            handleUpload(
+              file,
+              userID,
+              props.fileType,
+              props.setLoading,
+              router,
+              props.setUploadSuccess
+            );
+          }
           // clear input file
           e.target.value = "";
         }}
@@ -86,7 +82,8 @@ async function handleUpload(
     const reader = new FileReader();
     reader.onload = async function (e) {
       const rows = e.target?.result as string;
-      const header = rows.split("\n")[0].replaceAll(" ", "");
+      const header = rows.split("\n")[0].trim().replaceAll(" ", "");
+
       if (type === "transaction") {
         if (header !== transactionHeader) {
           handleErrors(Errors.formatError, router);

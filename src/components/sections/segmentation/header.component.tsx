@@ -24,6 +24,8 @@ import {
   formatDateInput,
   NumberToDate,
 } from "utils/formatter.utils";
+import fetcher from "utils/fetcher.utils";
+import API from "const/api.const";
 
 interface Props {
   selectedModel: RetainModel;
@@ -130,17 +132,29 @@ export default function Header(props: Props): JSX.Element {
           </div>
         )}
         {props.selectedModel === RetainModel.bg_nbd && <div />}
-        {props.selectedModel === RetainModel.bg_nbd && (
-          <div className="w-full col-span-3 italic text-sm">
-            *Last observed day and Predict days are set to default after log out
-          </div>
-        )}
         <div className="w-full flex justify-end col-span-3">
           <Button
             style="solid"
-            onClick={() => {
+            onClick={async () => {
+              if (!userID) {
+                handleErrors(Errors[401], router);
+                return;
+              }
               setTrigger(true);
-              window.location.reload();
+              try {
+                const response = await fetcher.post(
+                  API.POST.triggerModels(userID),
+                  {
+                    end_of_observation_date: endDate ?? DEFAULT_END_DATE,
+                    prediction_time: predictTime ?? DEFAULT_PREDICT_TIME,
+                  }
+                );
+                if (response.data.status !== "in progress") setTrigger(false);
+              } catch (error) {
+                handleErrors(error, router);
+              } finally {
+                window.location.reload();
+              }
             }}
           >
             Update data

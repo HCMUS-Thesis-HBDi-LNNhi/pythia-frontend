@@ -107,7 +107,7 @@ export async function handleFetchData(
   try {
     setLoading(true);
     const response = await fetcher.get(API.GET.getData(userID));
-    if (response.status === 400 && setFirstUser) {
+    if (response.data.status === 'in progress' && setFirstUser) {
       setFirstUser(true);
     } else if (response.status !== 200)
       throw Errors[response.status] ?? response;

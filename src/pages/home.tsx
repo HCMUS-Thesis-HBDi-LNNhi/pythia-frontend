@@ -41,8 +41,13 @@ export default function Home(): JSX.Element {
           </>
         )}
       </Layout>
-      {firstUser && (
-        <Instructions setLoading={setLoading} setFirstUser={setFirstUser} />
+      {firstUser && userID && (
+        <Instructions
+          setLoading={setLoading}
+          setFirstUser={setFirstUser}
+          userID={userID}
+          router={router}
+        />
       )}
     </>
   );

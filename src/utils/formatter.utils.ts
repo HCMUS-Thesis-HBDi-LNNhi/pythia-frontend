@@ -165,10 +165,10 @@ export const getCategoryLabel = (key: string) => {
 export const DEFAULT_START_DATE = new Date("01/01/1990");
 
 export const DateToNumber = (endDate: Date): number =>
-  (endDate.getTime() - DEFAULT_START_DATE.getTime()) / 3600;
+  (endDate.getTime() - DEFAULT_START_DATE.getTime()) / 86400000;
 
 export const NumberToDate = (value: number): Date =>
-  new Date(value * 3600 + DEFAULT_START_DATE.getTime());
+  new Date(value * 86400000 + DEFAULT_START_DATE.getTime());
 
 export const formatDateInput = (date: Date): string =>
   date.toISOString().substring(0, 10);
