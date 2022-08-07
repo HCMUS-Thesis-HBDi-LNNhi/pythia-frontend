@@ -18,7 +18,6 @@ export default function MenuBar(): JSX.Element {
     switch (viewMode) {
       case "user":
         return [...menuItems, { label: "log out", icon: icons.outline.logout }];
-      case "guest":
       default:
         return [
           ...menuItems,
