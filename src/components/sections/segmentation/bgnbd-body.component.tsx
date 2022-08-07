@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 
 import { Pane } from "components/common";
 import { ScatterChart } from "./charts";
@@ -42,7 +42,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
   const [bgnbdResult, setBGNBDResult] = useState<IBGNBDResult>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     if (!props.userID) {
       handleErrors(Errors[401], router);
       return;
@@ -64,7 +64,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
           });
           break;
         case "in progress":
-          setTimeout(() => window.location.reload(), 5000);
+          setTimeout(() => fetchData(), 5000);
           break;
         default:
           break;
@@ -73,6 +73,11 @@ export default function BGNBDBody(props: Props): JSX.Element {
     });
     // eslint-disable-next-line
   }, [props.userID]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, [props.userID, fetchData]);
 
   useEffect(() => {
     if (!bgnbdResult) return;

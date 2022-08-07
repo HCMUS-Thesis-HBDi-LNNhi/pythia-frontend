@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { Pane } from "components/common";
@@ -47,7 +47,7 @@ export default function RFMBody(props: Props): JSX.Element {
   const [rfmResult, setRFMResult] = useState<IRFMResults>();
   const [tooltipLabels, setTooltipLabels] = useState<string[]>([]);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     if (!props.userID) {
       handleErrors(Errors[401], router);
       return;
@@ -80,7 +80,7 @@ export default function RFMBody(props: Props): JSX.Element {
           });
           break;
         case "in progress":
-          setTimeout(() => window.location.reload(), 5000);
+          setTimeout(() => fetchData(), 5000);
           break;
         default:
           break;
@@ -89,6 +89,11 @@ export default function RFMBody(props: Props): JSX.Element {
     });
     // eslint-disable-next-line
   }, [props.userID]);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, [props.userID, fetchData]);
 
   return (
     <>
