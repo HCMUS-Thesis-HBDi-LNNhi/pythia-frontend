@@ -175,7 +175,6 @@ export default function ChartOptions(props: Props): JSX.Element {
               icons={Object.values(transactionIcons)}
             />
           )}
-          {/*TODO: Implement 3D charts */}
           <div className="mt-auto pt-4 col-span-3 grid place-items-center">
             <Button style="solid" type="submit">
               Draw chart

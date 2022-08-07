@@ -50,7 +50,7 @@ export default function UploadButton(props: Props) {
               props.setUploadSuccess
             );
           }
-          // clear input file
+          /** clear input file */
           e.target.value = "";
         }}
       />

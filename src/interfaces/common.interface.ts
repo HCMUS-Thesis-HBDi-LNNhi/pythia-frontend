@@ -1,6 +1,6 @@
 import React from "react";
 
-export type ViewMode = "guest" | "user" | "";
+export type ViewMode = "user" | "";
 
 export type ButtonStyle = "outline" | "solid" | "failure" | "highlight";
 

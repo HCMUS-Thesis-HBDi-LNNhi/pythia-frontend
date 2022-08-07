@@ -25,11 +25,6 @@ export default function Router(): void {
         }
         router.push(`/${PageLabels.HOME}`);
         return;
-      // TODO: handle guest mode
-      case "guest":
-      default:
-        router.push(`/${PageLabels.LOGIN}`);
-        return;
     }
   }, [router, viewMode, setUserID, setToken]);
 }

@@ -88,8 +88,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
     const map = new Map<number, [number, number][]>();
     results.bgnbd.forEach((value) => {
       if (key === "id") return;
-      // let mapKey = Math.floor((value.x + 1) / DIVIDER);
-      let mapKey = value.x + 1;
+      let mapKey = Math.floor((value.x + 1) / DIVIDER);
       const mapValue = map.get(mapKey) ?? [];
       map.set(mapKey, [...mapValue, [value.predict, value[key]]]);
     });
@@ -97,8 +96,7 @@ export default function BGNBDBody(props: Props): JSX.Element {
       .sort((a, b) => a[0] - b[0])
       .map((value) => {
         return {
-          // label: `Over ${value[0] * DIVIDER} transactions`,
-          label: value[0].toString(),
+          label: `Over ${value[0]} transaction(s)`,
           data: value[1],
         };
       });

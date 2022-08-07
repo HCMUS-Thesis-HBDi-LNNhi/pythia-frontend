@@ -11,7 +11,6 @@ import { ILoginMethod, ViewMode } from "interfaces/common.interface";
 
 import handleErrors from "utils/errors.utils";
 import fetcher from "utils/fetcher.utils";
-import { DEFAULT_END_DATE } from "const/chart.const";
 
 export default function Login(): JSX.Element {
   const router = useRouter();
@@ -38,15 +37,6 @@ export default function Login(): JSX.Element {
         }
       },
     },
-    // TODO: Handle Guest mode
-    // {
-    //   label: "Continue as guest",
-    //   icon: icons.solid.guest,
-    //   action: () => {
-    //     setViewMode("guest");
-    //     router.push(`/${PageLabels.HOME}`);
-    //   },
-    // },
   ];
 
   useEffect(() => {

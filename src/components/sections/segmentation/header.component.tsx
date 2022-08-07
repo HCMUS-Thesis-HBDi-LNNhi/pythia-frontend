@@ -132,6 +132,13 @@ export default function Header(props: Props): JSX.Element {
           </div>
         )}
         {props.selectedModel === RetainModel.bg_nbd && <div />}
+        {props.selectedModel === RetainModel.bg_nbd && (
+          <div className="w-full col-span-2 italic text-sm">
+            *Last observed day and predict days are reset to default after log
+            out
+          </div>
+        )}
+
         <div className="w-full flex justify-end col-span-3">
           <Button
             style="solid"

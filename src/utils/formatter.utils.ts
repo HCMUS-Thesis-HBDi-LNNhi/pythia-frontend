@@ -124,7 +124,7 @@ export const getValueLabel = (key: string, category?: string): string => {
 
 export const getCategoryLabel = (key: string) => {
   switch (key) {
-    // IFactData + RFM
+    /** IFactData + RFM */
     case "num_trans":
       return "Total transactions";
     case "total_amount":
@@ -133,7 +133,7 @@ export const getCategoryLabel = (key: string) => {
       return "Recency";
     case "cluster_id":
       return "Cluster ID";
-    //  IDimCustomer
+    /** IDimCustomer */
     case "customer_id":
       return "Customer ID";
     case "city":
@@ -152,7 +152,7 @@ export const getCategoryLabel = (key: string) => {
       return "Quarters";
     case "wealth_segment":
       return "Wealth segment";
-    // MAP_JSON
+    /** MAP_JSON */
     case "world":
       return "World countries";
     case "world_continents":

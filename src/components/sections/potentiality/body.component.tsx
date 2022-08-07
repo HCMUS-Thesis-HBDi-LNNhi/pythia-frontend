@@ -20,8 +20,6 @@ interface Props {
 }
 
 export default function Body(props: Props): JSX.Element {
-  // const [chartOptions, setChartOptions] = useState(initialChartOptions);
-  // const [chartType, setChartType] = useState(ChartType.bar);
   const [labels] = useState(["Non potential customers", "Potential customers"]);
   const [datasets, setDatasets] = useState(getDatasets(props.result.result));
 
@@ -37,11 +35,6 @@ export default function Body(props: Props): JSX.Element {
       ].join(" ")}
     >
       <Pane width="w-full" className="space-y-4">
-        {/* <ChartHeader
-          chosenChart={chartType}
-          setChosenChart={setChartType}
-          disabledTypes={disabledTypes}
-        /> */}
         <BarChart
           labels={labels}
           yLabel="Number of customers"
@@ -54,13 +47,6 @@ export default function Body(props: Props): JSX.Element {
           datasets={datasets}
         />
       </Pane>
-      {/* <Pane width="mb-2 lg:mb-0 lg:ml-4 lg:w-1/5">
-        <ChartOptions
-          initialValues={chartOptions}
-          setChartOptions={setChartOptions}
-          chartType={chartType}
-        />
-      </Pane> */}
     </div>
   );
 }
