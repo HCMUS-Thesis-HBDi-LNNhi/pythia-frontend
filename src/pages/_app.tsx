@@ -29,11 +29,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, 600000);
 
   useInterval(async () => {
+    if (viewMode !== "user" || !trigger) return;
     if (!userID) {
       handleErrors(Errors[401], router);
       return;
     }
-    if (!trigger) return;
     try {
       const response = await fetcher.post(API.POST.triggerModels(userID), {
         end_of_observation_date: endDate ?? DEFAULT_END_DATE,
