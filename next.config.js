@@ -5,7 +5,7 @@ const nextConfig = {
     return [
       {
         source: "/redirect/:path*",
-        destination: `https://pythia-backend-staging.herokuapp.com/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_DOMAIN}/:path*`,
         permanent: true,
       },
     ];
